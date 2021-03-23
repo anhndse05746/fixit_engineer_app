@@ -39,25 +39,26 @@ const LoginView = ({navigation}) => {
       setErrorMessage('Password không thể để trống');
     } else {
       setErrorMessage('');
-      dispatch(loadUsers(username, password, deviceToken));
+      // dispatch(loadUsers(username, password, deviceToken));
+      navigation.navigate('DrawerInside');
       Keyboard.dismiss();
     }
   };
 
-  useEffect(() => {
-    if (message === LOGGED_IN) {
-      navigation.navigate('DrawerInside');
-    }
-  }, [message]);
+  // useEffect(() => {
+  //   if (message === LOGGED_IN) {
+  //     navigation.navigate('DrawerInside');
+  //   }
+  // }, [message]);
 
-  useEffect(() => {
-    //Get device token
-    const {messaging} = firebase();
-    (async () => {
-      const token = await messaging().getToken();
-      setDeviceToken(token);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   //Get device token
+  //   const {messaging} = firebase();
+  //   (async () => {
+  //     const token = await messaging().getToken();
+  //     setDeviceToken(token);
+  //   })();
+  // }, []);
 
   return (
     <KeyboardAvoidingView

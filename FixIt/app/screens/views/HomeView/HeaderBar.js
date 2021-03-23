@@ -1,9 +1,9 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {Image, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, View, TouchableOpacity, Switch} from 'react-native';
 import {calcScale} from '../../../utils/dimension';
 
-const SearchView = ({navigation}) => {
+const SearchView = ({navigation, isEnabled, toggleSwitch}) => {
   return (
     <View style={styles.headerSafeArea}>
       <View style={styles.header}>
@@ -22,7 +22,12 @@ const SearchView = ({navigation}) => {
               resizeMode="contain"
             />
           </View>
-          <View style={[styles.iconBox, {opacity: 0}]}></View>
+          <Switch
+            trackColor={{false: '#767577', true: 'rgb(255, 188, 0)'}}
+            thumbColor={'#fff'}
+            onValueChange={() => toggleSwitch()}
+            value={isEnabled}
+          />
         </View>
       </View>
     </View>

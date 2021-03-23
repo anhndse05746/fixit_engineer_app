@@ -19,7 +19,7 @@ const MyProfileDrawer = ({navigation}) => {
   let data = useSelector((state) => state.user);
 
   const logOut = () => {
-    // navigation.navigate('OutsideStack');
+    navigation.navigate('OutsideStack');
   };
 
   return (
@@ -98,7 +98,7 @@ const MyProfileDrawer = ({navigation}) => {
                   styles.textMedium,
                   {paddingLeft: calcScale(20), fontSize: calcScale(20)},
                 ]}>
-                Các thợ đã thích
+                Cộng đồng FixIt
               </Text>
             </View>
           </TouchableOpacity>
