@@ -9,9 +9,9 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {CheckBox, Input} from 'react-native-elements';
+import {CheckBox, Input, ListItem} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
-
+import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CommonStyles from '../Styles';
 import PTButton from '../../commonComponent/Button';
@@ -20,55 +20,114 @@ import {checkRegisteredUser} from '../../../store/register';
 import {useReducer} from 'react';
 
 const RegisterView = ({navigation}) => {
+  const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [fullName, setFullName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [phone, setPhone] = React.useState('');
+  const [knowledge, setKnowledge] = React.useState();
   const [password, setPassword] = React.useState('');
   const [repassword, setRepassword] = React.useState('');
   const [secure, setSecure] = React.useState(true);
   const [resecure, setResecure] = React.useState(true);
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = React.useState([]);
+  const [confirm, setConfirm] = React.useState(false);
+  const [errorChecked, setErrorChecked] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
   const [matchedPassword, setMatchedPassword] = React.useState(false);
 
-  const {isRegistered, message} = useSelector((state) => state.register);
-  const dispatch = useDispatch();
+  const dataJob = [
+    {
+      id: 1,
+      name: 'Sửa nhà',
+      checked: false,
+    },
+    {
+      id: 2,
+      name: 'Sửa điện tử',
+      checked: false,
+    },
+    {
+      id: 3,
+      name: 'Sửa điện dân dụng',
+      checked: false,
+    },
+    {
+      id: 4,
+      name: 'Sửa điện lạnh',
+      checked: false,
+    },
+    {
+      id: 5,
+      name: 'Khác',
+      checked: false,
+    },
+  ];
 
-  const checkRegistered = (phone) => {
-    dispatch(checkRegisteredUser(phone));
+  const constructor = () => {
+    if (constructorHasRun) {
+      return;
+    } else {
+      setChecked(dataJob);
+      setConstructorHasRun(true);
+    }
   };
 
-  useEffect(() => {
-    const user = {
-      phone: phone,
-      name: fullName,
-      email: email,
-      password: password,
-    };
-    if (isRegistered == false) {
-      navigateOtpScreen(user);
-    }
-  }, [isRegistered]);
+  constructor();
 
-  const navigateOtpScreen = (user) => {
+  const toggleCheckbox = (index) => {
+    const checkboxData = [...checked];
+    checkboxData[index].checked = !checkboxData[index].checked;
+    setChecked(checkboxData);
+  };
+
+  // const {isRegistered, message} = useSelector((state) => state.register);
+  // const dispatch = useDispatch();
+
+  // const checkRegistered = (phone) => {
+  //   dispatch(checkRegisteredUser(phone));
+  // };
+
+  // useEffect(() => {
+  //   const user = {
+  //     phone: phone,
+  //     name: fullName,
+  //     email: email,
+  //     password: password,
+  //   };
+  //   if (isRegistered == false) {
+  //     navigateOtpScreen(user);
+  //   }
+  // }, [isRegistered]);
+
+  const navigateOtpScreen = () => {
+    const checkedData = [];
+    checked.map((item, index) => {
+      if (item.checked) {
+        checkedData.push(item);
+      }
+    });
     if (fullName === '') {
-      setErrorMessage(' is required');
+      setErrorMessage(' không được để trống');
+    } else if (email === '') {
+      setErrorMessage(' không được để trống');
     } else if (phone === '') {
-      setErrorMessage(' is required');
+      setErrorMessage(' không được để trống');
+    } else if (checkedData.length !== []) {
+      setErrorChecked('Cần có ít nhất một chuyên ngành');
     } else if (password === '') {
-      setErrorMessage(' is required');
+      setErrorMessage(' không được để trống');
     } else if (repassword === '') {
-      setErrorMessage(' is required');
+      setErrorMessage(' không được để trống');
     } else if (
       password !== '' &&
       repassword !== '' &&
       password !== repassword
     ) {
-      setMatchedPassword(true);
-      setErrorMessage(' is not matched with Password');
+      setErrorMessage(' không trùng với Password');
     } else {
       setErrorMessage('');
-      navigation.navigate('OTPView', user);
+      setErrorChecked('');
+      navigation.navigate('OTPView');
     }
   };
 
@@ -85,13 +144,15 @@ const RegisterView = ({navigation}) => {
             ]}>
             Vui lòng điền những thông tin sau
           </Text>
-          <Text
-            style={[
-              styles.textRegular,
-              {marginTop: calcScale(15), fontSize: calcScale(22)},
-            ]}>
-            {message}
-          </Text>
+          {/* {message ? (
+            <Text
+              style={[
+                styles.textRegular,
+                {marginTop: calcScale(5), fontSize: calcScale(22)},
+              ]}>
+              {message}
+            </Text>
+          ) : null} */}
           <View style={styles.formContainer}>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
@@ -120,7 +181,9 @@ const RegisterView = ({navigation}) => {
               />
             </View>
             <View style={styles.column}>
-              <Text style={styles.textRegular}>Email</Text>
+              <Text style={styles.textRegular}>
+                Email <Text style={{color: 'red'}}>*</Text>
+              </Text>
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana@gmail.com"
@@ -165,6 +228,46 @@ const RegisterView = ({navigation}) => {
                     : ''
                 }
               />
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.textRegular}>
+                Trình độ học vấn <Text style={{color: 'red'}}>*</Text>
+              </Text>
+              <Picker
+                selectedValue={knowledge}
+                onValueChange={(itemValue, itemIndex) =>
+                  setKnowledge(itemValue)
+                }>
+                <Picker.Item label="Tốt nghiệp cấp 2" value="0" />
+                <Picker.Item label="Tốt nghiệp cấp 3" value="1" />
+                <Picker.Item label="Cao đẳng" value="2" />
+                <Picker.Item label="Đại học" value="3" />
+              </Picker>
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.textRegular}>
+                Chuyên ngành <Text style={{color: 'red'}}>*</Text>
+              </Text>
+              <ListItem
+                containerStyle={{
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}>
+                {checked.map((item, index) => {
+                  return (
+                    <ListItem.CheckBox
+                      key={item.id.toString()}
+                      title={item.name}
+                      checked={item.checked}
+                      containerStyle={{backgroundColor: '#fff', borderWidth: 0}}
+                      onPress={() => toggleCheckbox(index)}
+                    />
+                  );
+                })}
+              </ListItem>
+              {errorChecked !== '' ? (
+                <Text style={{color: 'red'}}>{errorChecked}</Text>
+              ) : null}
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
@@ -241,8 +344,8 @@ const RegisterView = ({navigation}) => {
           </View>
           <CheckBox
             title="Tôi đồng ý với điều khoản và dịch vụ của FixIt"
-            checked={checked}
-            onPress={() => setChecked(!checked)}
+            checked={confirm}
+            onPress={() => setConfirm(!confirm)}
             containerStyle={styles.checkBox}
             textStyle={{fontSize: calcScale(17)}}
           />
@@ -250,11 +353,11 @@ const RegisterView = ({navigation}) => {
             <PTButton
               title="Tiếp tục"
               onPress={() => {
-                checkRegistered(phone);
+                navigateOtpScreen();
               }}
               style={styles.button}
               color="#fff"
-              disabled={checked ? false : true}
+              disable={confirm}
             />
           </View>
         </ScrollView>
