@@ -95,7 +95,7 @@ const MyProfileView = () => {
             placeholder="Phone"
             onChangeText={(phone) => setPhone(phone)}
             value={phone}
-            disabled={notEdit}
+            disabled
             keyboardType="number-pad"
           />
           <Input

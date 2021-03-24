@@ -30,7 +30,7 @@ const AnnouncementBox = ({item, navigation}) => {
   return (
     <ListItem
       containerStyle={{
-        backgroundColor: checkRead === 0 ? '#e9f7fc' : '#fff',
+        backgroundColor: checkRead === 0 ? 'rgb(255, 218, 114)' : '#fff',
       }}
       onPress={() => readNotification(item.id)}>
       <Avatar.Text size={calcScale(65)} label={item.metionUser.charAt(0)} />

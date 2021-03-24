@@ -23,13 +23,13 @@ const AnnouncementView = ({navigation}) => {
   const getNewNotification = () => {
     setIsLoading(true);
 
-    setNewNotification(response);
+    setNewNotification();
     setIsLoading(false);
   };
 
   const getEarlierNotification = (currentPage) => {
     setIsLoading(true);
-    setEarlierNotification(response);
+    setEarlierNotification();
     setIsLoading(false);
     setTotalPage();
   };

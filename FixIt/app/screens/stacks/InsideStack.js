@@ -9,6 +9,7 @@ import ConfirmRequestView from '../views/CreateRequestView/ConfirmRequestView';
 import CreateAddressView from '../views/CreateRequestView/CreateAddressView';
 import CreateRequestView from '../views/CreateRequestView/CreateRequestView';
 import HomeView from '../views/HomeView';
+import RequestDetailView from '../views/HomeView/RequestDetailView';
 import MyProfileView from '../views/MyProfileView';
 import MyRequestView from '../views/MyRequestView';
 import ServiceListView from '../views/ServiceView/ServiceListView';
@@ -61,47 +62,12 @@ const HomeStackNavigator = () => {
         component={HomeView}
       />
       <HomeStack.Screen
-        name="ServiceListView"
-        component={ServiceListView}
-        options={({route}) => ({
-          title: route.params.serviceName,
-          headerTitleStyle: {color: '#fff'},
-          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
-        })}
-      />
-      <HomeStack.Screen
-        name="CreateRequestView"
-        component={CreateRequestView}
+        name="RequestDetailView"
+        component={RequestDetailView}
         options={{
-          title: 'Tạo yêu cầu',
+          title: 'Chi tiết đơn hàng',
           headerTitleStyle: {color: '#fff'},
-          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
-        }}
-      />
-      <HomeStack.Screen
-        name="ConfirmRequestView"
-        component={ConfirmRequestView}
-        options={{
-          title: 'Xác nhận yêu cầu',
-          headerTitleStyle: {color: '#fff'},
-          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
-        }}
-      />
-      <HomeStack.Screen
-        name="AddressListView"
-        component={AddressListView}
-        options={{
-          title: 'Chọn địa chỉ',
-          headerTitleStyle: {color: '#fff'},
-          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
-        }}
-      />
-      <HomeStack.Screen
-        name="CreateAddressView"
-        component={CreateAddressView}
-        options={{
-          title: 'Thêm địa chỉ',
-          headerTitleStyle: {color: '#fff'},
+          headerTintColor: '#fff',
           headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
         }}
       />

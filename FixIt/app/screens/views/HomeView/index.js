@@ -5,7 +5,7 @@ import {StyleSheet, Text} from 'react-native';
 import {calcScale} from '../../../utils/dimension';
 import HeaderBar from './HeaderBar';
 import CommonStyles from '../Styles';
-import ServiceItem from './ServiceItem';
+import RequestItem from './RequestItem';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -19,6 +19,8 @@ const HomeView = ({navigation}) => {
       service: 'Sửa nhà',
       estimate_fix_duration: 60,
       estimate_price: 300,
+      created_time: '10:00',
+      accepted: 0,
     },
     {
       id: 2,
@@ -26,6 +28,8 @@ const HomeView = ({navigation}) => {
       service: 'Sửa nhà',
       estimate_fix_duration: 30,
       estimate_price: 100,
+      created_time: '10:00',
+      accepted: 1,
     },
     {
       id: 3,
@@ -33,6 +37,8 @@ const HomeView = ({navigation}) => {
       service: 'Sửa nhà',
       estimate_fix_duration: 60,
       estimate_price: 400,
+      created_time: '10:00',
+      accepted: 0,
     },
     {
       id: 4,
@@ -40,6 +46,8 @@ const HomeView = ({navigation}) => {
       service: 'Sửa nhà',
       estimate_fix_duration: 60,
       estimate_price: 300,
+      created_time: '10:00',
+      accepted: 0,
     },
     {
       id: 5,
@@ -47,6 +55,8 @@ const HomeView = ({navigation}) => {
       service: 'Sửa nhà',
       estimate_fix_duration: 30,
       estimate_price: 100,
+      created_time: '10:00',
+      accepted: 1,
     },
     {
       id: 6,
@@ -54,6 +64,8 @@ const HomeView = ({navigation}) => {
       service: 'Sửa nhà',
       estimate_fix_duration: 60,
       estimate_price: 400,
+      created_time: '10:00',
+      accepted: 1,
     },
     {
       id: 7,
@@ -61,6 +73,8 @@ const HomeView = ({navigation}) => {
       service: 'Sửa nhà',
       estimate_fix_duration: 60,
       estimate_price: 300,
+      created_time: '10:00',
+      accepted: 0,
     },
     {
       id: 8,
@@ -68,6 +82,8 @@ const HomeView = ({navigation}) => {
       service: 'Sửa nhà',
       estimate_fix_duration: 30,
       estimate_price: 100,
+      created_time: '10:00',
+      accepted: 1,
     },
     {
       id: 9,
@@ -75,6 +91,8 @@ const HomeView = ({navigation}) => {
       service: 'Sửa nhà',
       estimate_fix_duration: 60,
       estimate_price: 400,
+      created_time: '10:00',
+      accepted: 1,
     },
   ];
   const [isEnabled, setIsEnabled] = React.useState(false);
@@ -114,7 +132,7 @@ const HomeView = ({navigation}) => {
               data={requestData}
               style={styles.serviceContainer}
               renderItem={({item, index}) => (
-                <ServiceItem
+                <RequestItem
                   navigation={navigation}
                   item={item}
                   index={index}

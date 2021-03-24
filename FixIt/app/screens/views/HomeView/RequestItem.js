@@ -18,7 +18,7 @@ const useComponentSize = () => {
   return [size, onLayout];
 };
 
-const ServiceItem = ({navigation, item, index}) => {
+const RequestItem = ({navigation, item, index}) => {
   const [size, onLayout] = useComponentSize();
 
   const data = item;
@@ -26,19 +26,26 @@ const ServiceItem = ({navigation, item, index}) => {
   return (
     <ListItem
       containerStyle={{
-        backgroundColor: index % 2 === 0 ? 'rgb(255, 188, 0)' : '#fff',
+        backgroundColor: index % 2 === 0 ? 'rgba(255, 188, 0, .9)' : '#fff',
       }}
-      onPress={() => {}}>
+      onPress={() =>
+        navigation.navigate('RequestDetailView', {requestData: data})
+      }>
       <Avatar.Text size={calcScale(65)} label="R" />
-      <ListItem.Content>
-        <ListItem.Title numberOfLines={1}>
-          <Text style={styles.textBold}>{data.request}</Text>
-        </ListItem.Title>
-        <ListItem.Content style={styles.column}>
-          <Text>Phân loại: {data.service}</Text>
-          <Text>
-            {data.estimate_fix_duration} - {data.estimate_price}
-          </Text>
+      <ListItem.Content style={styles.row}>
+        <ListItem.Content style={{flexBasis: '85%'}}>
+          <ListItem.Title numberOfLines={1}>
+            <Text style={styles.textBold}>{data.request}</Text>
+          </ListItem.Title>
+          <ListItem.Content style={styles.column}>
+            <Text>Phân loại: {data.service}</Text>
+            <Text>
+              {data.estimate_fix_duration} - {data.estimate_price}
+            </Text>
+          </ListItem.Content>
+        </ListItem.Content>
+        <ListItem.Content style={{flexBasis: '15%'}}>
+          <Text>{data.created_time}</Text>
         </ListItem.Content>
       </ListItem.Content>
     </ListItem>
@@ -49,6 +56,9 @@ const styles = StyleSheet.create({
   column: {
     flexDirection: 'column',
   },
+  row: {
+    flexDirection: 'row',
+  },
   textBold: {
     ...CommonStyles.textBold,
     fontSize: calcScale(20),
@@ -57,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ServiceItem;
+export default RequestItem;
