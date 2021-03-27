@@ -76,9 +76,9 @@ export const { usersRequested, usersLoggedIn, usersLoginFailed, userChangePasswo
 export const loadUsers = (username, password, device_token) => apiCallBegan({
     url: '/login',
     data: {
-        phoneNumber: username,
+        phone_number: username,
         password: password,
-        role_id: constants.ROLE_CUSTOMER,
+        role_id: constants.ROLE_REPAIRER,
         device_token: device_token
     },
     method: 'POST',
@@ -96,7 +96,7 @@ export const changePassword = (phone, token, old_password, new_password) => apiC
         phone_number: phone,
         old_password: old_password,
         new_password: new_password,
-        role_id: constants.ROLE_CUSTOMER
+        role_id: constants.ROLE_REPAIRER
     },
     method: 'POST',
     onStart: usersRequested.type,
@@ -111,7 +111,7 @@ export const updateUser = (phone, token, name, email) => apiCallBegan({
     },
     data: {
         phone_number: phone,
-        role_id: constants.ROLE_CUSTOMER,
+        role_id: constants.ROLE_REPAIRER,
         name: name,
         email: email
     },

@@ -12,6 +12,7 @@ const register = createSlice({
     },
     reducers: {
         registerRequested: (register, action) => {
+            console.log(action)
             register.message = ''
             register.isRegistered = true
             register.sendOTP = true
@@ -55,7 +56,7 @@ export const registerUser = (phoneNumber, password, name, email) => apiCallBegan
         phone_number: phoneNumber,
         password: password,
         name: name,
-        role_id: constants.ROLE_CUSTOMER,
+        role_id: constants.ROLE_REPAIRER,
         email: email
     },
     method: 'POST',
@@ -68,7 +69,7 @@ export const checkRegisteredUser = (phoneNumber) => apiCallBegan({
     url: '/checkRegistered',
     data: {
         phone_number: phoneNumber,
-        role_id: constants.ROLE_CUSTOMER
+        role_id: constants.ROLE_REPAIRER
     },
     method: 'POST',
     onStart: registerRequested.type,

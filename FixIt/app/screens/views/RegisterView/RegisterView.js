@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   Text,
   View,
@@ -9,17 +9,17 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {CheckBox, Input, ListItem} from 'react-native-elements';
-import {useDispatch, useSelector} from 'react-redux';
-import {Picker} from '@react-native-picker/picker';
+import { CheckBox, Input, ListItem } from 'react-native-elements';
+import { useDispatch, useSelector } from 'react-redux';
+import { Picker } from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CommonStyles from '../Styles';
 import PTButton from '../../commonComponent/Button';
-import {calcScale} from '../../../utils/dimension';
-import {checkRegisteredUser} from '../../../store/register';
-import {useReducer} from 'react';
+import { calcScale } from '../../../utils/dimension';
+import { checkRegisteredUser } from '../../../store/register';
+import { useReducer } from 'react';
 
-const RegisterView = ({navigation}) => {
+const RegisterView = ({ navigation }) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [fullName, setFullName] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -80,26 +80,26 @@ const RegisterView = ({navigation}) => {
     setChecked(checkboxData);
   };
 
-  // const {isRegistered, message} = useSelector((state) => state.register);
-  // const dispatch = useDispatch();
+  const { isRegistered, message } = useSelector((state) => state.register);
+  const dispatch = useDispatch();
 
-  // const checkRegistered = (phone) => {
-  //   dispatch(checkRegisteredUser(phone));
-  // };
+  const checkRegistered = (phone) => {
+    dispatch(checkRegisteredUser(phone));
+  };
 
-  // useEffect(() => {
-  //   const user = {
-  //     phone: phone,
-  //     name: fullName,
-  //     email: email,
-  //     password: password,
-  //   };
-  //   if (isRegistered == false) {
-  //     navigateOtpScreen(user);
-  //   }
-  // }, [isRegistered]);
+  useEffect(() => {
+    const user = {
+      phone: phone,
+      name: fullName,
+      email: email,
+      password: password,
+    };
+    if (isRegistered == false) {
+      navigateOtpScreen(user);
+    }
+  }, [isRegistered]);
 
-  const navigateOtpScreen = () => {
+  const navigateOtpScreen = (user) => {
     const checkedData = [];
     checked.map((item, index) => {
       if (item.checked) {
@@ -112,7 +112,7 @@ const RegisterView = ({navigation}) => {
       setErrorMessage(' không được để trống');
     } else if (phone === '') {
       setErrorMessage(' không được để trống');
-    } else if (checkedData.length !== []) {
+    } else if (checkedData.length === 0) {
       setErrorChecked('Cần có ít nhất một chuyên ngành');
     } else if (password === '') {
       setErrorMessage(' không được để trống');
@@ -127,7 +127,7 @@ const RegisterView = ({navigation}) => {
     } else {
       setErrorMessage('');
       setErrorChecked('');
-      navigation.navigate('OTPView');
+      navigation.navigate('OTPView', user);
     }
   };
 
@@ -140,7 +140,7 @@ const RegisterView = ({navigation}) => {
           <Text
             style={[
               styles.textRegular,
-              {marginTop: calcScale(15), fontSize: calcScale(22)},
+              { marginTop: calcScale(15), fontSize: calcScale(22) },
             ]}>
             Vui lòng điền những thông tin sau
           </Text>
@@ -156,7 +156,7 @@ const RegisterView = ({navigation}) => {
           <View style={styles.formContainer}>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Họ và tên <Text style={{color: 'red'}}>*</Text>
+                Họ và tên <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -182,7 +182,7 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Email <Text style={{color: 'red'}}>*</Text>
+                Email <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -204,7 +204,7 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Phone number <Text style={{color: 'red'}}>*</Text>
+                Phone number <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -231,7 +231,7 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Trình độ học vấn <Text style={{color: 'red'}}>*</Text>
+                Trình độ học vấn <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <Picker
                 selectedValue={knowledge}
@@ -246,7 +246,7 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Chuyên ngành <Text style={{color: 'red'}}>*</Text>
+                Chuyên ngành <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <ListItem
                 containerStyle={{
@@ -259,19 +259,19 @@ const RegisterView = ({navigation}) => {
                       key={item.id.toString()}
                       title={item.name}
                       checked={item.checked}
-                      containerStyle={{backgroundColor: '#fff', borderWidth: 0}}
+                      containerStyle={{ backgroundColor: '#fff', borderWidth: 0 }}
                       onPress={() => toggleCheckbox(index)}
                     />
                   );
                 })}
               </ListItem>
               {errorChecked !== '' ? (
-                <Text style={{color: 'red'}}>{errorChecked}</Text>
+                <Text style={{ color: 'red' }}>{errorChecked}</Text>
               ) : null}
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Mật khẩu <Text style={{color: 'red'}}>*</Text>
+                Mật khẩu <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -286,7 +286,7 @@ const RegisterView = ({navigation}) => {
                         size={calcScale(15)}
                         color="grey"
                         onPress={() => setSecure(!secure)}
-                        style={{marginRight: calcScale(5)}}
+                        style={{ marginRight: calcScale(5) }}
                       />
                       <Icon
                         name="times-circle"
@@ -307,7 +307,7 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Nhập lại mật khẩu <Text style={{color: 'red'}}>*</Text>
+                Nhập lại mật khẩu <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -322,7 +322,7 @@ const RegisterView = ({navigation}) => {
                         size={calcScale(15)}
                         color="grey"
                         onPress={() => setResecure(!resecure)}
-                        style={{marginRight: calcScale(5)}}
+                        style={{ marginRight: calcScale(5) }}
                       />
                       <Icon
                         name="times-circle"
@@ -347,13 +347,13 @@ const RegisterView = ({navigation}) => {
             checked={confirm}
             onPress={() => setConfirm(!confirm)}
             containerStyle={styles.checkBox}
-            textStyle={{fontSize: calcScale(17)}}
+            textStyle={{ fontSize: calcScale(17) }}
           />
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <PTButton
               title="Tiếp tục"
               onPress={() => {
-                navigateOtpScreen();
+                checkRegistered(phone);
               }}
               style={styles.button}
               color="#fff"

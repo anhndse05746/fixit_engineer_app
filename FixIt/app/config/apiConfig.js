@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://fixit-back-end.herokuapp.com/'
+export const BASE_URL = 'https://fixit-backend-test.herokuapp.com/'

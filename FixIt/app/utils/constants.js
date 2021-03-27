@@ -1,5 +1,5 @@
 module.exports = Object.freeze({
-    ROLE_CUSTOMER: 3,
+    ROLE_REPAIRER: 2,
 
     LOGIN_FAIL_MESSAGE: "Sai tên tài khoản hoặc mật khẩu",
     REGISTER_SUCCESSFULLY: "Đăng ký thành công",

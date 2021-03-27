@@ -60,7 +60,7 @@ export const resetPassword = (phoneNumber, newPassword) => apiCallBegan({
     data: {
         phone_number: phoneNumber,
         new_password: newPassword,
-        role_id: constants.ROLE_CUSTOMER,
+        role_id: constants.ROLE_REPAIRER,
     },
     method: 'POST',
     onStart: resetRequested.type,
@@ -72,7 +72,7 @@ export const checkRegisteredUser = (phoneNumber) => apiCallBegan({
     url: '/checkRegistered',
     data: {
         phone_number: phoneNumber,
-        role_id: constants.ROLE_CUSTOMER
+        role_id: constants.ROLE_REPAIRER
     },
     method: 'POST',
     onStart: resetRequested.type,
