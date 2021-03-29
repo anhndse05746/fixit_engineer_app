@@ -6,6 +6,7 @@ import constants from '../utils/constants'
 const user = createSlice({
     name: 'user',
     initialState: {
+        userId: '',
         phoneNumber: '',
         name: '',
         roleId: '',
@@ -26,6 +27,7 @@ const user = createSlice({
         },
         usersLoggedIn: (users, action) => {
             console.log(action)
+            users.userId = action.payload.id
             users.phoneNumber = action.payload.phone
             users.name = action.payload.name
             users.roleId = action.payload.roleId
