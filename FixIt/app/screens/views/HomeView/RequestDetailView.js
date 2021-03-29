@@ -1,14 +1,20 @@
-import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {useSelector} from 'react-redux';
-import {calcScale} from '../../../utils/dimension';
+import React, { useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { calcScale } from '../../../utils/dimension';
 import PTButton from '../../commonComponent/Button';
 import commonStyles from '../Styles';
+import { getRequestDetail } from '../../../store/request'
 
-const RequestDetailView = ({navigation, route}) => {
+const RequestDetailView = ({ navigation, route }) => {
   const user = useSelector((state) => state.user);
+  const dispatch = useDispatch()
+  const request = useSelector(state => state.request)
 
-  const data = route.params.requestData;
+  useEffect(() => {
+    dispatch(getRequestDetail(user.token, route.params.requestData.id))
+  }, [])
+  const data = request.requestDetail
 
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [accepted, setAccepted] = React.useState(0);
@@ -27,36 +33,38 @@ const RequestDetailView = ({navigation, route}) => {
 
   return (
     <ScrollView style={styles.container}>
-      {accepted ? (
-        <View
-          style={{
-            borderBottomColor: '#ccc',
-            borderBottomWidth: 1,
-            paddingBottom: calcScale(10),
-            marginTop: calcScale(20),
-          }}>
-          <View style={{marginLeft: calcScale(20)}}>
-            <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
-              Địa chỉ:
-            </Text>
-            <Text style={{fontSize: calcScale(18), marginTop: calcScale(5)}}>
-              {user.name} | {user.phoneNumber}
-            </Text>
-            <Text style={{fontSize: calcScale(18)}}>{data.address}</Text>
-          </View>
-        </View>
-      ) : null}
-      <View style={styles.form}>
-        <View style={styles.formHeader}>
-          <Text
-            style={{
-              fontSize: calcScale(28),
-              fontWeight: 'bold',
-            }}>
-            Phân loại: {data.service}
-          </Text>
-        </View>
-        <View style={styles.innerFormContainer}>
+      {data.id ? (
+        <>
+          {accepted ? (
+            <View
+              style={{
+                borderBottomColor: '#ccc',
+                borderBottomWidth: 1,
+                paddingBottom: calcScale(10),
+                marginTop: calcScale(20),
+              }}>
+              <View style={{ marginLeft: calcScale(20) }}>
+                <Text style={{ fontSize: calcScale(24), fontWeight: 'bold' }}>
+                  Địa chỉ: {data.address}, {data.district}, {data.city}
+                </Text>
+                <Text style={{ fontSize: calcScale(18), marginTop: calcScale(5) }}>
+                  {user.name} | {user.phoneNumber}
+                </Text>
+                <Text style={{ fontSize: calcScale(18) }}>{data.address}</Text>
+              </View>
+            </View>
+          ) : null}
+          <View style={styles.form}>
+            <View style={styles.formHeader}>
+              <Text
+                style={{
+                  fontSize: calcScale(28),
+                  fontWeight: 'bold',
+                }}>
+                Phân loại: {data.service.name}
+              </Text>
+            </View>
+            {/* <View style={styles.innerFormContainer}>
           <Text
             style={{
               fontSize: calcScale(18),
@@ -72,149 +80,158 @@ const RequestDetailView = ({navigation, route}) => {
             }}>
             {data.request}
           </Text>
-        </View>
-        <View style={styles.innerFormContainer}>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              fontWeight: 'bold',
-              marginBottom: calcScale(10),
-            }}>
-            Thời gian hẹn:
-          </Text>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              marginBottom: calcScale(10),
-            }}>
-            {/* {data.date.toString()} */}
-          </Text>
-        </View>
-        <View style={styles.innerFormContainer}>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              fontWeight: 'bold',
-              marginBottom: calcScale(10),
-            }}>
-            Vấn đề đang gặp phải:
-          </Text>
-          {/* {data.issues.map((item, index) => {
-            return (
+        </View> */}
+            <View style={styles.innerFormContainer}>
               <Text
-                key={item.id.toString()}
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                Thời gian hẹn:
+          </Text>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  marginBottom: calcScale(10),
+                }}>
+                {data.schedule_time.toString()}
+              </Text>
+            </View>
+            <View style={styles.innerFormContainer}>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                Vấn đề đang gặp phải:
+          </Text>
+              {data.request_issues.map((item, index) => {
+                return (
+                  <Text
+                    key={item.id}
+                    style={{
+                      fontSize: calcScale(16),
+                      marginBottom: calcScale(10),
+                    }}>
+                    + {item.issue.name}
+                  </Text>
+                );
+              })}
+            </View>
+            <View style={styles.innerFormContainer}>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                Mô tả chi tiết vấn đề gặp phải:
+          </Text>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                {data.description}
+              </Text>
+            </View>
+            <View style={styles.innerFormContainer}>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                Thời gian sửa ước tính:
+          </Text>
+              <Text
                 style={{
                   fontSize: calcScale(16),
                   marginBottom: calcScale(10),
                 }}>
-                + {item.title}
+                {data.estimate_time}
               </Text>
-            );
-          })} */}
-        </View>
-        <View style={styles.innerFormContainer}>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              fontWeight: 'bold',
-              marginBottom: calcScale(10),
-            }}>
-            Mô tả chi tiết vấn đề gặp phải:
+            </View>
+            <View style={styles.innerFormContainer}>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                Tổng chi phí:
           </Text>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              fontWeight: 'bold',
-              marginBottom: calcScale(10),
-            }}>
-            {/* {data.description} */}
+              <Text
+                style={{
+                  fontSize: calcScale(16),
+                  marginBottom: calcScale(10),
+                }}>
+                {data.estimate_price}
+              </Text>
+            </View>
+            <View style={styles.innerFormContainer}>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                Hình thức thanh toán:
           </Text>
-        </View>
-        <View style={styles.innerFormContainer}>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              fontWeight: 'bold',
-              marginBottom: calcScale(10),
-            }}>
-            Thời gian sửa ước tính:
+              <Text
+                style={{
+                  fontSize: calcScale(16),
+                  marginBottom: calcScale(10),
+                }}>
+                Tiền mặt
           </Text>
-          <Text
-            style={{
-              fontSize: calcScale(16),
-              marginBottom: calcScale(10),
-            }}>
-            {data.estimate_fix_duration}
-          </Text>
-        </View>
-        <View style={styles.innerFormContainer}>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              fontWeight: 'bold',
-              marginBottom: calcScale(10),
-            }}>
-            Tổng chi phí:
-          </Text>
-          <Text
-            style={{
-              fontSize: calcScale(16),
-              marginBottom: calcScale(10),
-            }}>
-            {data.estimate_price}
-          </Text>
-        </View>
-        <View style={styles.innerFormContainer}>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              fontWeight: 'bold',
-              marginBottom: calcScale(10),
-            }}>
-            Hình thức thanh toán:
-          </Text>
-          <Text
-            style={{
-              fontSize: calcScale(16),
-              marginBottom: calcScale(10),
-            }}>
-            Tiền mặt
-          </Text>
-        </View>
-        <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
-          {accepted ? (
-            <>
-              <View style={styles.row}>
+            </View>
+            <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
+              {accepted ? (
+                <>
+                  <View style={styles.row}>
+                    <PTButton
+                      title="Gọi điện"
+                      onPress={() => { }}
+                      style={styles.buttonHalfWidth}
+                      color="#fff"
+                    />
+                    <PTButton
+                      title="Tạo hóa đơn"
+                      onPress={() => { }}
+                      style={styles.buttonHalfWidth}
+                      color="#fff"
+                    />
+                  </View>
+                  <PTButton
+                    title="Hủy nhận yêu cầu"
+                    onPress={() => setAccepted(0)}
+                    style={styles.button}
+                    color="#fff"
+                  />
+                </>
+              ) : (
                 <PTButton
-                  title="Gọi điện"
-                  onPress={() => {}}
-                  style={styles.buttonHalfWidth}
+                  title="Nhận yêu cầu"
+                  onPress={() => setAccepted(1)}
+                  style={styles.button}
                   color="#fff"
                 />
-                <PTButton
-                  title="Tạo hóa đơn"
-                  onPress={() => {}}
-                  style={styles.buttonHalfWidth}
-                  color="#fff"
-                />
-              </View>
-              <PTButton
-                title="Hủy nhận yêu cầu"
-                onPress={() => setAccepted(0)}
-                style={styles.button}
-                color="#fff"
-              />
-            </>
-          ) : (
-            <PTButton
-              title="Nhận yêu cầu"
-              onPress={() => setAccepted(1)}
-              style={styles.button}
-              color="#fff"
-            />
-          )}
-        </View>
-      </View>
+              )}
+            </View>
+          </View>
+
+        </>
+      ) : (
+        <ActivityIndicator
+          size="small"
+          color="#3368f3"
+          style={{ marginTop: calcScale(10) }}
+        />
+      )}
     </ScrollView>
   );
 };

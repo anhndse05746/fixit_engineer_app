@@ -100,16 +100,16 @@ export const listRequest = (token, repairer_id) => apiCallBegan({
 //     onError: '',
 // })
 
-// export const getRequestDetail = (token, request_id) => apiCallBegan({
-//     url: '/api/getRequestDetail',
-//     headers: {
-//         Authorization: token,
-//     },
-//     data: {
-//         request_id: request_id
-//     },
-//     method: 'POST',
-//     onStart: onRequestStarted.type,
-//     onSuccess: getRequestDetailSuccess.type,
-//     onError: getRequestDetailFail.type,
-// })
+export const getRequestDetail = (token, request_id) => apiCallBegan({
+    url: '/api/getRequestDetail',
+    headers: {
+        Authorization: token,
+    },
+    data: {
+        request_id: request_id
+    },
+    method: 'POST',
+    onStart: onRequestStarted.type,
+    onSuccess: getRequestDetailSuccess.type,
+    onError: getRequestDetailFail.type,
+})
