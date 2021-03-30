@@ -1,29 +1,38 @@
-import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useEffect} from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
+} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { calcScale } from '../../../utils/dimension';
+import {calcScale} from '../../../utils/dimension';
 import PTButton from '../../commonComponent/Button';
 import commonStyles from '../Styles';
-import { getRequestDetail, takeRequest, clearMessage } from '../../../store/request'
+import {
+  getRequestDetail,
+  takeRequest,
+  clearMessage,
+} from '../../../store/request';
 import constants from '../../../utils/constants';
 
-const RequestDetailView = ({ navigation, route }) => {
+const RequestDetailView = ({navigation, route}) => {
   const user = useSelector((state) => state.user);
-  const dispatch = useDispatch()
-  const request = useSelector(state => state.request)
-  const requestId = route.params.requestData.id
-  const { message } = request
+  const dispatch = useDispatch();
+  const request = useSelector((state) => state.request);
+  const requestId = route.params.requestData.id;
+  const {message} = request;
 
   //get request detail
   useEffect(() => {
     if (message !== constants.TAKE_REQUEST_SUCCESSFULLY) {
-      setAccepted(0)
-      dispatch(getRequestDetail(user.token, requestId))
+      setAccepted(0);
+      dispatch(getRequestDetail(user.token, requestId));
     }
-
-  }, [])
-  const data = request.requestDetail
+  }, []);
+  const data = request.requestDetail;
 
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [accepted, setAccepted] = React.useState(0);
@@ -41,18 +50,17 @@ const RequestDetailView = ({ navigation, route }) => {
 
   //Take request
   const takeRequestTrigger = (token, userId, requestId) => {
-    setAccepted(1)
-    dispatch(takeRequest(token, requestId, userId))
-  }
+    setAccepted(1);
+    dispatch(takeRequest(token, requestId, userId));
+  };
 
   useEffect(() => {
-    console.log(message)
+    console.log(message);
     if (message === constants.TAKE_REQUEST_SUCCESSFULLY) {
-      console.log("i'm here")
-      alert(message)
-
+      console.log("i'm here");
+      alert(message);
     }
-  }, [message])
+  }, [message]);
 
   return (
     <ScrollView style={styles.container}>
@@ -66,14 +74,16 @@ const RequestDetailView = ({ navigation, route }) => {
                 paddingBottom: calcScale(10),
                 marginTop: calcScale(20),
               }}>
-              <View style={{ marginLeft: calcScale(20) }}>
-                <Text style={{ fontSize: calcScale(24), fontWeight: 'bold' }}>
+              <View style={{marginLeft: calcScale(20)}}>
+                <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
                   Địa chỉ: {data.address}, {data.district}, {data.city}
                 </Text>
-                <Text style={{ fontSize: calcScale(18), marginTop: calcScale(5) }}>
-                  {data.Customer.name}{/* | {user.phoneNumber} */}
+                <Text
+                  style={{fontSize: calcScale(18), marginTop: calcScale(5)}}>
+                  {data.Customer.name}
+                  {/* | {user.phoneNumber} */}
                 </Text>
-                <Text style={{ fontSize: calcScale(18) }}>{data.address}</Text>
+                <Text style={{fontSize: calcScale(18)}}>{data.address}</Text>
               </View>
             </View>
           ) : null}
@@ -112,7 +122,7 @@ const RequestDetailView = ({ navigation, route }) => {
                   marginBottom: calcScale(10),
                 }}>
                 Thời gian hẹn:
-          </Text>
+              </Text>
               <Text
                 style={{
                   fontSize: calcScale(18),
@@ -129,7 +139,7 @@ const RequestDetailView = ({ navigation, route }) => {
                   marginBottom: calcScale(10),
                 }}>
                 Vấn đề đang gặp phải:
-          </Text>
+              </Text>
               {data.request_issues.map((item, index) => {
                 return (
                   <Text
@@ -151,7 +161,7 @@ const RequestDetailView = ({ navigation, route }) => {
                   marginBottom: calcScale(10),
                 }}>
                 Mô tả chi tiết vấn đề gặp phải:
-          </Text>
+              </Text>
               <Text
                 style={{
                   fontSize: calcScale(18),
@@ -169,7 +179,7 @@ const RequestDetailView = ({ navigation, route }) => {
                   marginBottom: calcScale(10),
                 }}>
                 Thời gian sửa ước tính:
-          </Text>
+              </Text>
               <Text
                 style={{
                   fontSize: calcScale(16),
@@ -186,7 +196,7 @@ const RequestDetailView = ({ navigation, route }) => {
                   marginBottom: calcScale(10),
                 }}>
                 Tổng chi phí:
-          </Text>
+              </Text>
               <Text
                 style={{
                   fontSize: calcScale(16),
@@ -203,28 +213,28 @@ const RequestDetailView = ({ navigation, route }) => {
                   marginBottom: calcScale(10),
                 }}>
                 Hình thức thanh toán:
-          </Text>
+              </Text>
               <Text
                 style={{
                   fontSize: calcScale(16),
                   marginBottom: calcScale(10),
                 }}>
                 Tiền mặt
-          </Text>
+              </Text>
             </View>
-            <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
+            <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
               {accepted ? (
                 <>
                   <View style={styles.row}>
                     <PTButton
                       title="Gọi điện"
-                      onPress={() => { }}
+                      onPress={() => {}}
                       style={styles.buttonHalfWidth}
                       color="#fff"
                     />
                     <PTButton
                       title="Tạo hóa đơn"
-                      onPress={() => { }}
+                      onPress={() => navigation.navigate('AddBillView')}
                       style={styles.buttonHalfWidth}
                       color="#fff"
                     />
@@ -239,20 +249,21 @@ const RequestDetailView = ({ navigation, route }) => {
               ) : (
                 <PTButton
                   title="Nhận yêu cầu"
-                  onPress={() => takeRequestTrigger(user.token, user.userId, requestId)}
+                  onPress={() =>
+                    takeRequestTrigger(user.token, user.userId, requestId)
+                  }
                   style={styles.button}
                   color="#fff"
                 />
               )}
             </View>
           </View>
-
         </>
       ) : (
         <ActivityIndicator
           size="small"
           color="#3368f3"
-          style={{ marginTop: calcScale(10) }}
+          style={{marginTop: calcScale(10)}}
         />
       )}
     </ScrollView>

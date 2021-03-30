@@ -1,18 +1,17 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useNavigation} from '@react-navigation/core';
 import {createStackNavigator} from '@react-navigation/stack';
 import React from 'react';
+import {StyleSheet, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {calcScale} from '../../utils/dimension';
 import AnnoucementView from '../views/AnnouncementView';
-import AddressListView from '../views/CreateRequestView/AddressListView';
-import ConfirmRequestView from '../views/CreateRequestView/ConfirmRequestView';
-import CreateAddressView from '../views/CreateRequestView/CreateAddressView';
-import CreateRequestView from '../views/CreateRequestView/CreateRequestView';
 import HomeView from '../views/HomeView';
+import AddBillView from '../views/HomeView/AddBillView';
+import BillDetailView from '../views/HomeView/BillDetailView';
 import RequestDetailView from '../views/HomeView/RequestDetailView';
 import MyProfileView from '../views/MyProfileView';
-import MyRequestView from '../views/MyRequestView';
-import ServiceListView from '../views/ServiceView/ServiceListView';
+import RequestTabs from '../views/MyRequestView/tabRoutes';
 
 const InsideTabBottom = createBottomTabNavigator();
 
@@ -23,7 +22,7 @@ const InsideTabBottomNavigator = () => {
         tabBarIcon: ({focused, color, size}) => {
           if (route.name === 'HomeStackNavigator') {
             return <Icon name="home" size={calcScale(22)} color={color} />;
-          } else if (route.name === 'MyRequestView') {
+          } else if (route.name === 'MyRequestStackNavigator') {
             return <Icon name="tasks" size={calcScale(22)} color={color} />;
           } else if (route.name === 'AnnoucementView') {
             return <Icon name="bell" size={calcScale(22)} color={color} />;
@@ -41,7 +40,10 @@ const InsideTabBottomNavigator = () => {
         name="HomeStackNavigator"
         component={HomeStackNavigator}
       />
-      <InsideTabBottom.Screen name="MyRequestView" component={MyRequestView} />
+      <InsideTabBottom.Screen
+        name="MyRequestStackNavigator"
+        component={MyRequestStackNavigator}
+      />
       <InsideTabBottom.Screen
         name="AnnoucementView"
         component={AnnoucementView}
@@ -71,8 +73,80 @@ const HomeStackNavigator = () => {
           headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
         }}
       />
+      <HomeStack.Screen
+        name="AddBillView"
+        component={AddBillView}
+        options={{
+          title: 'Tạo hóa đơn',
+          headerTitleStyle: {color: '#fff'},
+          headerTintColor: '#fff',
+          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+        }}
+      />
+      <HomeStack.Screen
+        name="BillDetailView"
+        component={BillDetailView}
+        options={{
+          title: 'Xác nhận hóa đơn',
+          headerTitleStyle: {color: '#fff'},
+          headerTintColor: '#fff',
+          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+        }}
+      />
     </HomeStack.Navigator>
   );
 };
 
+const MyRequestStack = createStackNavigator();
+
+const MyRequestStackNavigator = () => {
+  const navigation = useNavigation();
+  return (
+    <MyRequestStack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+      }}>
+      <MyRequestStack.Screen
+        name="MyRequest"
+        options={{
+          title: 'My Request',
+          headerRight: () => {
+            return (
+              <TouchableHighlight
+                activeOpacity={1}
+                underlayColor={'#ccd0d5'}
+                onPress={() => navigation.openDrawer()}
+                style={styles.iconBox}>
+                <Icon name="user" size={calcScale(22)} color="#fff" />
+              </TouchableHighlight>
+            );
+          },
+          headerTitleStyle: {color: '#fff'},
+          headerLeft: null,
+        }}
+        component={RequestTabs}
+      />
+    </MyRequestStack.Navigator>
+  );
+};
+
 export default InsideTabBottomNavigator;
+
+const styles = StyleSheet.create({
+  iconBox: {
+    width: calcScale(40),
+    height: calcScale(40),
+    borderRadius: calcScale(40),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: calcScale(10),
+  },
+  backButton: {
+    width: calcScale(50),
+    height: calcScale(50),
+    borderRadius: calcScale(25),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: calcScale(10),
+  },
+});
