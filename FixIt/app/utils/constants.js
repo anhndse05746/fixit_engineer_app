@@ -9,5 +9,6 @@ module.exports = Object.freeze({
 
     OLD_PASSWORD_IS_NOT_CORRECT: "Mật khẩu cũ không đúng",
 
-    UPDATE_SUCCESSFULLY: "Lưu thay đổi thành công"
+    UPDATE_SUCCESSFULLY: "Lưu thay đổi thành công",
+    TAKE_REQUEST_SUCCESSFULLY: "Nhận yêu cầu thành công"
 })

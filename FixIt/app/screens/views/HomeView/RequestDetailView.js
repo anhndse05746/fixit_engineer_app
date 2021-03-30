@@ -1,18 +1,27 @@
 import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+
 import { calcScale } from '../../../utils/dimension';
 import PTButton from '../../commonComponent/Button';
 import commonStyles from '../Styles';
-import { getRequestDetail } from '../../../store/request'
+import { getRequestDetail, takeRequest, clearMessage } from '../../../store/request'
+import constants from '../../../utils/constants';
 
 const RequestDetailView = ({ navigation, route }) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch()
   const request = useSelector(state => state.request)
+  const requestId = route.params.requestData.id
+  const { message } = request
 
+  //get request detail
   useEffect(() => {
-    dispatch(getRequestDetail(user.token, route.params.requestData.id))
+    if (message !== constants.TAKE_REQUEST_SUCCESSFULLY) {
+      setAccepted(0)
+      dispatch(getRequestDetail(user.token, requestId))
+    }
+
   }, [])
   const data = request.requestDetail
 
@@ -23,13 +32,27 @@ const RequestDetailView = ({ navigation, route }) => {
     if (constructorHasRun) {
       return;
     } else {
-      console.log(data);
       setAccepted(data.accepted);
       setConstructorHasRun(true);
     }
   };
 
   constructor();
+
+  //Take request
+  const takeRequestTrigger = (token, userId, requestId) => {
+    setAccepted(1)
+    dispatch(takeRequest(token, requestId, userId))
+  }
+
+  useEffect(() => {
+    console.log(message)
+    if (message === constants.TAKE_REQUEST_SUCCESSFULLY) {
+      console.log("i'm here")
+      alert(message)
+
+    }
+  }, [message])
 
   return (
     <ScrollView style={styles.container}>
@@ -48,7 +71,7 @@ const RequestDetailView = ({ navigation, route }) => {
                   Địa chỉ: {data.address}, {data.district}, {data.city}
                 </Text>
                 <Text style={{ fontSize: calcScale(18), marginTop: calcScale(5) }}>
-                  {user.name} | {user.phoneNumber}
+                  {data.Customer.name}{/* | {user.phoneNumber} */}
                 </Text>
                 <Text style={{ fontSize: calcScale(18) }}>{data.address}</Text>
               </View>
@@ -216,7 +239,7 @@ const RequestDetailView = ({ navigation, route }) => {
               ) : (
                 <PTButton
                   title="Nhận yêu cầu"
-                  onPress={() => setAccepted(1)}
+                  onPress={() => takeRequestTrigger(user.token, user.userId, requestId)}
                   style={styles.button}
                   color="#fff"
                 />

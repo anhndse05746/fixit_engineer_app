@@ -59,12 +59,24 @@ const request = createSlice({
             console.log(action)
             request.isLoading = false
             request.requestDetail = action.payload
-            console.log(request.requestDetail)
         },
         getRequestDetailFail: (request, action) => {
             console.log(action)
             request.isLoading = false
         },
+        takeRequestSuccess: (request, action) => {
+            console.log(action)
+            if (payload.action !== "This request is taken") {
+                request.message = constants.TAKE_REQUEST_SUCCESSFULLY
+            }
+            console.log(message)
+            request.isLoading = false
+        },
+        takeRequestFail: (request, action) => {
+            console.log(action)
+            request.isLoading = false
+        },
+
     }
 })
 
@@ -107,6 +119,21 @@ export const getRequestDetail = (token, request_id) => apiCallBegan({
     },
     data: {
         request_id: request_id
+    },
+    method: 'POST',
+    onStart: onRequestStarted.type,
+    onSuccess: getRequestDetailSuccess.type,
+    onError: getRequestDetailFail.type,
+})
+
+export const takeRequest = (token, request_id, repairer_id) => apiCallBegan({
+    url: '/api/repairer/takeRequest',
+    headers: {
+        Authorization: token,
+    },
+    data: {
+        request_id: request_id,
+        repairer_id: repairer_id
     },
     method: 'POST',
     onStart: onRequestStarted.type,
