@@ -39,6 +39,8 @@ const RegisterView = ({navigation}) => {
   const [selectedCity, setSelectedCity] = React.useState('');
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
   const [selectedDistrict, setSelectedDistrict] = React.useState('');
+  const [selectedDistrictIndex, setSelectedDistrictIndex] = React.useState(0);
+  const [selectedWard, setSelectedWard] = React.useState('');
 
   const dataJob = [
     {
@@ -136,8 +138,6 @@ const RegisterView = ({navigation}) => {
       navigation.navigate('OTPView', user);
     }
   };
-
-  console.log(cities.length);
 
   return (
     <KeyboardAvoidingView
@@ -237,39 +237,74 @@ const RegisterView = ({navigation}) => {
                 }
               />
             </View>
-            {/* <Picker
-              selectedValue={selectedCity}
-              onValueChange={(itemValue, itemIndex) => {
-                setSelectedCity(itemValue);
-                setSelectedCityIndex(itemIndex);
-              }}>
-              {cities.map((city) => {
-                return (
-                  <Picker.Item
-                    label={city.Name}
-                    value={city.Name}
-                    key={city.Id}
-                  />
-                );
-              })}
-            </Picker> */}
-            {/* <Picker
-              selectedValue={selectedDistrict}
-              onValueChange={(itemValue, itemIndex) => {
-                setSelectedDistrict(itemValue);
-              }}>
-              //render district list based on selected city
-              {cities.length > 0 &&
-                cities[selectedCityIndex].Districts.map((district) => {
+            <View style={styles.column}>
+              <Text style={styles.textRegular}>
+                Tỉnh/Thành phố <Text style={{color: 'red'}}>*</Text>
+              </Text>
+              <Picker
+                selectedValue={selectedCity}
+                onValueChange={(itemValue, itemIndex) => {
+                  setSelectedCity(itemValue);
+                  setSelectedCityIndex(itemIndex);
+                }}>
+                {cities.map((city) => {
                   return (
                     <Picker.Item
-                      label={district.Name}
-                      value={district.Name}
-                      key={district.Id}
+                      label={city.Name}
+                      value={city.Name}
+                      key={city.Id}
                     />
                   );
                 })}
-            </Picker> */}
+              </Picker>
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.textRegular}>
+                Quận/Huyện <Text style={{color: 'red'}}>*</Text>
+              </Text>
+              <Picker
+                selectedValue={selectedDistrict}
+                onValueChange={(itemValue, itemIndex) => {
+                  setSelectedDistrict(itemValue);
+                  setSelectedDistrictIndex(itemIndex);
+                }}>
+                {cities.length > 0
+                  ? cities[selectedCityIndex].Districts.map((district) => {
+                      return (
+                        <Picker.Item
+                          label={district.Name}
+                          value={district.Name}
+                          key={district.Id}
+                        />
+                      );
+                    })
+                  : null}
+              </Picker>
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.textRegular}>
+                Phường/Xã <Text style={{color: 'red'}}>*</Text>
+              </Text>
+              <Picker
+                selectedValue={selectedWard}
+                onValueChange={(itemValue, itemIndex) => {
+                  setSelectedWard(itemValue);
+                }}>
+                {cities.length > 0
+                  ? cities[selectedCityIndex].Districts[
+                      selectedDistrictIndex
+                    ].Wards.map((ward) => {
+                      return (
+                        <Picker.Item
+                          label={ward.Name}
+                          value={ward.Name}
+                          key={ward.Id}
+                        />
+                      );
+                    })
+                  : null}
+              </Picker>
+            </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
                 Trình độ học vấn <Text style={{color: 'red'}}>*</Text>

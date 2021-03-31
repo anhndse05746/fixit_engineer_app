@@ -66,27 +66,27 @@ const RequestDetailView = ({navigation, route}) => {
     <ScrollView style={styles.container}>
       {data.id ? (
         <>
-          {accepted ? (
-            <View
-              style={{
-                borderBottomColor: '#ccc',
-                borderBottomWidth: 1,
-                paddingBottom: calcScale(10),
-                marginTop: calcScale(20),
-              }}>
-              <View style={{marginLeft: calcScale(20)}}>
-                <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
-                  Địa chỉ: {data.address}, {data.district}, {data.city}
-                </Text>
+          <View
+            style={{
+              borderBottomColor: '#ccc',
+              borderBottomWidth: 1,
+              paddingBottom: calcScale(10),
+              marginTop: calcScale(20),
+            }}>
+            <View style={{marginLeft: calcScale(20)}}>
+              <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
+                Địa chỉ: {data.address}, {data.district}, {data.city}
+              </Text>
+              {accepted ? (
                 <Text
                   style={{fontSize: calcScale(18), marginTop: calcScale(5)}}>
                   {data.Customer.name}
                   {/* | {user.phoneNumber} */}
                 </Text>
-                <Text style={{fontSize: calcScale(18)}}>{data.address}</Text>
-              </View>
+              ) : null}
+              <Text style={{fontSize: calcScale(18)}}>{data.address}</Text>
             </View>
-          ) : null}
+          </View>
           <View style={styles.form}>
             <View style={styles.formHeader}>
               <Text

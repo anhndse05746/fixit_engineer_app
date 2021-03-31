@@ -78,6 +78,7 @@ const MyProfileView = () => {
         </View>
         <Text>{updateUserMessage}</Text>
         <View>
+          <Text style={styles.textRegular}>ID number:</Text>
           <Input
             containerStyle={[styles.input, {width: calcScale(width)}]}
             inputContainerStyle={{borderBottomWidth: 0}}

@@ -1,10 +1,10 @@
-import { Provider as PaperProvider } from 'react-native-paper';
-import React, { useEffect } from 'react';
+import {Provider as PaperProvider} from 'react-native-paper';
+import React, {useEffect} from 'react';
 import {
   SafeAreaProvider,
   initialWindowMetrics,
 } from 'react-native-safe-area-context';
-import { Provider, useDispatch } from 'react-redux';
+import {Provider, useDispatch} from 'react-redux';
 import RNScreens from 'react-native-screens';
 import store from './store/configureStore';
 import AppContainer from './AppContainer';
@@ -20,13 +20,13 @@ const Root = () => {
     if (constructorHasRun) {
       return;
     } else {
-      RNBootSplash.show({ fade: true });
+      RNBootSplash.show({fade: true});
       setConstructorHasRun(true);
     }
   };
 
   useEffect(() => {
-    RNBootSplash.hide({ fade: true });
+    RNBootSplash.hide({fade: true});
   }, []);
 
   constructor();
