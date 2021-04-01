@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,9 +6,9 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {calcScale} from '../../../utils/dimension';
+import { calcScale } from '../../../utils/dimension';
 import PTButton from '../../commonComponent/Button';
 import commonStyles from '../Styles';
 import {
@@ -18,12 +18,12 @@ import {
 } from '../../../store/request';
 import constants from '../../../utils/constants';
 
-const RequestDetailView = ({navigation, route}) => {
+const RequestDetailView = ({ navigation, route }) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const request = useSelector((state) => state.request);
   const requestId = route.params.requestData.id;
-  const {message} = request;
+  const { message } = request;
 
   //get request detail
   useEffect(() => {
@@ -57,35 +57,44 @@ const RequestDetailView = ({navigation, route}) => {
   useEffect(() => {
     console.log(message);
     if (message === constants.TAKE_REQUEST_SUCCESSFULLY) {
-      console.log("i'm here");
       alert(message);
+      //navigate to home view 
+      navigation.navigate('HomeView')
     }
   }, [message]);
+
+  //Get status object of request
+  let requestStatus
+  if (data.request_statuses) {
+    requestStatus = data.request_statuses;
+  }
 
   return (
     <ScrollView style={styles.container}>
       {data.id ? (
         <>
-          {accepted ? (
-            <View
-              style={{
-                borderBottomColor: '#ccc',
-                borderBottomWidth: 1,
-                paddingBottom: calcScale(10),
-                marginTop: calcScale(20),
-              }}>
-              <View style={{marginLeft: calcScale(20)}}>
-                <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
-                  Địa chỉ: {data.address}, {data.district}, {data.city}
-                </Text>
-                <Text
-                  style={{fontSize: calcScale(18), marginTop: calcScale(5)}}>
-                  {data.Customer.name}
-                  {/* | {user.phoneNumber} */}
-                </Text>
-                <Text style={{fontSize: calcScale(18)}}>{data.address}</Text>
+          {requestStatus ? (
+            requestStatus[0].status_id != 1 ?
+              (<View
+                style={{
+                  borderBottomColor: '#ccc',
+                  borderBottomWidth: 1,
+                  paddingBottom: calcScale(10),
+                  marginTop: calcScale(20),
+                }}>
+                <View style={{ marginLeft: calcScale(20) }}>
+                  <Text style={{ fontSize: calcScale(24), fontWeight: 'bold' }}>
+                    Địa chỉ: {data.address}, {data.district}, {data.city}
+                  </Text>
+                  <Text
+                    style={{ fontSize: calcScale(18), marginTop: calcScale(5) }}>
+                    {data.Customer.name}
+                    {/* | {user.phoneNumber} */}
+                  </Text>
+                  <Text style={{ fontSize: calcScale(18) }}>{data.address}</Text>
+                </View>
               </View>
-            </View>
+              ) : null
           ) : null}
           <View style={styles.form}>
             <View style={styles.formHeader}>
@@ -222,40 +231,51 @@ const RequestDetailView = ({navigation, route}) => {
                 Tiền mặt
               </Text>
             </View>
-            <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
-              {accepted ? (
-                <>
-                  <View style={styles.row}>
+            <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
+              {requestStatus ?
+                (requestStatus[0].status_id != 1 ?
+                  (<>
+                    <View style={styles.row}>
+                      <PTButton
+                        title="Gọi điện"
+                        onPress={() => { }}
+                        style={styles.buttonHalfWidth}
+                        color="#fff"
+                      />
+                      <PTButton
+                        title="Tạo hóa đơn"
+                        onPress={() => navigation.navigate('AddBillView', data)}
+                        style={styles.buttonHalfWidth}
+                        color="#fff"
+                      />
+                    </View>
                     <PTButton
-                      title="Gọi điện"
-                      onPress={() => {}}
-                      style={styles.buttonHalfWidth}
+                      title="Hủy nhận yêu cầu"
+                      onPress={() => setAccepted(0)}
+                      style={styles.button}
                       color="#fff"
                     />
+                  </>
+                  ) : (
                     <PTButton
-                      title="Tạo hóa đơn"
-                      onPress={() => navigation.navigate('AddBillView')}
-                      style={styles.buttonHalfWidth}
+                      title="Nhận yêu cầu"
+                      onPress={() =>
+                        takeRequestTrigger(user.token, user.userId, requestId)
+                      }
+                      style={styles.button}
                       color="#fff"
                     />
-                  </View>
+                  )
+                ) : (
                   <PTButton
-                    title="Hủy nhận yêu cầu"
-                    onPress={() => setAccepted(0)}
+                    title="Nhận yêu cầu"
+                    onPress={() =>
+                      takeRequestTrigger(user.token, user.userId, requestId)
+                    }
                     style={styles.button}
                     color="#fff"
                   />
-                </>
-              ) : (
-                <PTButton
-                  title="Nhận yêu cầu"
-                  onPress={() =>
-                    takeRequestTrigger(user.token, user.userId, requestId)
-                  }
-                  style={styles.button}
-                  color="#fff"
-                />
-              )}
+                )}
             </View>
           </View>
         </>
@@ -263,7 +283,7 @@ const RequestDetailView = ({navigation, route}) => {
         <ActivityIndicator
           size="small"
           color="#3368f3"
-          style={{marginTop: calcScale(10)}}
+          style={{ marginTop: calcScale(10) }}
         />
       )}
     </ScrollView>

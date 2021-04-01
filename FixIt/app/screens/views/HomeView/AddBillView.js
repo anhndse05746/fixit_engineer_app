@@ -1,17 +1,21 @@
 import * as React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {Input} from 'react-native-elements';
-import {calcScale} from '../../../utils/dimension';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Input } from 'react-native-elements';
+import { calcScale } from '../../../utils/dimension';
 import PTButton from '../../commonComponent/Button';
 import CommonStyles from '../Styles';
 
-const AddBillView = ({navigation}) => {
+const AddBillView = ({ navigation, route }) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [billData, setBillData] = React.useState([
-    {id: 0, data: {service: 'Tên dịch vụ', money: 'Đơn giá'}, isRemove: false},
+    { id: 0, data: { service: 'Tên dịch vụ', money: 'Đơn giá' }, isRemove: false },
   ]);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [navigateFail, setNavigateFail] = React.useState('');
+
+  const requestData = route.params
+
+  //setBillData(requestData.request_issues)
 
   const constructor = () => {
     if (constructorHasRun) {
@@ -31,7 +35,7 @@ const AddBillView = ({navigation}) => {
     } else {
       const object = {
         id: id + 1,
-        data: {service: '', money: ''},
+        data: { service: '', money: '' },
         isRemove: true,
       };
       setErrorMessage('');
@@ -62,7 +66,7 @@ const AddBillView = ({navigation}) => {
     setBillData(bills);
   };
 
-  const renderColums = ({item, index}) => {
+  const renderColums = ({ item, index }) => {
     return (
       <>
         {!item.isRemove ? (
@@ -72,14 +76,14 @@ const AddBillView = ({navigation}) => {
               <Text style={styles.textBold}>{item.data.money}</Text>
             </View>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               {item.isRemove ? (
                 <PTButton
                   title="Xóa hàng"
                   onPress={() => {
                     removeRow(item.id);
                   }}
-                  style={[styles.button, {backgroundColor: 'rgb(242, 85, 44)'}]}
+                  style={[styles.button, { backgroundColor: 'rgb(242, 85, 44)' }]}
                   color="#fff"
                 />
               ) : null}
@@ -97,7 +101,7 @@ const AddBillView = ({navigation}) => {
           <>
             <View style={styles.row} key={item.id.toString()}>
               <Input
-                containerStyle={[styles.input, {width: '75%'}]}
+                containerStyle={[styles.input, { width: '75%' }]}
                 onChangeText={(service) => setService(index, service)}
                 value={item.data.service}
                 errorMessage={
@@ -107,7 +111,7 @@ const AddBillView = ({navigation}) => {
                 }
               />
               <Input
-                containerStyle={[styles.input, {width: '20%'}]}
+                containerStyle={[styles.input, { width: '20%' }]}
                 onChangeText={(money) => setMoney(index, money)}
                 value={item.data.money}
                 errorMessage={
@@ -118,14 +122,14 @@ const AddBillView = ({navigation}) => {
               />
             </View>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               {item.isRemove ? (
                 <PTButton
                   title="Xóa hàng"
                   onPress={() => {
                     removeRow(item.id);
                   }}
-                  style={[styles.button, {backgroundColor: 'rgb(242, 85, 44)'}]}
+                  style={[styles.button, { backgroundColor: 'rgb(242, 85, 44)' }]}
                   color="#fff"
                 />
               ) : null}
@@ -157,7 +161,7 @@ const AddBillView = ({navigation}) => {
         }
       });
       if (checkData) {
-        navigation.navigate('BillDetailView', {billData: billData});
+        navigation.navigate('BillDetailView', { billData: billData });
       }
     } else {
       setNavigateFail('Bạn phải nhập ít nhất một dịch vụ và giá tiền');
@@ -169,7 +173,7 @@ const AddBillView = ({navigation}) => {
       <Text
         style={[
           styles.textRegular,
-          {marginTop: calcScale(15), fontSize: calcScale(22)},
+          { marginTop: calcScale(15), fontSize: calcScale(22) },
         ]}>
         Các chi phí cần thanh toán
       </Text>
@@ -179,14 +183,14 @@ const AddBillView = ({navigation}) => {
         keyExtractor={(item) => item.id.toString()}
       />
       {navigateFail !== '' ? (
-        <Text style={{color: 'red'}}>{navigateFail}</Text>
+        <Text style={{ color: 'red' }}>{navigateFail}</Text>
       ) : null}
       <PTButton
         title="Tạo"
         onPress={() => navigateConfirmBill()}
         style={[
           styles.button,
-          {width: '100%', backgroundColor: 'rgb(255, 188, 0)'},
+          { width: '100%', backgroundColor: 'rgb(255, 188, 0)' },
         ]}
         color="#fff"
       />

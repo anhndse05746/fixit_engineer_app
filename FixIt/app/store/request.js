@@ -74,12 +74,31 @@ const request = createSlice({
             console.log(action)
             request.isLoading = false
         },
+        createInvoiceSuccess: (request, action) => {
+            console.log(action)
+            request.isLoading = false
+        },
+        createInvoiceFail: (request, action) => {
+            console.log(action)
+            request.isLoading = false
+        },
 
     }
 })
 
 export default request.reducer
-export const { onRequestStarted, clearMessage, listRequestFail, listRequestSuccess, listMyRequestFail, listMyRequestSuccess, updateListRequestFail, updateListRequestSuccess, getRequestDetailFail, getRequestDetailSuccess } = request.actions
+export const { onRequestStarted,
+    clearMessage,
+    listRequestFail,
+    listRequestSuccess,
+    listMyRequestFail,
+    listMyRequestSuccess,
+    updateListRequestFail,
+    updateListRequestSuccess,
+    getRequestDetailFail,
+    getRequestDetailSuccess,
+    createInvoiceSuccess,
+    createInvoiceFail } = request.actions
 
 
 export const listRequest = (token, repairer_id) => apiCallBegan({
@@ -153,3 +172,22 @@ export const takeRequest = (token, request_id, repairer_id) => apiCallBegan({
     onSuccess: getRequestDetailSuccess.type,
     onError: getRequestDetailFail.type,
 })
+
+export const createInvoice = (token, request_id, total_price, request_issues) => apiCallBegan({
+    url: '/api/createInvoice',
+    headers: {
+        Authorization: token,
+    },
+    data: {
+        request_id: request_id,
+        payment_method_id: 1,
+        status: "NOT_PAYMENT",
+        total_price: total_price,
+        request_issues: request_issues
+    },
+    method: 'POST',
+    onStart: onRequestStarted.type,
+    onSuccess: createInvoiceSuccess.type,
+    onError: createInvoiceFail.type,
+})
+
