@@ -7,30 +7,32 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {calcScale} from '../../../utils/dimension';
+import { useDispatch, useSelector } from 'react-redux';
+import { calcScale } from '../../../utils/dimension';
 import commonStyles from '../Styles';
 import ListEmptyComponent from './ListEmpty';
 
-const AcceptedTabView = ({navigation}) => {
-  const acceptedData = [
-    {
-      id: 1,
-      service: 'Sửa nhà',
-      request: 'Sửa lò vi sóng',
-      estimate_fix_duration: 100,
-      estimate_price: 100,
-      status: 'Đã nhận',
-    },
-    {
-      id: 2,
-      service: 'Sửa nhà',
-      request: 'Service test',
-      estimate_fix_duration: 200,
-      estimate_price: 150,
-      status: 'Đã nhận',
-    },
-  ];
+const AcceptedTabView = ({ navigation }) => {
+  const request = useSelector(state => state.request)
+  const acceptedData = request.executingRequest
+  // [
+  //   {
+  //     id: 1,
+  //     service: 'Sửa nhà',
+  //     request: 'Sửa lò vi sóng',
+  //     estimate_fix_duration: 100,
+  //     estimate_price: 100,
+  //     status: 'Đã nhận',
+  //   },
+  //   {
+  //     id: 2,
+  //     service: 'Sửa nhà',
+  //     request: 'Service test',
+  //     estimate_fix_duration: 200,
+  //     estimate_price: 150,
+  //     status: 'Đã nhận',
+  //   },
+  // ];
 
   // // Seletor redux
   // const isFetching = useSelector((state) => state.acceptedData.isFetching);
@@ -65,33 +67,33 @@ const AcceptedTabView = ({navigation}) => {
   //   const page = currentPage + 1;
   // }, [acceptedData]);
 
-  const renderListRequest = ({item}) => {
+  const renderListRequest = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.ticketContainer}
         onPress={() =>
           navigation.navigate('HomeStackNavigator', {
             screen: 'RequestDetailView',
-            params: {requestData: item},
+            params: { requestData: item },
           })
         }>
         <View style={styles.row}>
           <Text style={[styles.textBold, styles.textTitle]}>
-            {item.request}
+            {item.serviceName}
           </Text>
         </View>
-        <View style={[styles.row, {justifyContent: 'space-between'}]}>
+        <View style={[styles.row, { justifyContent: 'space-between' }]}>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Thời gian:</Text>
-            <Text style={styles.textBold}>{item.estimate_fix_duration}</Text>
+            <Text style={styles.textBold}>{item.estimate_time} Phút</Text>
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Giá:</Text>
-            <Text style={styles.textBold}>{item.estimate_price}</Text>
+            <Text style={styles.textBold}>{item.estimate_price} VND</Text>
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Trạng thái:</Text>
-            <Text style={styles.textBold}>{item.status}</Text>
+            <Text style={styles.textBold}>{item.statusName}</Text>
           </View>
         </View>
       </TouchableOpacity>
