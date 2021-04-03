@@ -50,14 +50,16 @@ const register = createSlice({
 export default register.reducer
 export const { registerRequested, registeredSuccessful, registerFailed, checkRegistered, checkRegisteredFail } = register.actions
 
-export const registerUser = (phoneNumber, password, name, email) => apiCallBegan({
+export const registerUser = (phoneNumber, password, name, email, city, district) => apiCallBegan({
     url: '/register',
     data: {
         phone_number: phoneNumber,
         password: password,
         name: name,
         role_id: constants.ROLE_REPAIRER,
-        email: email
+        email: email,
+        district: district,
+        city: city
     },
     method: 'POST',
     onStart: registerRequested.type,

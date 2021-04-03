@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   Text,
   StyleSheet,
@@ -6,29 +6,31 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import firebase from '../../../config/firebaseConfig';
 
-import {calcScale} from '../../../utils/dimension';
+import { calcScale } from '../../../utils/dimension';
 import CommonStyles from '../Styles';
 import PTButton from '../../commonComponent/Button';
-import {registerUser} from '../../../store/register';
+import { registerUser } from '../../../store/register';
 import constants from '../../../utils/constants';
 
-const OTPView = ({route, navigation}) => {
+const OTPView = ({ route, navigation }) => {
   const dispatch = useDispatch();
-  const {message} = useSelector((state) => state.register);
+  const { message } = useSelector((state) => state.register);
   //user
   const user = {
     phone: route.params.phone,
     name: route.params.name,
     email: route.params.email,
     password: route.params.password,
+    district: route.params.district,
+    city: route.params.city
   };
   const formatedPhoneNumber = '+84' + user.phone.slice(1);
 
   //otp states
-  const {auth} = firebase();
+  const { auth } = firebase();
   const [confirm, setConfirm] = React.useState(null);
   const [code, setCode] = React.useState('');
 
@@ -42,7 +44,7 @@ const OTPView = ({route, navigation}) => {
   const confirmOTP = async () => {
     try {
       await confirm.confirm(code);
-      dispatch(registerUser(user.phone, user.password, user.name, user.email));
+      dispatch(registerUser(user.phone, user.password, user.name, user.email, user.city, user.district));
     } catch (error) {
       console.log(error);
       alert(JSON.stringify(error));
@@ -67,11 +69,11 @@ const OTPView = ({route, navigation}) => {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
-      <Text style={[styles.textRegular, {marginTop: calcScale(30)}]}>
+      <Text style={[styles.textRegular, { marginTop: calcScale(30) }]}>
         Mã OTP đã được gửi đến số điện thoại của bạn.
       </Text>
       <OTPInputView
-        style={{width: '80%', height: 100}}
+        style={{ width: '80%', height: 100 }}
         pinCount={6}
         // code={code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
         // onCodeChanged = {(code) => setCode(code)}
@@ -82,7 +84,7 @@ const OTPView = ({route, navigation}) => {
       />
       <TouchableOpacity
         onPress={() => signInWithPhoneNumber(formatedPhoneNumber)}>
-        <Text style={[styles.textRegular, {textDecorationLine: 'underline'}]}>
+        <Text style={[styles.textRegular, { textDecorationLine: 'underline' }]}>
           Gửi lại mã OTP.
         </Text>
       </TouchableOpacity>
