@@ -10,7 +10,6 @@ const request = createSlice({
         isLoading: false,
         listRequest: [],
         requestDetail: {},
-        onGoingRequests: [],
         executingRequest: [],
         completeRequest: [],
         canceledRequest: []
@@ -38,7 +37,6 @@ const request = createSlice({
         listMyRequestSuccess: (request, action) => {
             console.log(action)
             request.isLoading = false
-            request.onGoingRequests = action.payload.listFindingRequest
             request.executingRequest = action.payload.listProcessingRequest
             request.completeRequest = action.payload.listCompletedRequest
             request.canceledRequest = action.payload.listCancelledRequest
@@ -96,6 +94,21 @@ export const listRequest = (token, repairer_id) => apiCallBegan({
     onStart: onRequestStarted.type,
     onSuccess: listRequestSuccess.type,
     onError: listRequestFail.type,
+})
+
+export const listAllRequest = (token, customer_id) => apiCallBegan({
+    url: '/api/getInitListRequest',
+    headers: {
+        Authorization: token,
+    },
+    data: {
+        role: constants.ROLE_REPAIRER,
+        customer_id: customer_id
+    },
+    method: 'POST',
+    onStart: onRequestStarted.type,
+    onSuccess: listMyRequestSuccess.type,
+    onError: listMyRequestFail.type,
 })
 
 // export const updateListRequest = (token, customer_id, status) => apiCallBegan({
