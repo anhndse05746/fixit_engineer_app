@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react';
-import { FlatList, SafeAreaView } from 'react-native';
-import { View } from 'react-native';
-import { StyleSheet, Text } from 'react-native';
-import { calcScale } from '../../../utils/dimension';
+import React, {useEffect} from 'react';
+import {FlatList, SafeAreaView} from 'react-native';
+import {View} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
+import {calcScale} from '../../../utils/dimension';
 import HeaderBar from './HeaderBar';
 import CommonStyles from '../Styles';
 import RequestItem from './RequestItem';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 
-import { listRequest } from '../../../store/request';
+import {listRequest} from '../../../store/request';
 
-const HomeView = ({ navigation }) => {
+const HomeView = ({navigation}) => {
   // const requestData = [
   //   {
   //     id: 24,
@@ -72,17 +72,17 @@ const HomeView = ({ navigation }) => {
 
   const [isEnabled, setIsEnabled] = React.useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-  const request = useSelector((state) => state.request)
+  const request = useSelector((state) => state.request);
   const data = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  const requestData = request.listRequest
+  const requestData = request.listRequest;
 
   useEffect(() => {
     if (isEnabled) {
-      dispatch(listRequest(data.token, data.userId))
+      dispatch(listRequest(data.token, data.userId));
     }
-  }, [isEnabled])
+  }, [isEnabled]);
 
   // const navigation = useNavigation();
 
@@ -104,7 +104,7 @@ const HomeView = ({ navigation }) => {
         toggleSwitch={toggleSwitch}
       />
       <View style={styles.innerContainer}>
-        <Text style={[styles.textBold, { paddingTop: calcScale(10) }]}>
+        <Text style={[styles.textBold, {paddingTop: calcScale(10)}]}>
           Hi, {data.name}!
         </Text>
         {isEnabled && requestData ? (
@@ -115,7 +115,7 @@ const HomeView = ({ navigation }) => {
             <FlatList
               data={requestData}
               style={styles.serviceContainer}
-              renderItem={({ item, index }) => (
+              renderItem={({item, index}) => (
                 <RequestItem
                   navigation={navigation}
                   item={item}

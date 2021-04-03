@@ -86,7 +86,7 @@ const MyProfileDrawer = ({navigation}) => {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          {/* <TouchableOpacity style={styles.button}>
             <View style={[styles.row, {paddingLeft: calcScale(20)}]}>
               <Icon
                 name="gratipay"
@@ -117,11 +117,11 @@ const MyProfileDrawer = ({navigation}) => {
                 Về FixIt
               </Text>
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style={styles.footer}>
           <TouchableOpacity onPress={() => logOut()}>
-            <Text style={styles.headmanText}>Log out</Text>
+            <Text style={styles.headmanText}>Đăng xuất</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

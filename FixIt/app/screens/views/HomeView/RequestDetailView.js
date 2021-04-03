@@ -57,10 +57,17 @@ const RequestDetailView = ({navigation, route}) => {
   useEffect(() => {
     console.log(message);
     if (message === constants.TAKE_REQUEST_SUCCESSFULLY) {
-      console.log("i'm here");
       alert(message);
+      //navigate to home view
+      navigation.navigate('HomeView');
     }
   }, [message]);
+
+  //Get status object of request
+  let requestStatus;
+  if (data.request_statuses) {
+    requestStatus = data.request_statuses;
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -77,14 +84,23 @@ const RequestDetailView = ({navigation, route}) => {
               <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
                 Địa chỉ: {data.address}, {data.district}, {data.city}
               </Text>
-              {accepted ? (
-                <Text
-                  style={{fontSize: calcScale(18), marginTop: calcScale(5)}}>
-                  {data.Customer.name}
-                  {/* | {user.phoneNumber} */}
-                </Text>
+              {requestStatus ? (
+                requestStatus[0].status_id != 1 ? (
+                  <>
+                    <Text
+                      style={{
+                        fontSize: calcScale(18),
+                        marginTop: calcScale(5),
+                      }}>
+                      {data.Customer.name}
+                      {/* | {user.phoneNumber} */}
+                    </Text>
+                    <Text style={{fontSize: calcScale(18)}}>
+                      {data.address}
+                    </Text>
+                  </>
+                ) : null
               ) : null}
-              <Text style={{fontSize: calcScale(18)}}>{data.address}</Text>
             </View>
           </View>
           <View style={styles.form}>
@@ -143,7 +159,7 @@ const RequestDetailView = ({navigation, route}) => {
               {data.request_issues.map((item, index) => {
                 return (
                   <Text
-                    key={item.id}
+                    key={index.toString()}
                     style={{
                       fontSize: calcScale(16),
                       marginBottom: calcScale(10),
@@ -195,7 +211,7 @@ const RequestDetailView = ({navigation, route}) => {
                   fontWeight: 'bold',
                   marginBottom: calcScale(10),
                 }}>
-                Tổng chi phí:
+                Tổng chi phí ước tính:
               </Text>
               <Text
                 style={{
@@ -223,29 +239,40 @@ const RequestDetailView = ({navigation, route}) => {
               </Text>
             </View>
             <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
-              {accepted ? (
-                <>
-                  <View style={styles.row}>
+              {requestStatus ? (
+                requestStatus[0].status_id != 1 ? (
+                  <>
+                    <View style={styles.row}>
+                      <PTButton
+                        title="Gọi điện"
+                        onPress={() => {}}
+                        style={styles.buttonHalfWidth}
+                        color="#fff"
+                      />
+                      <PTButton
+                        title="Tạo hóa đơn"
+                        onPress={() => navigation.navigate('AddBillView', data)}
+                        style={styles.buttonHalfWidth}
+                        color="#fff"
+                      />
+                    </View>
                     <PTButton
-                      title="Gọi điện"
-                      onPress={() => {}}
-                      style={styles.buttonHalfWidth}
+                      title="Hủy nhận yêu cầu"
+                      onPress={() => setAccepted(0)}
+                      style={styles.button}
                       color="#fff"
                     />
-                    <PTButton
-                      title="Tạo hóa đơn"
-                      onPress={() => navigation.navigate('AddBillView')}
-                      style={styles.buttonHalfWidth}
-                      color="#fff"
-                    />
-                  </View>
+                  </>
+                ) : (
                   <PTButton
-                    title="Hủy nhận yêu cầu"
-                    onPress={() => setAccepted(0)}
+                    title="Nhận yêu cầu"
+                    onPress={() =>
+                      takeRequestTrigger(user.token, user.userId, requestId)
+                    }
                     style={styles.button}
                     color="#fff"
                   />
-                </>
+                )
               ) : (
                 <PTButton
                   title="Nhận yêu cầu"

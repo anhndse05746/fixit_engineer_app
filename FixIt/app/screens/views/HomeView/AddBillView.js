@@ -4,14 +4,20 @@ import {Input} from 'react-native-elements';
 import {calcScale} from '../../../utils/dimension';
 import PTButton from '../../commonComponent/Button';
 import CommonStyles from '../Styles';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
-const AddBillView = ({navigation}) => {
+const AddBillView = ({navigation, route}) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [billData, setBillData] = React.useState([
     {id: 0, data: {service: 'Tên dịch vụ', money: 'Đơn giá'}, isRemove: false},
   ]);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [navigateFail, setNavigateFail] = React.useState('');
+
+  const requestData = route.params;
+
+  //setBillData(requestData.request_issues)
 
   const constructor = () => {
     if (constructorHasRun) {
@@ -24,9 +30,10 @@ const AddBillView = ({navigation}) => {
   constructor();
 
   const addRow = (id) => {
-    if (billData[id].data.service === '') {
+    console.log(id);
+    if (billData.find((x) => x.id === id).data.service === '') {
       setErrorMessage(' không được để trống');
-    } else if (billData[id].data.money === '') {
+    } else if (billData.find((x) => x.id === id).data.money === '') {
       setErrorMessage(' không được để trống');
     } else {
       const object = {
@@ -67,37 +74,20 @@ const AddBillView = ({navigation}) => {
       <>
         {!item.isRemove ? (
           <>
-            <View style={styles.row}>
+            <View
+              style={[
+                styles.row,
+                {justifyContent: 'space-around', marginVertical: calcScale(20)},
+              ]}>
               <Text style={styles.textBold}>{item.data.service}</Text>
               <Text style={styles.textBold}>{item.data.money}</Text>
-            </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              {item.isRemove ? (
-                <PTButton
-                  title="Xóa hàng"
-                  onPress={() => {
-                    removeRow(item.id);
-                  }}
-                  style={[styles.button, {backgroundColor: 'rgb(242, 85, 44)'}]}
-                  color="#fff"
-                />
-              ) : null}
-              <PTButton
-                title="Thêm hàng"
-                onPress={() => {
-                  addRow(item.id);
-                }}
-                style={styles.button}
-                color="#fff"
-              />
             </View>
           </>
         ) : (
           <>
             <View style={styles.row} key={item.id.toString()}>
               <Input
-                containerStyle={[styles.input, {width: '75%'}]}
+                containerStyle={[styles.input, {width: '65%'}]}
                 onChangeText={(service) => setService(index, service)}
                 value={item.data.service}
                 errorMessage={
@@ -107,7 +97,7 @@ const AddBillView = ({navigation}) => {
                 }
               />
               <Input
-                containerStyle={[styles.input, {width: '20%'}]}
+                containerStyle={[styles.input, {width: '30%'}]}
                 onChangeText={(money) => setMoney(index, money)}
                 value={item.data.money}
                 errorMessage={
@@ -116,27 +106,16 @@ const AddBillView = ({navigation}) => {
                     : ''
                 }
               />
-            </View>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              {item.isRemove ? (
-                <PTButton
-                  title="Xóa hàng"
+              <TouchableOpacity>
+                <Icon
+                  name="times-circle"
+                  size={calcScale(20)}
+                  color="grey"
                   onPress={() => {
                     removeRow(item.id);
                   }}
-                  style={[styles.button, {backgroundColor: 'rgb(242, 85, 44)'}]}
-                  color="#fff"
                 />
-              ) : null}
-              <PTButton
-                title="Thêm hàng"
-                onPress={() => {
-                  addRow(item.id);
-                }}
-                style={styles.button}
-                color="#fff"
-              />
+              </TouchableOpacity>
             </View>
           </>
         )}
@@ -176,6 +155,17 @@ const AddBillView = ({navigation}) => {
       <FlatList
         data={billData}
         renderItem={renderColums}
+        ListFooterComponent={
+          <PTButton
+            title="Thêm hàng"
+            onPress={() => {
+              console.log(billData[billData.length - 1].id);
+              addRow(billData[billData.length - 1].id);
+            }}
+            style={styles.button}
+            color="#fff"
+          />
+        }
         keyExtractor={(item) => item.id.toString()}
       />
       {navigateFail !== '' ? (
@@ -184,10 +174,7 @@ const AddBillView = ({navigation}) => {
       <PTButton
         title="Tạo"
         onPress={() => navigateConfirmBill()}
-        style={[
-          styles.button,
-          {width: '100%', backgroundColor: 'rgb(255, 188, 0)'},
-        ]}
+        style={[styles.button, {backgroundColor: 'rgb(255, 188, 0)'}]}
         color="#fff"
       />
     </View>
@@ -217,7 +204,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: calcScale(10),
-    width: '45%',
     height: calcScale(45),
     borderRadius: 10,
     backgroundColor: 'rgb(0, 0, 60)',

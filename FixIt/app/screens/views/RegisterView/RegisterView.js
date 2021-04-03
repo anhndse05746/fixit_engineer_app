@@ -25,6 +25,7 @@ const RegisterView = ({navigation}) => {
   const [fullName, setFullName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [phone, setPhone] = React.useState('');
+  const [address, setAddress] = React.useState('');
   const [knowledge, setKnowledge] = React.useState();
   const [password, setPassword] = React.useState('');
   const [repassword, setRepassword] = React.useState('');
@@ -120,6 +121,8 @@ const RegisterView = ({navigation}) => {
       setErrorMessage(' không được để trống');
     } else if (phone === '') {
       setErrorMessage(' không được để trống');
+    } else if (address === '') {
+      setErrorMessage(' không được để trống');
     } else if (checkedData.length === 0) {
       setErrorChecked('Cần có ít nhất một chuyên ngành');
     } else if (password === '') {
@@ -152,7 +155,7 @@ const RegisterView = ({navigation}) => {
             ]}>
             Vui lòng điền những thông tin sau
           </Text>
-          {/* {message ? (
+          {message ? (
             <Text
               style={[
                 styles.textRegular,
@@ -160,7 +163,7 @@ const RegisterView = ({navigation}) => {
               ]}>
               {message}
             </Text>
-          ) : null} */}
+          ) : null}
           <View style={styles.formContainer}>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
@@ -183,7 +186,7 @@ const RegisterView = ({navigation}) => {
                 value={fullName}
                 errorMessage={
                   errorMessage !== '' && fullName === ''
-                    ? 'Full Name' + errorMessage
+                    ? 'Họ và tên' + errorMessage
                     : ''
                 }
               />
@@ -232,7 +235,7 @@ const RegisterView = ({navigation}) => {
                 keyboardType="number-pad"
                 errorMessage={
                   errorMessage !== '' && phone === ''
-                    ? 'Phone number' + errorMessage
+                    ? 'Số điện thoại' + errorMessage
                     : ''
                 }
               />
@@ -307,6 +310,31 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
+                Địa chỉ <Text style={{color: 'red'}}>*</Text>
+              </Text>
+              <Input
+                containerStyle={styles.input}
+                onChangeText={(address) => setAddress(address)}
+                rightIcon={
+                  address != '' ? (
+                    <Icon
+                      name="times-circle"
+                      size={calcScale(15)}
+                      color="grey"
+                      onPress={() => setAddress('')}
+                    />
+                  ) : null
+                }
+                value={address}
+                errorMessage={
+                  errorMessage !== '' && address === ''
+                    ? 'Địa chỉ' + errorMessage
+                    : ''
+                }
+              />
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.textRegular}>
                 Trình độ học vấn <Text style={{color: 'red'}}>*</Text>
               </Text>
               <Picker
@@ -376,7 +404,7 @@ const RegisterView = ({navigation}) => {
                 value={password}
                 errorMessage={
                   errorMessage !== '' && password === ''
-                    ? 'Password' + errorMessage
+                    ? 'Mật khẩu' + errorMessage
                     : ''
                 }
               />
@@ -412,7 +440,7 @@ const RegisterView = ({navigation}) => {
                 value={repassword}
                 errorMessage={
                   (errorMessage !== '' && repassword === '') || matchedPassword
-                    ? 'Re-enter password' + errorMessage
+                    ? 'Nhập lại mật khẩu' + errorMessage
                     : ''
                 }
               />
