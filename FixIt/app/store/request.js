@@ -115,14 +115,14 @@ export const listRequest = (token, repairer_id) => apiCallBegan({
     onError: listRequestFail.type,
 })
 
-export const listAllRequest = (token, customer_id) => apiCallBegan({
+export const listAllRequest = (token, repairer_id) => apiCallBegan({
     url: '/api/getInitListRequest',
     headers: {
         Authorization: token,
     },
     data: {
         role: constants.ROLE_REPAIRER,
-        customer_id: customer_id
+        customer_id: repairer_id
     },
     method: 'POST',
     onStart: onRequestStarted.type,
@@ -173,7 +173,7 @@ export const takeRequest = (token, request_id, repairer_id) => apiCallBegan({
     onError: getRequestDetailFail.type,
 })
 
-export const createInvoice = (token, request_id, total_price, request_issues) => apiCallBegan({
+export const createInvoice = (token, request_id, total_price, request_issues, cost_incurred) => apiCallBegan({
     url: '/api/createInvoice',
     headers: {
         Authorization: token,
@@ -183,7 +183,8 @@ export const createInvoice = (token, request_id, total_price, request_issues) =>
         payment_method_id: 1,
         status: "NOT_PAYMENT",
         total_price: total_price,
-        request_issues: request_issues
+        request_issues: request_issues,
+        cost_incurred: cost_incurred
     },
     method: 'POST',
     onStart: onRequestStarted.type,

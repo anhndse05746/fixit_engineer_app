@@ -1,12 +1,17 @@
 import * as React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {calcScale} from '../../../../utils/dimension';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { createInvoice } from '../../../../store/request';
+import { calcScale } from '../../../../utils/dimension';
 import PTButton from '../../../commonComponent/Button';
 import CommonStyles from '../../Styles';
 
-const BillDetailView = ({navigation, route}) => {
+const BillDetailView = ({ navigation, route }) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [billData, setBillData] = React.useState([]);
+  const dispatch = useDispatch()
+  const request = useSelector(state => state.request)
+  const user = useSelector(state => state.user)
 
   const constructor = () => {
     if (constructorHasRun) {
@@ -19,19 +24,23 @@ const BillDetailView = ({navigation, route}) => {
 
   constructor();
 
-  const renderColums = ({item, index}) => {
+  const createInvoiceHandle = () => {
+    //dispatch(createInvoice(user.token, request_id, total_price, request_issues))
+  }
+
+  const renderColums = ({ item, index }) => {
     return (
       <>
         {index === 0 ? (
           <View style={styles.row}>
-            <Text style={[styles.textBold, {flexBasis: '75%'}]}>
+            <Text style={[styles.textBold, { flexBasis: '75%' }]}>
               {item.data.service}
             </Text>
             <Text style={styles.textBold}>{item.data.money}</Text>
           </View>
         ) : (
           <View style={styles.row}>
-            <Text style={[styles.textRegular, {flexBasis: '75%'}]}>
+            <Text style={[styles.textRegular, { flexBasis: '75%' }]}>
               {item.data.service}
             </Text>
             <Text style={styles.textRegular}>{item.data.money}</Text>
@@ -46,7 +55,7 @@ const BillDetailView = ({navigation, route}) => {
       <Text
         style={[
           styles.textRegular,
-          {marginTop: calcScale(15), fontSize: calcScale(22)},
+          { marginTop: calcScale(15), fontSize: calcScale(22) },
         ]}>
         Các chi phí cần thanh toán
       </Text>
@@ -57,10 +66,10 @@ const BillDetailView = ({navigation, route}) => {
       />
       <PTButton
         title="Xác nhận"
-        onPress={() => navigation.navigate('HomeView')}
+        onPress={() => createInvoiceHandle()}
         style={[
           styles.button,
-          {width: '100%', backgroundColor: 'rgb(255, 188, 0)'},
+          { width: '100%', backgroundColor: 'rgb(255, 188, 0)' },
         ]}
         color="#fff"
       />
