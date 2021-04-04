@@ -1,22 +1,17 @@
 import React, {useEffect} from 'react';
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  ActivityIndicator,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
-
-import {calcScale} from '../../../utils/dimension';
-import PTButton from '../../commonComponent/Button';
-import commonStyles from '../Styles';
-import {
-  getRequestDetail,
-  takeRequest,
-  clearMessage,
-} from '../../../store/request';
-import constants from '../../../utils/constants';
+import {useDispatch, useSelector} from 'react-redux';
+import {getRequestDetail, takeRequest} from '../../../../store/request';
+import constants from '../../../../utils/constants';
+import {calcScale} from '../../../../utils/dimension';
+import PTButton from '../../../commonComponent/Button';
+import commonStyles from '../../Styles';
 
 const RequestDetailView = ({navigation, route}) => {
   const user = useSelector((state) => state.user);
@@ -73,36 +68,6 @@ const RequestDetailView = ({navigation, route}) => {
     <ScrollView style={styles.container}>
       {data.id ? (
         <>
-          <View
-            style={{
-              borderBottomColor: '#ccc',
-              borderBottomWidth: 1,
-              paddingBottom: calcScale(10),
-              marginTop: calcScale(20),
-            }}>
-            <View style={{marginLeft: calcScale(20)}}>
-              <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
-                Địa chỉ: {data.address}, {data.district}, {data.city}
-              </Text>
-              {requestStatus ? (
-                requestStatus[0].status_id != 1 ? (
-                  <>
-                    <Text
-                      style={{
-                        fontSize: calcScale(18),
-                        marginTop: calcScale(5),
-                      }}>
-                      {data.Customer.name}
-                      {/* | {user.phoneNumber} */}
-                    </Text>
-                    <Text style={{fontSize: calcScale(18)}}>
-                      {data.address}
-                    </Text>
-                  </>
-                ) : null
-              ) : null}
-            </View>
-          </View>
           <View style={styles.form}>
             <View style={styles.formHeader}>
               <Text
@@ -238,51 +203,49 @@ const RequestDetailView = ({navigation, route}) => {
                 Tiền mặt
               </Text>
             </View>
+            <View
+              style={{
+                borderTopColor: '#ccc',
+                borderTopWidth: 1,
+                paddingTop: calcScale(10),
+                marginBottom: calcScale(20),
+              }}>
+              <View style={{marginLeft: calcScale(20)}}>
+                <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
+                  Địa chỉ: {data.address}, {data.district}, {data.city}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: calcScale(18),
+                    marginTop: calcScale(5),
+                  }}>
+                  {data.Customer.name}
+                  {/* | {user.phoneNumber} */}
+                </Text>
+                <Text style={{fontSize: calcScale(18)}}>{data.address}</Text>
+              </View>
+            </View>
             <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
-              {requestStatus ? (
-                requestStatus[0].status_id != 1 ? (
-                  <>
-                    <View style={styles.row}>
-                      <PTButton
-                        title="Gọi điện"
-                        onPress={() => {}}
-                        style={styles.buttonHalfWidth}
-                        color="#fff"
-                      />
-                      <PTButton
-                        title="Tạo hóa đơn"
-                        onPress={() => navigation.navigate('AddBillView', data)}
-                        style={styles.buttonHalfWidth}
-                        color="#fff"
-                      />
-                    </View>
-                    <PTButton
-                      title="Hủy nhận yêu cầu"
-                      onPress={() => setAccepted(0)}
-                      style={styles.button}
-                      color="#fff"
-                    />
-                  </>
-                ) : (
-                  <PTButton
-                    title="Nhận yêu cầu"
-                    onPress={() =>
-                      takeRequestTrigger(user.token, user.userId, requestId)
-                    }
-                    style={styles.button}
-                    color="#fff"
-                  />
-                )
-              ) : (
+              <View style={styles.row}>
                 <PTButton
-                  title="Nhận yêu cầu"
-                  onPress={() =>
-                    takeRequestTrigger(user.token, user.userId, requestId)
-                  }
-                  style={styles.button}
+                  title="Gọi điện"
+                  onPress={() => {}}
+                  style={styles.buttonHalfWidth}
                   color="#fff"
                 />
-              )}
+                <PTButton
+                  title="Tạo hóa đơn"
+                  onPress={() => navigation.navigate('AddBillView', data)}
+                  style={styles.buttonHalfWidth}
+                  color="#fff"
+                />
+              </View>
+              <PTButton
+                title="Hủy nhận yêu cầu"
+                onPress={() => setAccepted(0)}
+                style={styles.button}
+                color="#fff"
+              />
             </View>
           </View>
         </>
@@ -307,7 +270,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   form: {
-    marginTop: calcScale(20),
     marginHorizontal: calcScale(20),
   },
   formHeader: {

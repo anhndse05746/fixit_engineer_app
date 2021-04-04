@@ -1,9 +1,8 @@
 import * as React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {Input} from 'react-native-elements';
-import {calcScale} from '../../../utils/dimension';
-import PTButton from '../../commonComponent/Button';
-import CommonStyles from '../Styles';
+import {calcScale} from '../../../../utils/dimension';
+import PTButton from '../../../commonComponent/Button';
+import CommonStyles from '../../Styles';
 
 const BillDetailView = ({navigation, route}) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);

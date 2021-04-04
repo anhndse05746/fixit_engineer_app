@@ -39,6 +39,7 @@ const MyProfileView = () => {
       return;
     } else {
       setCities(cityOfVN);
+      console.log(data);
       setConstructorHasRun(true);
     }
   };
@@ -149,7 +150,7 @@ const MyProfileView = () => {
                   return (
                     <Picker.Item
                       label={city.Name}
-                      value={city.Name}
+                      value={city.Id}
                       key={city.Id}
                     />
                   );
@@ -169,7 +170,7 @@ const MyProfileView = () => {
                       return (
                         <Picker.Item
                           label={district.Name}
-                          value={district.Name}
+                          value={district.Id}
                           key={district.Id}
                         />
                       );
@@ -191,7 +192,7 @@ const MyProfileView = () => {
                       return (
                         <Picker.Item
                           label={ward.Name}
-                          value={ward.Name}
+                          value={ward.Id}
                           key={ward.Id}
                         />
                       );

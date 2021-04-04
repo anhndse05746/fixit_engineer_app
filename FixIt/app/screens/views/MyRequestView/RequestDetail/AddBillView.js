@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {Input} from 'react-native-elements';
-import {calcScale} from '../../../utils/dimension';
-import PTButton from '../../commonComponent/Button';
-import CommonStyles from '../Styles';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import {calcScale} from '../../../../utils/dimension';
+import PTButton from '../../../commonComponent/Button';
+import CommonStyles from '../../Styles';
 
 const AddBillView = ({navigation, route}) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
