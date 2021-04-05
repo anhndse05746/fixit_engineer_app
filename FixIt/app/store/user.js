@@ -1,6 +1,6 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import {apiCallBegan} from './apiActions';
+import { apiCallBegan } from './apiActions';
 import constants from '../utils/constants';
 
 const user = createSlice({
@@ -16,6 +16,9 @@ const user = createSlice({
     message: '',
     changePassMessage: '',
     updateUserMessage: '',
+    is_verify: '',
+    city: '',
+    district: '',
   },
   reducers: {
     usersRequested: (users, action) => {
@@ -33,6 +36,9 @@ const user = createSlice({
       users.roleId = action.payload.roleId;
       users.email = action.payload.email;
       users.token = action.payload.token;
+      users.city = action.payload.city;
+      users.district = action.payload.district;
+      users.is_verify = action.payload.is_verify;
       users.message = LOGGED_IN;
       users.loading = false;
     },
