@@ -29,7 +29,7 @@ const RequestItem = ({ navigation, item, index }) => {
         backgroundColor: index % 2 === 0 ? 'rgba(255, 188, 0, .9)' : '#fff',
       }}
       onPress={() =>
-        navigation.navigate('RequestDetailView', { requestData: data })
+        navigation.navigate('ReceiveRequestView', { requestData: data })
       }>
       <Avatar.Text size={calcScale(65)} label="R" />
       <ListItem.Content style={styles.row}>

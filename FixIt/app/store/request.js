@@ -76,6 +76,9 @@ const request = createSlice({
         },
         createInvoiceSuccess: (request, action) => {
             console.log(action)
+            if (action.payload != undefined) {
+                request.message = constants.CREATE_INVOICE_SUCCESSFULLY
+            }
             request.isLoading = false
         },
         createInvoiceFail: (request, action) => {
@@ -173,7 +176,7 @@ export const takeRequest = (token, request_id, repairer_id) => apiCallBegan({
     onError: getRequestDetailFail.type,
 })
 
-export const createInvoice = (token, request_id, total_price, request_issues, cost_incurred) => apiCallBegan({
+export const createInvoice = (token, request_id, total_price, request_issues) => apiCallBegan({
     url: '/api/createInvoice',
     headers: {
         Authorization: token,
@@ -184,7 +187,6 @@ export const createInvoice = (token, request_id, total_price, request_issues, co
         status: "NOT_PAYMENT",
         total_price: total_price,
         request_issues: request_issues,
-        cost_incurred: cost_incurred
     },
     method: 'POST',
     onStart: onRequestStarted.type,

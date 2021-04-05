@@ -2,6 +2,7 @@ import * as React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { createInvoice } from '../../../../store/request';
+import constants from '../../../../utils/constants';
 import { calcScale } from '../../../../utils/dimension';
 import PTButton from '../../../commonComponent/Button';
 import CommonStyles from '../../Styles';
@@ -12,6 +13,8 @@ const BillDetailView = ({ navigation, route }) => {
   const dispatch = useDispatch()
   const request = useSelector(state => state.request)
   const user = useSelector(state => state.user)
+  const requestData = route.params.requestData
+  const { message } = request
 
   const constructor = () => {
     if (constructorHasRun) {
@@ -24,9 +27,40 @@ const BillDetailView = ({ navigation, route }) => {
 
   constructor();
 
-  const createInvoiceHandle = () => {
-    //dispatch(createInvoice(user.token, request_id, total_price, request_issues))
+  const getRequestIssues = (requestId, billData) => {
+    const a = []
+    for (let i = 1; i < billData.length; i++) {
+      a.push({
+        request_id: requestId,
+        issues_id: billData[i].data.issuesId
+      })
+    }
+    return a
   }
+
+  const CalculateTotalPrice = (billData) => {
+    let total = 0
+    for (let i = 1; i < billData.length; i++) {
+      total += parseInt(billData[i].data.price)
+    }
+    return total
+  }
+
+  const totalPrice = CalculateTotalPrice(billData)
+  const request_issues = getRequestIssues(requestData.id, billData)
+
+  console.log(`User Token: ${user.token} - request Id: ${requestData.id} - Total Price ${totalPrice} - request Issue: ${request_issues}`)
+
+  const createInvoiceHandle = () => {
+    dispatch(createInvoice(user.token, requestData.id, totalPrice, request_issues))
+  }
+
+  React.useEffect(() => {
+    if (message === constants.CREATE_INVOICE_SUCCESSFULLY) {
+      alert(constants.CREATE_INVOICE_SUCCESSFULLY)
+      navigation.navigate("HomeView")
+    }
+  }, [message])
 
   const renderColums = ({ item, index }) => {
     return (
@@ -34,16 +68,16 @@ const BillDetailView = ({ navigation, route }) => {
         {index === 0 ? (
           <View style={styles.row}>
             <Text style={[styles.textBold, { flexBasis: '75%' }]}>
-              {item.data.service}
+              {item.data.issue}
             </Text>
-            <Text style={styles.textBold}>{item.data.money}</Text>
+            <Text style={styles.textBold}>{item.data.price}</Text>
           </View>
         ) : (
           <View style={styles.row}>
             <Text style={[styles.textRegular, { flexBasis: '75%' }]}>
-              {item.data.service}
+              {item.data.issue}
             </Text>
-            <Text style={styles.textRegular}>{item.data.money}</Text>
+            <Text style={styles.textRegular}>{item.data.price}</Text>
           </View>
         )}
       </>

@@ -11,6 +11,7 @@ module.exports = Object.freeze({
 
     UPDATE_SUCCESSFULLY: "Lưu thay đổi thành công",
     TAKE_REQUEST_SUCCESSFULLY: "Nhận yêu cầu thành công",
+    CREATE_INVOICE_SUCCESSFULLY: "Tạo hoá đơn thành công",
 
     // Đang tìm thợ
     STATUS_REQUEST_FINDING: 1,

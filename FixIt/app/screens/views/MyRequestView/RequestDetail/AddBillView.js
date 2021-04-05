@@ -11,7 +11,7 @@ import CommonStyles from '../../Styles';
 const AddBillView = ({ navigation, route }) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [billData, setBillData] = React.useState([
-    { id: 0, data: { service: 'Tên dịch vụ', money: 'Đơn giá' }, isRemove: false },
+    { id: 0, data: { issueId: 0, issue: 'Vấn đề thực tế', price: 'Đơn giá' }, isRemove: false },
   ]);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [navigateFail, setNavigateFail] = React.useState('');
@@ -38,15 +38,15 @@ const AddBillView = ({ navigation, route }) => {
   const addRow = (id) => {
 
     console.log(id);
-    // if (billData.find((x) => x.id === id).data.service === '') {
+    // if (billData.find((x) => x.id === id).data.issue === '') {
     //   setErrorMessage(' không được để trống');
     // } else 
-    if (billData.find((x) => x.id === id).data.money === '') {
+    if (billData.find((x) => x.id === id).data.price === '') {
       setErrorMessage(' không được để trống');
     } else {
       const object = {
         id: id + 1,
-        data: { service: '', money: '' },
+        data: { issue: '', price: '' },
         isRemove: true,
       };
       setErrorMessage('');
@@ -65,15 +65,18 @@ const AddBillView = ({ navigation, route }) => {
     setBillData(bills);
   };
 
-  const setService = (index, service) => {
+  const setIssue = (index, issue) => {
     const bills = [...billData];
-    bills[index].data.service = service;
+    const issueId = issueList.find(i => i.name == issue).id
+    console.log(issueList.find(i => i.name == issue).id)
+    bills[index].data.issue = issue;
+    bills[index].data.issueId = issueId
     setBillData(bills);
   };
 
-  const setMoney = (index, money) => {
+  const setPrice = (index, price) => {
     const bills = [...billData];
-    bills[index].data.money = money;
+    bills[index].data.price = price;
     setBillData(bills);
   };
 
@@ -87,8 +90,8 @@ const AddBillView = ({ navigation, route }) => {
                 styles.row,
                 { justifyContent: 'space-around', marginVertical: calcScale(20) },
               ]}>
-              <Text style={styles.textBold}>{item.data.service}</Text>
-              <Text style={styles.textBold}>{item.data.money}</Text>
+              <Text style={styles.textBold}>{item.data.issue}</Text>
+              <Text style={styles.textBold}>{item.data.price}</Text>
             </View>
           </>
         ) : (
@@ -97,25 +100,24 @@ const AddBillView = ({ navigation, route }) => {
               {/* <Input
                 containerStyle={[styles.input, { width: '65%' }]}
                 onChangeText={(service) => setService(index, service)}
-                value={item.data.service}
+                value={item.data.issue}
                 errorMessage={
-                  errorMessage !== '' && item.data.service === ''
+                  errorMessage !== '' && item.data.issue === ''
                     ? 'Tên dịch vụ' + errorMessage
                     : ''
                 }
               /> */}
               <View style={[styles.column, { width: '65%' }]}>
                 <Picker
-                  selectedValue={selectedIssue}
-                  onValueChange={(itemValue, itemIndex) => {
-                    setSelectedIssue(itemValue);
-                    setSelectedIssueIndex(itemIndex);
+                  selectedValue={item.data.issue}
+                  onValueChange={(itemValue) => {
+                    setIssue(index, itemValue)
                   }}>
                   {issueList.map((issue) => {
                     return (
                       <Picker.Item
                         label={issue.name}
-                        value={issue.id}
+                        value={issue.name}
                         key={issue.id}
                       />
                     );
@@ -124,10 +126,10 @@ const AddBillView = ({ navigation, route }) => {
               </View>
               <Input
                 containerStyle={[styles.input, { width: '30%' }]}
-                onChangeText={(money) => setMoney(index, money)}
-                value={item.data.money}
+                onChangeText={(price) => setPrice(index, price)}
+                value={item.data.price}
                 errorMessage={
-                  errorMessage !== '' && item.data.money === ''
+                  errorMessage !== '' && item.data.price === ''
                     ? 'Đơn giá' + errorMessage
                     : ''
                 }
@@ -153,16 +155,17 @@ const AddBillView = ({ navigation, route }) => {
     let checkData = true;
     if (billData.length > 1) {
       billData.map((item, index) => {
-        if (item.data.service === '') {
+        if (item.data.issue === '') {
           checkData = false;
           setErrorMessage(' không được để trống');
-        } else if (item.data.money === '') {
+        } else if (item.data.price === '') {
           checkData = false;
           setErrorMessage(' không được để trống');
         }
       });
       if (checkData) {
-        navigation.navigate('BillDetailView', { billData: billData });
+        console.log(billData)
+        navigation.navigate('BillDetailView', { requestData: requestData, billData: billData });
       }
     } else {
       setNavigateFail('Bạn phải nhập ít nhất một dịch vụ và giá tiền');
