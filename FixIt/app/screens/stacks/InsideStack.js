@@ -1,12 +1,12 @@
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useNavigation} from '@react-navigation/core';
-import {createStackNavigator} from '@react-navigation/stack';
-import React, {useEffect} from 'react';
-import {StyleSheet, TouchableHighlight} from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/core';
+import { createStackNavigator } from '@react-navigation/stack';
+import React, { useEffect } from 'react';
+import { StyleSheet, TouchableHighlight } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useDispatch, useSelector} from 'react-redux';
-import {listAllRequest} from '../../store/request';
-import {calcScale} from '../../utils/dimension';
+import { useDispatch, useSelector } from 'react-redux';
+import { listAllRequest } from '../../store/request';
+import { calcScale } from '../../utils/dimension';
 import AnnoucementView from '../views/AnnouncementView';
 import HomeView from '../views/HomeView';
 import ReceiveRequestView from '../views/HomeView/ReceiveRequestView';
@@ -21,8 +21,8 @@ const InsideTabBottom = createBottomTabNavigator();
 const InsideTabBottomNavigator = () => {
   return (
     <InsideTabBottom.Navigator
-      screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
           if (route.name === 'HomeStackNavigator') {
             return <Icon name="home" size={calcScale(22)} color={color} />;
           } else if (route.name === 'MyRequestStackNavigator') {
@@ -62,7 +62,7 @@ const HomeStackNavigator = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
         name="HomeView"
         component={HomeView}
       />
@@ -71,9 +71,9 @@ const HomeStackNavigator = () => {
         component={ReceiveRequestView}
         options={{
           title: 'Chi tiết đơn hàng',
-          headerTitleStyle: {color: '#fff'},
+          headerTitleStyle: { color: '#fff' },
           headerTintColor: '#fff',
-          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+          headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
         }}
       />
     </HomeStack.Navigator>
@@ -94,12 +94,12 @@ const MyRequestStackNavigator = () => {
   return (
     <MyRequestStack.Navigator
       screenOptions={{
-        headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+        headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
       }}>
       <MyRequestStack.Screen
         name="MyRequest"
         options={{
-          title: 'My Request',
+          title: 'Yêu cầu của tôi',
           headerRight: () => {
             return (
               <TouchableHighlight
@@ -111,7 +111,7 @@ const MyRequestStackNavigator = () => {
               </TouchableHighlight>
             );
           },
-          headerTitleStyle: {color: '#fff'},
+          headerTitleStyle: { color: '#fff' },
           headerLeft: null,
         }}
         component={RequestTabs}
@@ -121,9 +121,9 @@ const MyRequestStackNavigator = () => {
         component={RequestDetailView}
         options={{
           title: 'Chi tiết đơn hàng',
-          headerTitleStyle: {color: '#fff'},
+          headerTitleStyle: { color: '#fff' },
           headerTintColor: '#fff',
-          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+          headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
         }}
       />
       <MyRequestStack.Screen
@@ -131,9 +131,9 @@ const MyRequestStackNavigator = () => {
         component={AddBillView}
         options={{
           title: 'Tạo hóa đơn',
-          headerTitleStyle: {color: '#fff'},
+          headerTitleStyle: { color: '#fff' },
           headerTintColor: '#fff',
-          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+          headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
         }}
       />
       <MyRequestStack.Screen
@@ -141,9 +141,9 @@ const MyRequestStackNavigator = () => {
         component={BillDetailView}
         options={{
           title: 'Xác nhận hóa đơn',
-          headerTitleStyle: {color: '#fff'},
+          headerTitleStyle: { color: '#fff' },
           headerTintColor: '#fff',
-          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+          headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
         }}
       />
     </MyRequestStack.Navigator>

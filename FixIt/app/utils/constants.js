@@ -11,6 +11,7 @@ module.exports = Object.freeze({
 
     UPDATE_SUCCESSFULLY: "Lưu thay đổi thành công",
     TAKE_REQUEST_SUCCESSFULLY: "Nhận yêu cầu thành công",
+    CANCEL_REQUEST_SUCCESSFULLY: "Huỷ yêu cầu thành công",
     CREATE_INVOICE_SUCCESSFULLY: "Tạo hoá đơn thành công",
 
     // Đang tìm thợ
@@ -24,4 +25,6 @@ module.exports = Object.freeze({
     // Đã tạo xong hóa đơn
     STATUS_REQUEST_PAID: 5,
     STATUS_REQUEST_CANCELED: 6,
+
+    ERROR: "Đã có lỗi xảy ra, vui lòng thử lại"
 })

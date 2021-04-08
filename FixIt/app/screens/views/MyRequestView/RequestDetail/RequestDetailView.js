@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -6,19 +6,19 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {getRequestDetail, takeRequest} from '../../../../store/request';
+import { useDispatch, useSelector } from 'react-redux';
+import { getRequestDetail, takeRequest, cancelRequest, listAllRequest } from '../../../../store/request';
 import constants from '../../../../utils/constants';
-import {calcScale} from '../../../../utils/dimension';
+import { calcScale } from '../../../../utils/dimension';
 import PTButton from '../../../commonComponent/Button';
 import commonStyles from '../../Styles';
 
-const RequestDetailView = ({navigation, route}) => {
+const RequestDetailView = ({ navigation, route }) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const request = useSelector((state) => state.request);
   const requestId = route.params.requestData.id;
-  const {message} = request;
+  const { message } = request;
 
   //get request detail
   useEffect(() => {
@@ -49,10 +49,16 @@ const RequestDetailView = ({navigation, route}) => {
     dispatch(takeRequest(token, requestId, userId));
   };
 
+  const cancelRequestTrigger = (token, requestId, cancel_reason) => {
+    dispatch(cancelRequest(token, requestId, cancel_reason));
+  };
+
+
   useEffect(() => {
     console.log(message);
-    if (message === constants.TAKE_REQUEST_SUCCESSFULLY) {
+    if (message === constants.CANCEL_REQUEST_SUCCESSFULLY) {
       alert(message);
+      dispatch(listAllRequest(user.token, user.userId));
       //navigate to home view
       navigation.navigate('HomeView');
     }
@@ -166,7 +172,7 @@ const RequestDetailView = ({navigation, route}) => {
                   fontSize: calcScale(16),
                   marginBottom: calcScale(10),
                 }}>
-                {data.estimate_time}
+                {data.estimate_time} Phút
               </Text>
             </View>
             <View style={styles.innerFormContainer}>
@@ -183,7 +189,7 @@ const RequestDetailView = ({navigation, route}) => {
                   fontSize: calcScale(16),
                   marginBottom: calcScale(10),
                 }}>
-                {data.estimate_price}
+                {data.estimate_price} VND
               </Text>
             </View>
             <View style={styles.innerFormContainer}>
@@ -210,8 +216,8 @@ const RequestDetailView = ({navigation, route}) => {
                 paddingTop: calcScale(10),
                 marginBottom: calcScale(20),
               }}>
-              <View style={{marginLeft: calcScale(20)}}>
-                <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
+              <View style={{ marginLeft: calcScale(20) }}>
+                <Text style={{ fontSize: calcScale(24), fontWeight: 'bold' }}>
                   Địa chỉ: {data.address}, {data.district}, {data.city}
                 </Text>
                 <Text
@@ -222,14 +228,14 @@ const RequestDetailView = ({navigation, route}) => {
                   {data.Customer.name}
                   {/* | {user.phoneNumber} */}
                 </Text>
-                <Text style={{fontSize: calcScale(18)}}>{data.address}</Text>
+                <Text style={{ fontSize: calcScale(18) }}>{data.address}</Text>
               </View>
             </View>
-            <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
+            <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
               <View style={styles.row}>
                 <PTButton
                   title="Gọi điện"
-                  onPress={() => {}}
+                  onPress={() => { }}
                   style={styles.buttonHalfWidth}
                   color="#fff"
                 />
@@ -242,7 +248,7 @@ const RequestDetailView = ({navigation, route}) => {
               </View>
               <PTButton
                 title="Hủy nhận yêu cầu"
-                onPress={() => setAccepted(0)}
+                onPress={() => cancelRequestTrigger(user.token, data.id, "Lí Do Lí chấu")}
                 style={styles.button}
                 color="#fff"
               />
@@ -253,7 +259,7 @@ const RequestDetailView = ({navigation, route}) => {
         <ActivityIndicator
           size="small"
           color="#3368f3"
-          style={{marginTop: calcScale(10)}}
+          style={{ marginTop: calcScale(10) }}
         />
       )}
     </ScrollView>

@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {calcScale} from '../../../utils/dimension';
+import { useDispatch, useSelector } from 'react-redux';
+import { calcScale } from '../../../utils/dimension';
 import commonStyles from '../Styles';
 import ListEmptyComponent from './ListEmpty';
 
-const AcceptedTabView = ({navigation}) => {
+const AcceptedTabView = ({ navigation }) => {
   const request = useSelector((state) => state.request);
   const acceptedData = request.executingRequest;
   // [
@@ -67,25 +67,25 @@ const AcceptedTabView = ({navigation}) => {
   //   const page = currentPage + 1;
   // }, [acceptedData]);
 
-  const renderListRequest = ({item}) => {
+  const renderListRequest = ({ item }) => {
     return (
       <TouchableOpacity
         style={styles.ticketContainer}
         onPress={() =>
-          navigation.navigate('RequestDetailView', {requestData: item})
+          navigation.navigate('RequestDetailView', { requestData: item })
         }>
         <View style={styles.row}>
           <Text style={[styles.textBold, styles.textTitle]}>
             {item.serviceName}
           </Text>
         </View>
-        <View style={[styles.row, {justifyContent: 'space-between'}]}>
+        <View style={[styles.row, { justifyContent: 'space-between' }]}>
           <View style={styles.column}>
-            <Text style={styles.textRegular}>Thời gian:</Text>
+            <Text style={styles.textRegular}>Thời gian ước tính:</Text>
             <Text style={styles.textBold}>{item.estimate_time} Phút</Text>
           </View>
           <View style={styles.column}>
-            <Text style={styles.textRegular}>Giá:</Text>
+            <Text style={styles.textRegular}>Giá ước tính:</Text>
             <Text style={styles.textBold}>{item.estimate_price} VND</Text>
           </View>
           <View style={styles.column}>

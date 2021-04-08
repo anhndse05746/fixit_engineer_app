@@ -64,10 +64,10 @@ const request = createSlice({
         },
         takeRequestSuccess: (request, action) => {
             console.log(action)
-            if (payload.action !== "This request is taken") {
+            if (action.payload !== "This request is taken") {
                 request.message = constants.TAKE_REQUEST_SUCCESSFULLY
             }
-            console.log(message)
+            console.log(request.message)
             request.isLoading = false
         },
         takeRequestFail: (request, action) => {
@@ -85,7 +85,17 @@ const request = createSlice({
             console.log(action)
             request.isLoading = false
         },
-
+        cancelRequestSuccess: (request, action) => {
+            if (action.payload.message != 'Can not cancel this request') {
+                request.message = constants.CANCEL_REQUEST_SUCCESSFULLY
+            }
+            console.log(action)
+            request.isLoading = false
+        },
+        cancelRequestFail: (request, action) => {
+            console.log(action)
+            request.isLoading = false
+        },
     }
 })
 
@@ -101,7 +111,11 @@ export const { onRequestStarted,
     getRequestDetailFail,
     getRequestDetailSuccess,
     createInvoiceSuccess,
-    createInvoiceFail } = request.actions
+    createInvoiceFail,
+    takeRequestFail,
+    takeRequestSuccess,
+    cancelRequestFail,
+    cancelRequestSuccess } = request.actions
 
 
 export const listRequest = (token, repairer_id) => apiCallBegan({
@@ -172,8 +186,24 @@ export const takeRequest = (token, request_id, repairer_id) => apiCallBegan({
     },
     method: 'POST',
     onStart: onRequestStarted.type,
-    onSuccess: getRequestDetailSuccess.type,
-    onError: getRequestDetailFail.type,
+    onSuccess: takeRequestSuccess.type,
+    onError: takeRequestFail.type,
+})
+
+export const cancelRequest = (token, request_id, cancel_reason) => apiCallBegan({
+    url: '/api/cancelRequest',
+    headers: {
+        Authorization: token,
+    },
+    data: {
+        request_id: request_id,
+        cancel_by: constants.ROLE_REPAIRER,
+        cancel_reason: cancel_reason
+    },
+    method: 'POST',
+    onStart: onRequestStarted.type,
+    onSuccess: cancelRequestSuccess.type,
+    onError: cancelRequestFail.type,
 })
 
 export const createInvoice = (token, request_id, total_price, request_issues) => apiCallBegan({
