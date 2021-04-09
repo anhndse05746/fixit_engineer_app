@@ -60,15 +60,54 @@ const RequestDetailView = ({ navigation, route }) => {
       alert(message);
       dispatch(listAllRequest(user.token, user.userId));
       //navigate to home view
-      navigation.navigate('HomeView');
+      navigation.navigate('MyRequestStackNavigator');
     }
   }, [message]);
 
   //Get status object of request
   let requestStatus;
+  let myRequestButton
   if (data.request_statuses) {
-    requestStatus = data.request_statuses;
+    requestStatus = data.request_statuses[0].status_id;
+    if (requestStatus == 2) {
+      console.log(requestStatus + '=== 2')
+      myRequestButton = <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
+        <View style={styles.row}>
+          <PTButton
+            title="Gọi điện"
+            onPress={() => { }}
+            style={styles.buttonHalfWidth}
+            color="#fff"
+          />
+          <PTButton
+            title="Tạo hóa đơn"
+            onPress={() => navigation.navigate('AddBillView', data)}
+            style={styles.buttonHalfWidth}
+            color="#fff"
+          />
+        </View>
+        <PTButton
+          title="Hủy nhận yêu cầu"
+          onPress={() => cancelRequestTrigger(user.token, data.id, "Lí Do Lí chấu")}
+          style={styles.button}
+          color="#fff"
+        />
+      </View>
+    } else if (requestStatus == 4) {
+      myRequestButton = <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
+        <PTButton
+          title="Xác nhận đã thanh toán"
+          onPress={() => { }}
+          style={styles.button}
+          color="#fff"
+        />
+      </View>
+    } else if (requestStatus == 6) {
+      myRequestButton = null
+    }
   }
+
+
 
   return (
     <ScrollView style={styles.container}>
@@ -225,34 +264,14 @@ const RequestDetailView = ({ navigation, route }) => {
                     fontSize: calcScale(18),
                     marginTop: calcScale(5),
                   }}>
-                  {data.Customer.name}
+                  Tên khách hàng: {data.Customer.name}asdadadadadadas
                   {/* | {user.phoneNumber} */}
                 </Text>
-                <Text style={{ fontSize: calcScale(18) }}>{data.address}</Text>
+                {/* <Text style={{ fontSize: calcScale(18) }}>{data.address}</Text> */}
               </View>
             </View>
-            <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
-              <View style={styles.row}>
-                <PTButton
-                  title="Gọi điện"
-                  onPress={() => { }}
-                  style={styles.buttonHalfWidth}
-                  color="#fff"
-                />
-                <PTButton
-                  title="Tạo hóa đơn"
-                  onPress={() => navigation.navigate('AddBillView', data)}
-                  style={styles.buttonHalfWidth}
-                  color="#fff"
-                />
-              </View>
-              <PTButton
-                title="Hủy nhận yêu cầu"
-                onPress={() => cancelRequestTrigger(user.token, data.id, "Lí Do Lí chấu")}
-                style={styles.button}
-                color="#fff"
-              />
-            </View>
+
+            {myRequestButton}
           </View>
         </>
       ) : (

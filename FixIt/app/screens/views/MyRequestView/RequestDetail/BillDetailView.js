@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { createInvoice } from '../../../../store/request';
+import { createInvoice, listAllRequest } from '../../../../store/request';
 import constants from '../../../../utils/constants';
 import { calcScale } from '../../../../utils/dimension';
 import PTButton from '../../../commonComponent/Button';
@@ -32,7 +32,7 @@ const BillDetailView = ({ navigation, route }) => {
     for (let i = 1; i < billData.length; i++) {
       a.push({
         request_id: requestId,
-        issues_id: billData[i].data.issuesId
+        issues_id: billData[i].data.issueId
       })
     }
     return a
@@ -49,7 +49,7 @@ const BillDetailView = ({ navigation, route }) => {
   const totalPrice = CalculateTotalPrice(billData)
   const request_issues = getRequestIssues(requestData.id, billData)
 
-  console.log(`User Token: ${user.token} - request Id: ${requestData.id} - Total Price ${totalPrice} - request Issue: ${request_issues}`)
+  console.log(`User Token: ${user.token} - request Id: ${requestData.id} - Total Price ${totalPrice} - request Issue: ${JSON.stringify(request_issues)}`)
 
   const createInvoiceHandle = () => {
     dispatch(createInvoice(user.token, requestData.id, totalPrice, request_issues))
@@ -58,7 +58,8 @@ const BillDetailView = ({ navigation, route }) => {
   React.useEffect(() => {
     if (message === constants.CREATE_INVOICE_SUCCESSFULLY) {
       alert(constants.CREATE_INVOICE_SUCCESSFULLY)
-      navigation.navigate("HomeView")
+      dispatch(listAllRequest(user.token, user.userId));
+      navigation.navigate("Accecpted")
     }
   }, [message])
 

@@ -59,7 +59,7 @@ const request = createSlice({
             request.requestDetail = action.payload
         },
         getRequestDetailFail: (request, action) => {
-            console.log(action)
+            console.log(JSON.stringify(action))
             request.isLoading = false
         },
         takeRequestSuccess: (request, action) => {
