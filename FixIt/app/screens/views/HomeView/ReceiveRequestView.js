@@ -62,9 +62,6 @@ const ReceiveRequestView = ({ navigation, route }) => {
       dispatch(listAllRequest(user.token, user.userId));
       //navigate to home view
       navigation.navigate('MyRequestStackNavigator');
-    } else {
-      alert(constants.ERROR)
-      navigation.navigate('HomeView')
     }
   }, [message]);
 

@@ -66,11 +66,12 @@ const RequestDetailView = ({ navigation, route }) => {
 
   //Get status object of request
   let requestStatus;
-  let myRequestButton
+  let myRequestButton;
+  let price;
   if (data.request_statuses) {
     requestStatus = data.request_statuses[0].status_id;
+    //Request button
     if (requestStatus == 2) {
-      console.log(requestStatus + '=== 2')
       myRequestButton = <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
         <View style={styles.row}>
           <PTButton
@@ -104,6 +105,55 @@ const RequestDetailView = ({ navigation, route }) => {
       </View>
     } else if (requestStatus == 6) {
       myRequestButton = null
+    }
+
+    //Price
+    if (requestStatus == 4 || requestStatus == 5) {
+      console.log(data.invoice)
+      //Show price
+      price = <View style={styles.innerFormContainer}>
+        <Text
+          style={{
+            fontSize: calcScale(18),
+            fontWeight: 'bold',
+            marginBottom: calcScale(10),
+          }}>
+          Chi phí thực tế:
+      </Text>
+        <Text
+          style={{
+            fontSize: calcScale(16),
+            marginBottom: calcScale(10),
+          }}>
+          {data.invoice.total_price} VND
+      </Text>
+      </View>
+    } else {
+      //Show price
+      price = <View style={styles.innerFormContainer}>
+        <Text
+          style={{
+            fontSize: calcScale(18),
+            fontWeight: 'bold',
+            marginBottom: calcScale(10),
+          }}>
+          Tổng chi phí ước tính:
+      </Text>
+        <Text
+          style={{
+            fontSize: calcScale(16),
+            marginBottom: calcScale(10),
+          }}>
+          {data.estimate_price} VND
+      </Text>
+        <Text
+          style={{
+            fontSize: calcScale(16),
+            marginBottom: calcScale(10),
+          }}>
+          (Chi phí chưa bao gồm phí đi lại. Chí phí tối thiểu là 30.000VND)
+      </Text>
+      </View>
     }
   }
 
@@ -147,6 +197,17 @@ const RequestDetailView = ({ navigation, route }) => {
                   fontWeight: 'bold',
                   marginBottom: calcScale(10),
                 }}>
+                Trạng thái: {data.request_statuses[0].status.name == "Đã tìm thấy thợ" ? "Đã nhận" : data.request_statuses[0].status.name}
+              </Text>
+
+            </View>
+            <View style={styles.innerFormContainer}>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
                 Thời gian hẹn:
               </Text>
               <Text
@@ -154,7 +215,7 @@ const RequestDetailView = ({ navigation, route }) => {
                   fontSize: calcScale(18),
                   marginBottom: calcScale(10),
                 }}>
-                {data.schedule_time.toString()}
+                {`${data.schedule_time.split('T')[1].split('.')[0].split(':')[0]}:${data.schedule_time.split('T')[1].split('.')[0].split(':')[1]}, ${data.schedule_time.split('T')[0]}`}
               </Text>
             </View>
             <View style={styles.innerFormContainer}>
@@ -214,23 +275,10 @@ const RequestDetailView = ({ navigation, route }) => {
                 {data.estimate_time} Phút
               </Text>
             </View>
-            <View style={styles.innerFormContainer}>
-              <Text
-                style={{
-                  fontSize: calcScale(18),
-                  fontWeight: 'bold',
-                  marginBottom: calcScale(10),
-                }}>
-                Tổng chi phí ước tính:
-              </Text>
-              <Text
-                style={{
-                  fontSize: calcScale(16),
-                  marginBottom: calcScale(10),
-                }}>
-                {data.estimate_price} VND
-              </Text>
-            </View>
+            {
+              //price
+              price
+            }
             <View style={styles.innerFormContainer}>
               <Text
                 style={{
@@ -264,10 +312,15 @@ const RequestDetailView = ({ navigation, route }) => {
                     fontSize: calcScale(18),
                     marginTop: calcScale(5),
                   }}>
-                  Tên khách hàng: {data.Customer.name}asdadadadadadas
-                  {/* | {user.phoneNumber} */}
+                  Tên khách hàng: {data.Customer.name}
                 </Text>
-                {/* <Text style={{ fontSize: calcScale(18) }}>{data.address}</Text> */}
+                <Text
+                  style={{
+                    fontSize: calcScale(18),
+                    marginTop: calcScale(5),
+                  }}>
+                  Số điện thoại: {data.Customer.phone_number}
+                </Text>
               </View>
             </View>
 

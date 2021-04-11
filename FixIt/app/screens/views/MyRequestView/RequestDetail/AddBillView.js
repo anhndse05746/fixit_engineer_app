@@ -11,7 +11,7 @@ import CommonStyles from '../../Styles';
 const AddBillView = ({ navigation, route }) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [billData, setBillData] = React.useState([
-    { id: 0, data: { issueId: 0, issue: 'Vấn đề thực tế', price: 'Đơn giá' }, isRemove: false },
+    { id: 0, data: { issueId: 0, issue: 'Công việc thực hiện', price: 'Đơn giá' }, isRemove: false },
   ]);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [navigateFail, setNavigateFail] = React.useState('');

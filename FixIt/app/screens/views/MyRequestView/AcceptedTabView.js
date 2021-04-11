@@ -68,6 +68,8 @@ const AcceptedTabView = ({ navigation }) => {
   // }, [acceptedData]);
 
   const renderListRequest = ({ item }) => {
+    const schedule_time = `${item.schedule_time.split('T')[1].split('.')[0].split(':')[0]}:${item.schedule_time.split('T')[1].split('.')[0].split(':')[1]}, ${item.schedule_time.split('T')[0]}`
+
     return (
       <TouchableOpacity
         style={styles.ticketContainer}
@@ -75,9 +77,17 @@ const AcceptedTabView = ({ navigation }) => {
           navigation.navigate('RequestDetailView', { requestData: item })
         }>
         <View style={styles.row}>
-          <Text style={[styles.textBold, styles.textTitle]}>
-            {item.serviceName}
-          </Text>
+          <View style={styles.column}>
+            <Text style={[styles.textBold, styles.textTitle]}>
+              {item.serviceName}
+            </Text>
+            <Text style={[styles.textBold, styles.textTitle]}>
+              {schedule_time}
+            </Text>
+            <Text style={[styles.textBold, styles.textTitle]}>
+              {`${item.address}, ${item.district}, ${item.city}`}
+            </Text>
+          </View>
         </View>
         <View style={[styles.row, { justifyContent: 'space-between' }]}>
           <View style={styles.column}>
@@ -90,7 +100,7 @@ const AcceptedTabView = ({ navigation }) => {
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Trạng thái:</Text>
-            <Text style={styles.textBold}>{item.statusName}</Text>
+            <Text style={styles.textBold}>{(item.statusName == "Đã tìm thấy thợ") ? "Đã nhận" : item.statusName}</Text>
           </View>
         </View>
       </TouchableOpacity>
