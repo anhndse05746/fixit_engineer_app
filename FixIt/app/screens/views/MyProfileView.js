@@ -31,8 +31,6 @@ const MyProfileView = () => {
   const [selectedCity, setSelectedCity] = React.useState('');
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
   const [selectedDistrict, setSelectedDistrict] = React.useState('');
-  const [selectedDistrictIndex, setSelectedDistrictIndex] = React.useState(0);
-  const [selectedWard, setSelectedWard] = React.useState('');
 
   const constructor = () => {
     if (constructorHasRun) {
@@ -105,7 +103,6 @@ const MyProfileView = () => {
           </View>
           <Text>{updateUserMessage}</Text>
           <View style={{ paddingBottom: calcScale(50) }}>
-
             <Input
               containerStyle={[styles.input, { width: calcScale(width) }]}
               inputContainerStyle={{ borderBottomWidth: 0 }}
@@ -163,7 +160,6 @@ const MyProfileView = () => {
                 selectedValue={selectedDistrict}
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedDistrict(itemValue);
-                  setSelectedDistrictIndex(itemIndex);
                 }}>
                 {cities.length > 0
                   ? cities[selectedCityIndex].Districts.map((district) => {
@@ -172,28 +168,6 @@ const MyProfileView = () => {
                         label={district.Name}
                         value={district.Id}
                         key={district.Id}
-                      />
-                    );
-                  })
-                  : null}
-              </Picker>
-            </View>
-            <View style={styles.picker}>
-              <Picker
-                enabled={notEdit}
-                selectedValue={selectedWard}
-                onValueChange={(itemValue, itemIndex) => {
-                  setSelectedWard(itemValue);
-                }}>
-                {cities.length > 0
-                  ? cities[selectedCityIndex].Districts[
-                    selectedDistrictIndex
-                  ].Wards.map((ward) => {
-                    return (
-                      <Picker.Item
-                        label={ward.Name}
-                        value={ward.Id}
-                        key={ward.Id}
                       />
                     );
                   })

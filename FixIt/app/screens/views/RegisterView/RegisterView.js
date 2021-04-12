@@ -40,8 +40,6 @@ const RegisterView = ({navigation}) => {
   const [selectedCity, setSelectedCity] = React.useState('');
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
   const [selectedDistrict, setSelectedDistrict] = React.useState('');
-  const [selectedDistrictIndex, setSelectedDistrictIndex] = React.useState(0);
-  const [selectedWard, setSelectedWard] = React.useState('');
 
   const dataJob = [
     {
@@ -272,7 +270,6 @@ const RegisterView = ({navigation}) => {
                 selectedValue={selectedDistrict}
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedDistrict(itemValue);
-                  setSelectedDistrictIndex(itemIndex);
                 }}>
                 {cities.length > 0
                   ? cities[selectedCityIndex].Districts.map((district) => {
@@ -281,30 +278,6 @@ const RegisterView = ({navigation}) => {
                           label={district.Name}
                           value={district.Id}
                           key={district.Id}
-                        />
-                      );
-                    })
-                  : null}
-              </Picker>
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.textRegular}>
-                Phường/Xã <Text style={{color: 'red'}}>*</Text>
-              </Text>
-              <Picker
-                selectedValue={selectedWard}
-                onValueChange={(itemValue, itemIndex) => {
-                  setSelectedWard(itemValue);
-                }}>
-                {cities.length > 0
-                  ? cities[selectedCityIndex].Districts[
-                      selectedDistrictIndex
-                    ].Wards.map((ward) => {
-                      return (
-                        <Picker.Item
-                          label={ward.Name}
-                          value={ward.Id}
-                          key={ward.Id}
                         />
                       );
                     })
