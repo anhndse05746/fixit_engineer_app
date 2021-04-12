@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { getRequestDetail, takeRequest, cancelRequest, listAllRequest } from '../../../../store/request';
+import { getRequestDetail, takeRequest, cancelRequest, listAllRequest, paidConfirmation } from '../../../../store/request';
 import constants from '../../../../utils/constants';
 import { calcScale } from '../../../../utils/dimension';
 import PTButton from '../../../commonComponent/Button';
@@ -60,7 +60,13 @@ const RequestDetailView = ({ navigation, route }) => {
       alert(message);
       dispatch(listAllRequest(user.token, user.userId));
       //navigate to home view
-      navigation.navigate('MyRequestStackNavigator');
+      navigation.navigate('Accecpted');
+    }
+    else if (message === constants.PAID_CONFIRMATION_SUCCESSFULLY) {
+      alert(message);
+      dispatch(listAllRequest(user.token, user.userId));
+      //navigate to home view
+      navigation.navigate('Done');
     }
   }, [message]);
 
@@ -98,7 +104,7 @@ const RequestDetailView = ({ navigation, route }) => {
       myRequestButton = <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
         <PTButton
           title="Xác nhận đã thanh toán"
-          onPress={() => { }}
+          onPress={() => dispatch(paidConfirmation(user.token, data.id))}
           style={styles.button}
           color="#fff"
         />

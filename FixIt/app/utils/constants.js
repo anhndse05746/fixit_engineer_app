@@ -13,7 +13,7 @@ module.exports = Object.freeze({
     TAKE_REQUEST_SUCCESSFULLY: "Nhận yêu cầu thành công",
     CANCEL_REQUEST_SUCCESSFULLY: "Huỷ yêu cầu thành công",
     CREATE_INVOICE_SUCCESSFULLY: "Tạo hoá đơn thành công",
-
+    PAID_CONFIRMATION_SUCCESSFULLY: "Xác nhận yêu cầu đã được thanh toán thành công",
     // Đang tìm thợ
     STATUS_REQUEST_FINDING: 1,
     // Thợ đã nhận đồng thời có nút Bắt đầu sửa

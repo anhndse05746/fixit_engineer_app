@@ -96,6 +96,15 @@ const request = createSlice({
             console.log(action)
             request.isLoading = false
         },
+        paidConfirmationSuccess: (request, action) => {
+            console.log(action)
+            request.message = constants.PAID_CONFIRMATION_SUCCESSFULLY
+            request.isLoading = false
+        },
+        paidConfirmationFail: (request, action) => {
+            console.log(action)
+            request.isLoading = false
+        },
     }
 })
 
@@ -115,7 +124,9 @@ export const { onRequestStarted,
     takeRequestFail,
     takeRequestSuccess,
     cancelRequestFail,
-    cancelRequestSuccess } = request.actions
+    cancelRequestSuccess,
+    paidConfirmationFail,
+    paidConfirmationSuccess } = request.actions
 
 
 export const listRequest = (token, repairer_id) => apiCallBegan({
@@ -222,5 +233,19 @@ export const createInvoice = (token, request_id, total_price, request_issues) =>
     onStart: onRequestStarted.type,
     onSuccess: createInvoiceSuccess.type,
     onError: createInvoiceFail.type,
+})
+
+export const paidConfirmation = (token, request_id) => apiCallBegan({
+    url: '/api/confirmInvoice',
+    headers: {
+        Authorization: token,
+    },
+    data: {
+        request_id: request_id
+    },
+    method: 'POST',
+    onStart: onRequestStarted.type,
+    onSuccess: paidConfirmationSuccess.type,
+    onError: paidConfirmationFail.type,
 })
 
