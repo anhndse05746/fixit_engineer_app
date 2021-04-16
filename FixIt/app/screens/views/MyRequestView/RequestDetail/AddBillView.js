@@ -21,8 +21,12 @@ const AddBillView = ({ navigation, route }) => {
   //detail request
   const requestData = route.params;
   //get issue list of this service
-  const issueList = requestData.service.issues
-
+  let issueList = []
+  for (let i = 0; i < requestData.service.issues.length; i++) {
+    issueList.push(requestData.service.issues[i])
+  }
+  issueList.push({ "estimate_price": "0", "id": -1, "name": "Công việc khác" })
+  issueList.push({ "estimate_price": "0", "id": -2, "name": "Chi phí vật tư" })
   //setBillData(requestData.request_issues)
 
   const constructor = () => {
@@ -68,9 +72,9 @@ const AddBillView = ({ navigation, route }) => {
   const setIssue = (index, issue) => {
     const bills = [...billData];
     const issueId = issueList.find(i => i.name == issue).id
-    console.log(issueList.find(i => i.name == issue).id)
     bills[index].data.issue = issue;
     bills[index].data.issueId = issueId
+    setPrice(index, issueList.find(i => i.name == issue).estimate_price)
     setBillData(bills);
   };
 
@@ -81,6 +85,7 @@ const AddBillView = ({ navigation, route }) => {
   };
 
   const renderColums = ({ item, index }) => {
+    console.log({ issueList })
     return (
       <>
         {!item.isRemove ? (
@@ -124,7 +129,12 @@ const AddBillView = ({ navigation, route }) => {
                   })}
                 </Picker>
               </View>
-              <Input
+
+              {item.data.issueId && item.data.issueId > 0 ? (<View>
+                <Text>
+                  {issueList.find(i => i.id == item.data.issueId).estimate_price} VND
+                </Text>
+              </View>) : <Input
                 containerStyle={[styles.input, { width: '30%' }]}
                 onChangeText={(price) => setPrice(index, price)}
                 value={item.data.price}
@@ -133,7 +143,17 @@ const AddBillView = ({ navigation, route }) => {
                     ? 'Đơn giá' + errorMessage
                     : ''
                 }
-              />
+              />}
+              {/* <Input
+                containerStyle={[styles.input, { width: '30%' }]}
+                onChangeText={(price) => setPrice(index, price)}
+                value={item.data.price}
+                errorMessage={
+                  errorMessage !== '' && item.data.price === ''
+                    ? 'Đơn giá' + errorMessage
+                    : ''
+                }
+              /> */}
               <TouchableOpacity>
                 <Icon
                   name="times-circle"
@@ -158,9 +178,9 @@ const AddBillView = ({ navigation, route }) => {
         if (item.data.issue === '') {
           checkData = false;
           setErrorMessage(' không được để trống');
-        } else if (item.data.price === '') {
-          checkData = false;
-          setErrorMessage(' không được để trống');
+          // } else if (item.data.price === '') {
+          //   checkData = false;
+          //   setErrorMessage(' không được để trống');
         }
       });
       if (checkData) {

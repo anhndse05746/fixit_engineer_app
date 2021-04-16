@@ -64,6 +64,7 @@ const BillDetailView = ({ navigation, route }) => {
   }, [message])
 
   const renderColums = ({ item, index }) => {
+    console.log(item)
     return (
       <>
         {index === 0 ? (
@@ -73,14 +74,21 @@ const BillDetailView = ({ navigation, route }) => {
             </Text>
             <Text style={styles.textBold}>{item.data.price}</Text>
           </View>
-        ) : (
-          <View style={styles.row}>
-            <Text style={[styles.textRegular, { flexBasis: '75%' }]}>
-              {item.data.issue}
-            </Text>
-            <Text style={styles.textRegular}>{item.data.price}</Text>
-          </View>
-        )}
+        ) :
+          (item.data.issueId < 0 ?
+            (<View style={styles.row}>
+              <Text style={[styles.textBold, { flexBasis: '75%' }]}>
+                {item.data.issue}
+              </Text>
+              <Text style={styles.textRegular}>{item.data.price} VND</Text>
+            </View>) :
+            (<View style={styles.row}>
+              <Text style={[styles.textRegular, { flexBasis: '75%' }]}>
+                {item.data.issue}
+              </Text>
+              <Text style={styles.textRegular}>{item.data.price} VND</Text>
+            </View>)
+          )}
       </>
     );
   };
@@ -90,7 +98,7 @@ const BillDetailView = ({ navigation, route }) => {
       <Text
         style={[
           styles.textRegular,
-          { marginTop: calcScale(15), fontSize: calcScale(22) },
+          { marginTop: calcScale(15), fontSize: calcScale(22), }, styles.textBold
         ]}>
         Các chi phí cần thanh toán
       </Text>

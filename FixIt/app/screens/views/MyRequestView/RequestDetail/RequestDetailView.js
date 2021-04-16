@@ -124,7 +124,7 @@ const RequestDetailView = ({ navigation, route }) => {
             fontWeight: 'bold',
             marginBottom: calcScale(10),
           }}>
-          Chi phí thực tế:
+          Tiền thu thực tế:
       </Text>
         <Text
           style={{
@@ -143,7 +143,7 @@ const RequestDetailView = ({ navigation, route }) => {
             fontWeight: 'bold',
             marginBottom: calcScale(10),
           }}>
-          Tổng chi phí ước tính:
+          Tiền công ước tính:
       </Text>
         <Text
           style={{
@@ -157,7 +157,7 @@ const RequestDetailView = ({ navigation, route }) => {
             fontSize: calcScale(16),
             marginBottom: calcScale(10),
           }}>
-          (Chi phí chưa bao gồm phí đi lại. Chí phí tối thiểu là 30.000VND)
+          (Chi phí chưa bao gồm phí đi lại)
       </Text>
       </View>
     }
@@ -285,6 +285,23 @@ const RequestDetailView = ({ navigation, route }) => {
               //price
               price
             }
+            <View style={styles.innerFormContainer}>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                Tiền công tối thiểu
+              </Text>
+              <Text
+                style={{
+                  fontSize: calcScale(16),
+                  marginBottom: calcScale(10),
+                }}>
+                30.000 VND
+              </Text>
+            </View>
             <View style={styles.innerFormContainer}>
               <Text
                 style={{
