@@ -5,6 +5,8 @@ module.exports = Object.freeze({
   EncryptionKey_TOKEN_KEY: 'TOKEN_KEY_CgHsdtndVsD2021',
   EncryptionKey_USER_KEY: 'USER_TOKEN_KEY_CgHsdtndVsD2021',
 
+  WORKING_TOGGLE: 'workingtoggle',
+
   ROLE_REPAIRER: 2,
 
   LOGIN_FAIL_MESSAGE: 'Sai tên tài khoản hoặc mật khẩu',

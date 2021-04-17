@@ -1,5 +1,14 @@
 import * as React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {
+  FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {Input} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {createInvoice, listAllRequest} from '../../../../store/request';
@@ -50,9 +59,6 @@ const BillDetailView = ({navigation, route}) => {
   const totalPrice = CalculateTotalPrice(billData);
   const request_issues = getRequestIssues(requestData.id, billData);
 
-  const [realPrice, setRealPrice] = React.useState(totalPrice);
-  const [realPriceError, setRealPriceError] = React.useState('');
-
   console.log(
     `User Token: ${user.token} - request Id: ${
       requestData.id
@@ -61,12 +67,16 @@ const BillDetailView = ({navigation, route}) => {
     )}`,
   );
 
+  const [realPrice, setRealPrice] = React.useState(totalPrice);
+  const [realPriceError, setRealPriceError] = React.useState('');
+
   const createInvoiceHandle = () => {
-    if (!realPrice) {
+    if (realPrice === '') {
       setRealPriceError('không được để trống');
-    } else if (realPrice > totalPrice) {
+    } else if (parseInt(realPrice) > totalPrice) {
       setRealPriceError('không được lớn hơn tổng tiền');
     } else {
+      setRealPriceError('');
       dispatch(
         createInvoice(user.token, requestData.id, realPrice, request_issues),
       );
@@ -82,15 +92,20 @@ const BillDetailView = ({navigation, route}) => {
   }, [message]);
 
   const renderColums = ({item, index}) => {
-    console.log(item);
     return (
       <>
         {index === 0 ? (
           <View style={styles.row}>
-            <Text style={[styles.textBold, {flexBasis: '70%'}]}>
+            <Text
+              style={[
+                styles.textBold,
+                {flexBasis: '70%', fontSize: calcScale(24)},
+              ]}>
               {item.data.issue}
             </Text>
-            <Text style={styles.textBold}>{item.data.price}</Text>
+            <Text style={[styles.textBold, {fontSize: calcScale(24)}]}>
+              {item.data.price}
+            </Text>
           </View>
         ) : item.data.issueId < 0 ? (
           <View style={styles.row}>
@@ -111,67 +126,77 @@ const BillDetailView = ({navigation, route}) => {
     );
   };
 
-  const renderFooter = () => {
-    return (
-      <>
-        <View
-          style={{
-            borderTopColor: '#ccc',
-            borderTopWidth: 1,
-            marginTop: calcScale(15),
-            marginBottom: calcScale(10),
-          }}
-        />
-        <View style={styles.row}>
-          <Text style={[styles.textBold, {flexBasis: '70%'}]}>Tổng tiền</Text>
-          <Text style={styles.textRegular}>{totalPrice}.000 VND</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={[styles.textBold, {flexBasis: '70%'}]}>
-            Tổng tiền thực tế
-          </Text>
-          <Input
-            containerStyle={[styles.input, {width: '30%'}]}
-            onChangeText={(realPrice) => setRealPrice(realPrice)}
-            value={realPrice}
-            errorMessage={
-              realPriceError !== '' && realPrice === ''
-                ? 'Tổng tiền thực tế ' + realPriceError
-                : ''
-            }
-            keyboardType="number-pad"
-          />
-        </View>
-      </>
-    );
-  };
+  React.useEffect(() => {
+    if (totalPrice) {
+      setRealPrice(totalPrice);
+    }
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <Text
-        style={[
-          styles.textRegular,
-          {marginTop: calcScale(15), fontSize: calcScale(22)},
-          styles.textBold,
-        ]}>
-        Các chi phí cần thanh toán
-      </Text>
-      <FlatList
-        data={billData}
-        renderItem={renderColums}
-        keyExtractor={(item) => item.id.toString()}
-        ListFooterComponent={renderFooter}
-      />
-      <PTButton
-        title="Xác nhận"
-        onPress={() => createInvoiceHandle()}
-        style={[
-          styles.button,
-          {width: '100%', backgroundColor: 'rgb(255, 188, 0)'},
-        ]}
-        color="#fff"
-      />
-    </View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View>
+          <Text style={[styles.textBold, {marginTop: calcScale(15)}]}>
+            Các chi phí cần thanh toán
+          </Text>
+          <FlatList
+            data={billData}
+            renderItem={renderColums}
+            keyExtractor={(item) => item.id.toString()}
+          />
+          <View
+            style={{
+              borderTopColor: '#ccc',
+              borderTopWidth: 1,
+              marginTop: calcScale(15),
+              marginBottom: calcScale(10),
+            }}
+          />
+          <View style={styles.row}>
+            <Text
+              style={[
+                styles.textBold,
+                {flexBasis: '70%', fontSize: calcScale(24)},
+              ]}>
+              Tổng tiền
+            </Text>
+            <Text style={styles.textRegular}>{totalPrice}.000 VND</Text>
+          </View>
+          <View style={styles.row}>
+            <Text
+              style={[
+                styles.textBold,
+                {flexBasis: '50%', fontSize: calcScale(24)},
+              ]}>
+              Tổng tiền thực tế
+            </Text>
+            <Input
+              containerStyle={[styles.input, {width: '30%'}]}
+              onChangeText={(realPrice) => setRealPrice(realPrice)}
+              value={realPrice.toString()}
+              errorMessage={
+                realPriceError !== ''
+                  ? 'Tổng tiền thực tế ' + realPriceError
+                  : ''
+              }
+              keyboardType="number-pad"
+            />
+            <Text style={styles.textRegular}>.000 VND</Text>
+          </View>
+          <PTButton
+            title="Xác nhận"
+            onPress={() => createInvoiceHandle()}
+            style={[
+              styles.button,
+              {width: '100%', backgroundColor: 'rgb(255, 188, 0)'},
+            ]}
+            color="#fff"
+          />
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

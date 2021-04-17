@@ -53,7 +53,7 @@ const CanceledTabview = ({navigation}) => {
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Giá:</Text>
-            <Text style={styles.textBold}>{item.estimate_price} VND</Text>
+            <Text style={styles.textBold}>{item.estimate_price}0 VND</Text>
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Trạng thái:</Text>

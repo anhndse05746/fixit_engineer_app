@@ -10,10 +10,31 @@ import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {listRequest} from '../../../store/request';
+import userPreferences from '../../../libs/UserPreferences';
+import {WORKING_TOGGLE} from '../../../utils/constants';
 
 const HomeView = ({navigation}) => {
+  const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [isEnabled, setIsEnabled] = React.useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const constructor = async () => {
+    if (constructorHasRun) {
+      return;
+    } else {
+      setConstructorHasRun(true);
+      const workingToggleValue = await userPreferences.getObjectAsync(
+        WORKING_TOGGLE,
+      );
+      console.log(workingToggleValue);
+      setIsEnabled(workingToggleValue);
+    }
+  };
+
+  constructor();
+  const toggleSwitch = () => {
+    setIsEnabled(!isEnabled);
+    userPreferences.setObjectAsync(WORKING_TOGGLE, !isEnabled);
+  };
+
   const request = useSelector((state) => state.request);
   const data = useSelector((state) => state.user);
   const dispatch = useDispatch();
