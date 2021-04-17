@@ -1,24 +1,28 @@
 import React, {useEffect} from 'react';
 import {
-  Text,
-  View,
-  StyleSheet,
   Image,
-  KeyboardAvoidingView,
   Keyboard,
-  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Input} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
-
-import CommonStyles from './Styles';
-import PTButton from '../commonComponent/Button';
-import {calcScale} from '../../utils/dimension';
-import {loadUsers, LOGGED_IN} from '../../store/user';
 import firebase from '../../config/firebaseConfig';
-import {userUpdateDeviceToken} from '../../store/user';
+import userPreferences from '../../libs/UserPreferences';
+import {loadUsers, LOGGED_IN} from '../../store/user';
+import {
+  EncryptionKey_TOKEN_KEY,
+  TOKEN_KEY,
+  USER_KEY,
+} from '../../utils/constants';
+import {calcScale} from '../../utils/dimension';
+import PTButton from '../commonComponent/Button';
+import CommonStyles from './Styles';
 
 const LoginView = ({navigation}) => {
   const [username, setUsername] = React.useState('');
@@ -46,6 +50,23 @@ const LoginView = ({navigation}) => {
 
   useEffect(() => {
     if (message === LOGGED_IN) {
+      if (data) {
+        userPreferences.setEncryptData(
+          TOKEN_KEY,
+          data.token,
+          EncryptionKey_TOKEN_KEY,
+        );
+        const userData = {
+          id: data.userId,
+          phone: data.phoneNumber,
+          name: data.name,
+          roleId: data.roleId,
+          email: data.email,
+          token: data.token,
+          address_list: data.addressList,
+        };
+        userPreferences.setObjectAsync(USER_KEY, userData);
+      }
       navigation.navigate('DrawerInside');
     }
   }, [message]);
