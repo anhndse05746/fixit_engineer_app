@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,25 +6,25 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 
-import { calcScale } from '../../../utils/dimension';
+import {calcScale} from '../../../utils/dimension';
 import PTButton from '../../commonComponent/Button';
 import commonStyles from '../Styles';
 import {
   getRequestDetail,
   takeRequest,
   clearMessage,
-  listAllRequest
+  listAllRequest,
 } from '../../../store/request';
 import constants from '../../../utils/constants';
 
-const ReceiveRequestView = ({ navigation, route }) => {
+const ReceiveRequestView = ({navigation, route}) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const request = useSelector((state) => state.request);
   const requestId = route.params.requestData.id;
-  const { message } = request;
+  const {message} = request;
 
   //get request detail
   useEffect(() => {
@@ -85,23 +85,6 @@ const ReceiveRequestView = ({ navigation, route }) => {
                 Phân loại: {data.service.name}
               </Text>
             </View>
-            {/* <View style={styles.innerFormContainer}>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              fontWeight: 'bold',
-              marginBottom: calcScale(10),
-            }}>
-            Yêu cầu:
-          </Text>
-          <Text
-            style={{
-              fontSize: calcScale(16),
-              marginBottom: calcScale(10),
-            }}>
-            {data.request}
-          </Text>
-        </View> */}
             <View style={styles.innerFormContainer}>
               <Text
                 style={{
@@ -173,7 +156,7 @@ const ReceiveRequestView = ({ navigation, route }) => {
                   fontSize: calcScale(16),
                   marginBottom: calcScale(10),
                 }}>
-                {data.estimate_time}
+                {data.estimate_time} phút
               </Text>
             </View>
             <View style={styles.innerFormContainer}>
@@ -190,7 +173,7 @@ const ReceiveRequestView = ({ navigation, route }) => {
                   fontSize: calcScale(16),
                   marginBottom: calcScale(10),
                 }}>
-                {data.estimate_price}
+                {data.estimate_price}0 VND
               </Text>
             </View>
             <View style={styles.innerFormContainer}>
@@ -217,8 +200,8 @@ const ReceiveRequestView = ({ navigation, route }) => {
                 paddingTop: calcScale(10),
                 marginBottom: calcScale(20),
               }}>
-              <View style={{ marginLeft: calcScale(20) }}>
-                <Text style={{ fontSize: calcScale(24), fontWeight: 'bold' }}>
+              <View style={{marginLeft: calcScale(20)}}>
+                <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
                   Địa chỉ: {data.address}, {data.district}, {data.city}
                 </Text>
                 {requestStatus ? (
@@ -232,7 +215,7 @@ const ReceiveRequestView = ({ navigation, route }) => {
                         {data.Customer.name}
                         {/* | {user.phoneNumber} */}
                       </Text>
-                      <Text style={{ fontSize: calcScale(18) }}>
+                      <Text style={{fontSize: calcScale(18)}}>
                         {data.address}
                       </Text>
                     </>
@@ -240,7 +223,7 @@ const ReceiveRequestView = ({ navigation, route }) => {
                 ) : null}
               </View>
             </View>
-            <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
+            <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
               <PTButton
                 title="Nhận yêu cầu"
                 onPress={() =>
@@ -256,7 +239,7 @@ const ReceiveRequestView = ({ navigation, route }) => {
         <ActivityIndicator
           size="small"
           color="#3368f3"
-          style={{ marginTop: calcScale(10) }}
+          style={{marginTop: calcScale(10)}}
         />
       )}
     </ScrollView>
