@@ -6452,6 +6452,11 @@
     "invariant" "^2.2.4"
     "use-subscription" "^1.0.0"
 
+"react-native-bcrypt@^2.4.0":
+  "integrity" "sha1-ld/y28hJwisl8Lk3mre/69IUC/0="
+  "resolved" "https://registry.npmjs.org/react-native-bcrypt/-/react-native-bcrypt-2.4.0.tgz"
+  "version" "2.4.0"
+
 "react-native-bootsplash@^3.1.2":
   "integrity" "sha512-Br2lCqKmJYYP3a/PjmQwI98u+Koiib5zxeRVGbQZ+YeU3shUOpFlTtaYUnHuxiZH91Qp7UqBlRg/u6NUrEm8RQ=="
   "resolved" "https://registry.npmjs.org/react-native-bootsplash/-/react-native-bootsplash-3.1.2.tgz"

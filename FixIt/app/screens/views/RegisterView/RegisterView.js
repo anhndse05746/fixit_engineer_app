@@ -26,66 +26,30 @@ const RegisterView = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [phone, setPhone] = React.useState('');
   const [address, setAddress] = React.useState('');
-  const [knowledge, setKnowledge] = React.useState();
   const [password, setPassword] = React.useState('');
   const [repassword, setRepassword] = React.useState('');
   const [secure, setSecure] = React.useState(true);
   const [resecure, setResecure] = React.useState(true);
-  const [checked, setChecked] = React.useState([]);
   const [confirm, setConfirm] = React.useState(false);
-  const [errorChecked, setErrorChecked] = React.useState('');
+  const [nationId, setNationId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorPhone, setErrorPhone] = React.useState(false);
   const [matchedPassword, setMatchedPassword] = React.useState(false);
   const [cities, setCities] = React.useState([]);
   const [selectedCity, setSelectedCity] = React.useState('');
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
   const [selectedDistrict, setSelectedDistrict] = React.useState('');
 
-  const dataJob = [
-    {
-      id: 1,
-      name: 'Sửa nhà',
-      checked: false,
-    },
-    {
-      id: 2,
-      name: 'Sửa điện tử',
-      checked: false,
-    },
-    {
-      id: 3,
-      name: 'Sửa điện dân dụng',
-      checked: false,
-    },
-    {
-      id: 4,
-      name: 'Sửa điện lạnh',
-      checked: false,
-    },
-    {
-      id: 5,
-      name: 'Khác',
-      checked: false,
-    },
-  ];
-
   const constructor = () => {
     if (constructorHasRun) {
       return;
     } else {
-      setChecked(dataJob);
       setCities(cityOfVN);
       setConstructorHasRun(true);
     }
   };
 
   constructor();
-
-  const toggleCheckbox = (index) => {
-    const checkboxData = [...checked];
-    checkboxData[index].checked = !checkboxData[index].checked;
-    setChecked(checkboxData);
-  };
 
   const {isRegistered, message} = useSelector((state) => state.register);
   const dispatch = useDispatch();
@@ -110,22 +74,19 @@ const RegisterView = ({navigation}) => {
   }, [isRegistered]);
 
   const navigateOtpScreen = (user) => {
-    const checkedData = [];
-    checked.map((item, index) => {
-      if (item.checked) {
-        checkedData.push(item);
-      }
-    });
     if (fullName === '') {
+      setErrorMessage(' không được để trống');
+    } else if (nationId === '') {
       setErrorMessage(' không được để trống');
     } else if (email === '') {
       setErrorMessage(' không được để trống');
     } else if (phone === '') {
       setErrorMessage(' không được để trống');
+    } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(phone)) {
+      setErrorPhone(true);
+      setErrorMessage(' không đúng định dạng');
     } else if (address === '') {
       setErrorMessage(' không được để trống');
-    } else if (checkedData.length === 0) {
-      setErrorChecked('Cần có ít nhất một chuyên ngành');
     } else if (password === '') {
       setErrorMessage(' không được để trống');
     } else if (repassword === '') {
@@ -135,10 +96,10 @@ const RegisterView = ({navigation}) => {
       repassword !== '' &&
       password !== repassword
     ) {
+      setMatchedPassword(true);
       setErrorMessage(' không trùng với Password');
     } else {
       setErrorMessage('');
-      setErrorChecked('');
       navigation.navigate('OTPView', user);
     }
   };
@@ -194,6 +155,31 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
+                CMT/CCCD <Text style={{color: 'red'}}>*</Text>
+              </Text>
+              <Input
+                containerStyle={styles.input}
+                onChangeText={(nationId) => setNationId(nationId)}
+                rightIcon={
+                  nationId != '' ? (
+                    <Icon
+                      name="times-circle"
+                      size={calcScale(15)}
+                      color="grey"
+                      onPress={() => setNationId('')}
+                    />
+                  ) : null
+                }
+                value={address}
+                errorMessage={
+                  errorMessage !== '' && address === ''
+                    ? 'CMT/CCCD' + errorMessage
+                    : ''
+                }
+              />
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.textRegular}>
                 Email <Text style={{color: 'red'}}>*</Text>
               </Text>
               <Input
@@ -216,7 +202,7 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Phone number <Text style={{color: 'red'}}>*</Text>
+                Số điện thoại <Text style={{color: 'red'}}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -235,7 +221,7 @@ const RegisterView = ({navigation}) => {
                 value={phone}
                 keyboardType="number-pad"
                 errorMessage={
-                  errorMessage !== '' && phone === ''
+                  (errorMessage !== '' && phone === '') || errorPhone
                     ? 'Số điện thoại' + errorMessage
                     : ''
                 }
@@ -308,46 +294,6 @@ const RegisterView = ({navigation}) => {
                     : ''
                 }
               />
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.textRegular}>
-                Trình độ học vấn <Text style={{color: 'red'}}>*</Text>
-              </Text>
-              <Picker
-                selectedValue={knowledge}
-                onValueChange={(itemValue, itemIndex) =>
-                  setKnowledge(itemValue)
-                }>
-                <Picker.Item label="Tốt nghiệp cấp 2" value="0" />
-                <Picker.Item label="Tốt nghiệp cấp 3" value="1" />
-                <Picker.Item label="Cao đẳng" value="2" />
-                <Picker.Item label="Đại học" value="3" />
-              </Picker>
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.textRegular}>
-                Chuyên ngành <Text style={{color: 'red'}}>*</Text>
-              </Text>
-              <ListItem
-                containerStyle={{
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                }}>
-                {checked.map((item, index) => {
-                  return (
-                    <ListItem.CheckBox
-                      key={item.id.toString()}
-                      title={item.name}
-                      checked={item.checked}
-                      containerStyle={{backgroundColor: '#fff', borderWidth: 0}}
-                      onPress={() => toggleCheckbox(index)}
-                    />
-                  );
-                })}
-              </ListItem>
-              {errorChecked !== '' ? (
-                <Text style={{color: 'red'}}>{errorChecked}</Text>
-              ) : null}
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>

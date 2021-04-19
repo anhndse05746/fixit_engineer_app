@@ -38,9 +38,11 @@ const LoginView = ({navigation}) => {
   const login = (username, password) => {
     //call api & check user to login
     if (username === '') {
-      setErrorMessage('Username không thể để trống');
+      setErrorMessage('Số điện thoại không thể để trống');
+    } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(username)) {
+      setErrorMessage('Số điện thoại không đúng định dạng');
     } else if (password === '') {
-      setErrorMessage('Password không thể để trống');
+      setErrorMessage('Mật khẩu không thể để trống');
     } else {
       setErrorMessage('');
       dispatch(loadUsers(username, password, deviceToken));
@@ -105,14 +107,14 @@ const LoginView = ({navigation}) => {
             <Input
               containerStyle={styles.input}
               inputContainerStyle={{borderBottomWidth: 0}}
-              placeholder="Username"
+              placeholder="Số điện thoại"
               onChangeText={(username) => setUsername(username)}
               keyboardType="number-pad"
             />
             <Input
               containerStyle={styles.input}
               inputContainerStyle={{borderBottomWidth: 0}}
-              placeholder="Password"
+              placeholder="Mật khẩu"
               onChangeText={(password) => setPassword(password)}
               secureTextEntry={secure}
               rightIcon={
@@ -154,7 +156,7 @@ const LoginView = ({navigation}) => {
               </TouchableOpacity>
             </View>
             <View style={styles.line} />
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[
                 styles.row,
                 {
@@ -173,7 +175,7 @@ const LoginView = ({navigation}) => {
               <Text style={[styles.textRegular, {color: '#000', flex: 0.75}]}>
                 Đăng nhập với Google
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </TouchableWithoutFeedback>
