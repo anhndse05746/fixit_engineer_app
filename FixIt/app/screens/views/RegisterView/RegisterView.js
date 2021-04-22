@@ -17,7 +17,6 @@ import CommonStyles from '../Styles';
 import PTButton from '../../commonComponent/Button';
 import {calcScale} from '../../../utils/dimension';
 import {checkRegisteredUser} from '../../../store/register';
-import {useReducer} from 'react';
 import {cityOfVN} from '../../../utils/cityOfVietNam';
 
 const RegisterView = ({navigation}) => {
@@ -30,6 +29,7 @@ const RegisterView = ({navigation}) => {
   const [repassword, setRepassword] = React.useState('');
   const [secure, setSecure] = React.useState(true);
   const [resecure, setResecure] = React.useState(true);
+  const [checked, setChecked] = React.useState([]);
   const [confirm, setConfirm] = React.useState(false);
   const [nationId, setNationId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -39,17 +39,55 @@ const RegisterView = ({navigation}) => {
   const [selectedCity, setSelectedCity] = React.useState('');
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
   const [selectedDistrict, setSelectedDistrict] = React.useState('');
+  const [errorChecked, setErrorChecked] = React.useState('');
+
+  const dataJob = [
+    {
+      id: 1,
+      name: 'Sửa nhà',
+      checked: false,
+    },
+    {
+      id: 2,
+      name: 'Sửa điện tử',
+      checked: false,
+    },
+    {
+      id: 3,
+      name: 'Sửa điện dân dụng',
+      checked: false,
+    },
+    {
+      id: 4,
+      name: 'Sửa điện lạnh',
+      checked: false,
+    },
+    {
+      id: 5,
+      name: 'Khác',
+      checked: false,
+    },
+  ];
 
   const constructor = () => {
     if (constructorHasRun) {
       return;
     } else {
+      setChecked(dataJob);
       setCities(cityOfVN);
+      setErrorMessage('');
+      setErrorChecked('');
       setConstructorHasRun(true);
     }
   };
 
   constructor();
+
+  const toggleCheckbox = (index) => {
+    const checkboxData = [...checked];
+    checkboxData[index].checked = !checkboxData[index].checked;
+    setChecked(checkboxData);
+  };
 
   const {isRegistered, message} = useSelector((state) => state.register);
   const dispatch = useDispatch();
@@ -62,18 +100,28 @@ const RegisterView = ({navigation}) => {
     const user = {
       phone: phone,
       name: fullName,
+      nationId: nationId,
       email: email,
       password: password,
       district: selectedDistrict,
       city: selectedCity,
+      address: address,
     };
     console.log(user);
     if (isRegistered == false) {
       navigateOtpScreen(user);
+    } else {
+      alert('Số điện thoại đã được đăng kí');
     }
   }, [isRegistered]);
 
   const navigateOtpScreen = (user) => {
+    const checkedData = [];
+    checked.map((item, index) => {
+      if (item.checked) {
+        checkedData.push(item);
+      }
+    });
     if (fullName === '') {
       setErrorMessage(' không được để trống');
     } else if (nationId === '') {
@@ -87,6 +135,8 @@ const RegisterView = ({navigation}) => {
       setErrorMessage(' không đúng định dạng');
     } else if (address === '') {
       setErrorMessage(' không được để trống');
+    } else if (checkedData.length === 0) {
+      setErrorChecked('Cần có ít nhất một chuyên ngành');
     } else if (password === '') {
       setErrorMessage(' không được để trống');
     } else if (repassword === '') {
@@ -100,6 +150,7 @@ const RegisterView = ({navigation}) => {
       setErrorMessage(' không trùng với Password');
     } else {
       setErrorMessage('');
+      setErrorChecked('');
       navigation.navigate('OTPView', user);
     }
   };
@@ -170,18 +221,16 @@ const RegisterView = ({navigation}) => {
                     />
                   ) : null
                 }
-                value={address}
+                value={nationId}
                 errorMessage={
-                  errorMessage !== '' && address === ''
+                  errorMessage !== '' && nationId === ''
                     ? 'CMT/CCCD' + errorMessage
                     : ''
                 }
               />
             </View>
             <View style={styles.column}>
-              <Text style={styles.textRegular}>
-                Email <Text style={{color: 'red'}}>*</Text>
-              </Text>
+              <Text style={styles.textRegular}>Email</Text>
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana@gmail.com"
@@ -294,6 +343,31 @@ const RegisterView = ({navigation}) => {
                     : ''
                 }
               />
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.textRegular}>
+                Chuyên ngành <Text style={{color: 'red'}}>*</Text>
+              </Text>
+              <ListItem
+                containerStyle={{
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}>
+                {checked.map((item, index) => {
+                  return (
+                    <ListItem.CheckBox
+                      key={item.id.toString()}
+                      title={item.name}
+                      checked={item.checked}
+                      containerStyle={{backgroundColor: '#fff', borderWidth: 0}}
+                      onPress={() => toggleCheckbox(index)}
+                    />
+                  );
+                })}
+              </ListItem>
+              {errorChecked !== '' ? (
+                <Text style={{color: 'red'}}>{errorChecked}</Text>
+              ) : null}
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>

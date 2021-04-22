@@ -61,6 +61,7 @@ const ReceiveRequestView = ({navigation, route}) => {
       alert(message);
       dispatch(listAllRequest(user.token, user.userId));
       //navigate to home view
+      navigation.popToTop();
       navigation.navigate('MyRequestStackNavigator');
     }
   }, [message]);

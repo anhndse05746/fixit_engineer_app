@@ -28,21 +28,25 @@ const MyProfileView = () => {
   const [email, setEmail] = React.useState(data.email);
   const [address, setAddress] = React.useState(data.address);
   const [cities, setCities] = React.useState([]);
-  const [selectedCity, setSelectedCity] = React.useState('');
+  const [selectedCity, setSelectedCity] = React.useState(data.city);
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
-  const [selectedDistrict, setSelectedDistrict] = React.useState('');
+  const [selectedDistrict, setSelectedDistrict] = React.useState(data.district);
 
   const constructor = () => {
     if (constructorHasRun) {
       return;
     } else {
       setCities(cityOfVN);
-      console.log(data);
       setConstructorHasRun(true);
     }
   };
 
   constructor();
+
+  useEffect(() => {
+    const cityIndex = cities.findIndex((x) => x.Id === data.city.toString());
+    setSelectedCityIndex(cityIndex);
+  });
 
   const edit = () => {
     setNotEdit(!notEdit);
@@ -89,17 +93,17 @@ const MyProfileView = () => {
                 }}
               />
             )}
-            <View style={{paddingTop: calcScale(20)}}>
-              <Text style={[styles.textBold, {textAlign: 'center'}]}>
-                {data.name}
-              </Text>
-              <Text style={[styles.textRegular, {textAlign: 'center'}]}>
-                Thợ sửa chữa
-              </Text>
-              <Text style={[styles.textRegular, {textAlign: 'center'}]}>
-                Số dư: 0 VND
-              </Text>
-            </View>
+          </View>
+          <View style={{paddingTop: calcScale(20)}}>
+            <Text style={[styles.textBold, {textAlign: 'center'}]}>
+              {data.name}
+            </Text>
+            <Text style={[styles.textRegular, {textAlign: 'center'}]}>
+              Thợ sửa chữa
+            </Text>
+            <Text style={[styles.textRegular, {textAlign: 'center'}]}>
+              Số dư: 0 VND
+            </Text>
           </View>
           <Text>{updateUserMessage}</Text>
           <View style={{paddingBottom: calcScale(50)}}>

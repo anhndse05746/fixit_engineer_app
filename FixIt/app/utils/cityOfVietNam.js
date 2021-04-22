@@ -1,5 +1,16 @@
 export const cityOfVN = [
   {
+    Id: '00',
+    Name: '',
+    Districts: [
+      {
+        Id: '000',
+        Name: '',
+        Wards: [],
+      },
+    ],
+  },
+  {
     Id: '01',
     Name: 'Hà Nội',
     Districts: [

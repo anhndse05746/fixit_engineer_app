@@ -20,6 +20,7 @@ import constants from '../../utils/constants';
 import {TouchableOpacity} from 'react-native';
 
 const ChangePasswordView = ({route, navigation}) => {
+  const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [oldPassword, setOldPassword] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [repassword, setRepassword] = React.useState('');
@@ -28,6 +29,18 @@ const ChangePasswordView = ({route, navigation}) => {
   const [resecure, setResecure] = React.useState(true);
   const [errorMessage, setErrorMessage] = React.useState('');
   const [matchedPassword, setMatchedPassword] = React.useState(false);
+
+  const constructor = () => {
+    if (constructorHasRun) {
+      return;
+    } else {
+      setErrorMessage('');
+      setMatchedPassword(false);
+      setConstructorHasRun(true);
+    }
+  };
+
+  constructor();
 
   const dispatch = useDispatch();
   const data = useSelector((state) => state.user);
@@ -46,7 +59,7 @@ const ChangePasswordView = ({route, navigation}) => {
       password !== repassword
     ) {
       setMatchedPassword(true);
-      setErrorMessage(' không trùng với Password');
+      setErrorMessage(' không trùng với mật khẩu');
     } else {
       setErrorMessage('');
       console.log('dispatch');
@@ -185,7 +198,7 @@ const ChangePasswordView = ({route, navigation}) => {
                 value={repassword}
                 errorMessage={
                   (errorMessage !== '' && repassword === '') || matchedPassword
-                    ? 'Nhập lại password' + errorMessage
+                    ? 'Nhập lại mật khẩu' + errorMessage
                     : ''
                 }
               />
