@@ -20,6 +20,7 @@ import {checkRegisteredUser} from '../../../store/resetPassword';
 const ForgetPasswordView = ({navigation}) => {
   const [phone, setPhone] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorPhone, setErrorPhone] = React.useState(false);
 
   const {isRegistered, message} = useSelector((state) => state.resetPassword);
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const ForgetPasswordView = ({navigation}) => {
     if (phone === '') {
       setErrorMessage(' không được để trống');
     } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(phone)) {
+      setErrorPhone(true);
       setErrorMessage(' không đúng định dạng');
     } else {
       setErrorMessage('');
@@ -83,7 +85,7 @@ const ForgetPasswordView = ({navigation}) => {
                 value={phone}
                 keyboardType="number-pad"
                 errorMessage={
-                  errorMessage !== '' && phone === ''
+                  (errorMessage !== '' && phone === '') || errorPhone
                     ? 'Số điện thoại' + errorMessage
                     : ''
                 }
