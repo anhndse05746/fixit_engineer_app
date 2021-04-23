@@ -30,16 +30,16 @@ const RegisterView = ({navigation}) => {
   const [secure, setSecure] = React.useState(true);
   const [resecure, setResecure] = React.useState(true);
   const [checked, setChecked] = React.useState([]);
+  const [checkedData, setCheckedData] = React.useState([]);
   const [confirm, setConfirm] = React.useState(false);
   const [nationId, setNationId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
   const [errorPhone, setErrorPhone] = React.useState(false);
   const [matchedPassword, setMatchedPassword] = React.useState(false);
   const [cities, setCities] = React.useState([]);
-  const [selectedCity, setSelectedCity] = React.useState('');
+  const [selectedCity, setSelectedCity] = React.useState(0);
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
-  const [selectedDistrict, setSelectedDistrict] = React.useState('');
-  const [errorChecked, setErrorChecked] = React.useState('');
+  const [selectedDistrict, setSelectedDistrict] = React.useState(0);
 
   const dataJob = [
     {
@@ -76,7 +76,6 @@ const RegisterView = ({navigation}) => {
       setChecked(dataJob);
       setCities(cityOfVN);
       setErrorMessage('');
-      setErrorChecked('');
       setConstructorHasRun(true);
     }
   };
@@ -92,10 +91,6 @@ const RegisterView = ({navigation}) => {
   const {isRegistered, message} = useSelector((state) => state.register);
   const dispatch = useDispatch();
 
-  const checkRegistered = (phone) => {
-    dispatch(checkRegisteredUser(phone));
-  };
-
   useEffect(() => {
     const user = {
       phone: phone,
@@ -107,21 +102,22 @@ const RegisterView = ({navigation}) => {
       city: selectedCity,
       address: address,
     };
-    console.log(user);
     if (isRegistered == false) {
-      navigateOtpScreen(user);
-    } else {
-      alert('Số điện thoại đã được đăng kí');
+      navigation.navigate('OTPView', user);
+    }
+    if (message) {
+      alert(message);
     }
   }, [isRegistered]);
 
-  const navigateOtpScreen = (user) => {
-    const checkedData = [];
+  const navigateOtpScreen = () => {
+    const check = [];
     checked.map((item, index) => {
       if (item.checked) {
-        checkedData.push(item);
+        check.push(item);
       }
     });
+    setCheckedData(check);
     if (fullName === '') {
       setErrorMessage(' không được để trống');
     } else if (nationId === '') {
@@ -133,10 +129,14 @@ const RegisterView = ({navigation}) => {
     } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(phone)) {
       setErrorPhone(true);
       setErrorMessage(' không đúng định dạng');
+    } else if (selectedCity === 0) {
+      setErrorMessage(' không được để trống');
+    } else if (selectedDistrict === 0) {
+      setErrorMessage(' không được để trống');
     } else if (address === '') {
       setErrorMessage(' không được để trống');
-    } else if (checkedData.length === 0) {
-      setErrorChecked('Cần có ít nhất một chuyên ngành');
+    } else if (check.length === 0) {
+      setErrorMessage(' không được để trống');
     } else if (password === '') {
       setErrorMessage(' không được để trống');
     } else if (repassword === '') {
@@ -147,13 +147,15 @@ const RegisterView = ({navigation}) => {
       password !== repassword
     ) {
       setMatchedPassword(true);
-      setErrorMessage(' không trùng với Password');
+      setErrorMessage(' không trùng với mật khẩu');
     } else {
       setErrorMessage('');
       setErrorChecked('');
-      navigation.navigate('OTPView', user);
+      dispatch(checkRegisteredUser(phone));
     }
   };
+
+  console.log(checkedData);
 
   return (
     <KeyboardAvoidingView
@@ -168,15 +170,6 @@ const RegisterView = ({navigation}) => {
             ]}>
             Vui lòng điền những thông tin sau
           </Text>
-          {message ? (
-            <Text
-              style={[
-                styles.textRegular,
-                {marginTop: calcScale(5), fontSize: calcScale(22)},
-              ]}>
-              {message}
-            </Text>
-          ) : null}
           <View style={styles.formContainer}>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
@@ -296,6 +289,9 @@ const RegisterView = ({navigation}) => {
                   );
                 })}
               </Picker>
+              {errorMessage !== '' && selectedCity === 0 ? (
+                <Text style={{color: 'red'}}>Thành phố {errorMessage}</Text>
+              ) : null}
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
@@ -318,6 +314,9 @@ const RegisterView = ({navigation}) => {
                     })
                   : null}
               </Picker>
+              {errorMessage !== '' && selectedDistrict === 0 ? (
+                <Text style={{color: 'red'}}>Quận/Huyện {errorMessage}</Text>
+              ) : null}
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
@@ -365,8 +364,8 @@ const RegisterView = ({navigation}) => {
                   );
                 })}
               </ListItem>
-              {errorChecked !== '' ? (
-                <Text style={{color: 'red'}}>{errorChecked}</Text>
+              {errorMessage !== '' && checkedData.length === 0 ? (
+                <Text style={{color: 'red'}}>Chuyên ngành {errorMessage}</Text>
               ) : null}
             </View>
             <View style={styles.column}>
@@ -453,11 +452,11 @@ const RegisterView = ({navigation}) => {
             <PTButton
               title="Tiếp tục"
               onPress={() => {
-                checkRegistered(phone);
+                navigateOtpScreen();
               }}
               style={styles.button}
               color="#fff"
-              disable={confirm}
+              disabled={!confirm}
             />
           </View>
         </ScrollView>
