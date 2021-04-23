@@ -9,22 +9,22 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import {Input} from 'react-native-elements';
-import {useDispatch, useSelector} from 'react-redux';
-import {createInvoice, listAllRequest} from '../../../../store/request';
+import { Input } from 'react-native-elements';
+import { useDispatch, useSelector } from 'react-redux';
+import { createInvoice, listAllRequest } from '../../../../store/request';
 import constants from '../../../../utils/constants';
-import {calcScale} from '../../../../utils/dimension';
+import { calcScale } from '../../../../utils/dimension';
 import PTButton from '../../../commonComponent/Button';
 import CommonStyles from '../../Styles';
 
-const BillDetailView = ({navigation, route}) => {
+const BillDetailView = ({ navigation, route }) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [billData, setBillData] = React.useState([]);
   const dispatch = useDispatch();
   const request = useSelector((state) => state.request);
   const user = useSelector((state) => state.user);
   const requestData = route.params.requestData;
-  const {message} = request;
+  const { message } = request;
 
   const constructor = () => {
     if (constructorHasRun) {
@@ -40,28 +40,39 @@ const BillDetailView = ({navigation, route}) => {
   const getRequestIssues = (requestId, billData) => {
     const a = [];
     for (let i = 1; i < billData.length; i++) {
-      a.push({
-        request_id: requestId,
-        issues_id: billData[i].data.issueId,
-      });
+      if (billData[i].data.issueId > 0) {
+        a.push({
+          request_id: requestId,
+          issues_id: billData[i].data.issueId,
+        });
+      }
     }
     return a;
   };
 
+  let other_cost = 0
+  let cost_of_supplies = 0
   const CalculateTotalPrice = (billData) => {
     let total = 0;
     for (let i = 1; i < billData.length; i++) {
       total += parseInt(billData[i].data.price);
+      if (billData[i].data.issueId == -1) {
+        other_cost = billData[i].data.price
+      }
+      else if (billData[i].data.issueId == -2) {
+        cost_of_supplies = billData[i].data.price
+      }
     }
     return total;
   };
+
+
 
   const totalPrice = CalculateTotalPrice(billData);
   const request_issues = getRequestIssues(requestData.id, billData);
 
   console.log(
-    `User Token: ${user.token} - request Id: ${
-      requestData.id
+    `User Token: ${user.token} - request Id: ${requestData.id
     } - Total Price ${totalPrice} - request Issue: ${JSON.stringify(
       request_issues,
     )}`,
@@ -78,8 +89,9 @@ const BillDetailView = ({navigation, route}) => {
     } else {
       setRealPriceError('');
       dispatch(
-        createInvoice(user.token, requestData.id, realPrice, request_issues),
+        createInvoice(user.token, requestData.id, other_cost, cost_of_supplies, totalPrice, realPrice, request_issues),
       );
+      //other_cost, cost_of_supplies, total_price, actual_proceeds
     }
   };
 
@@ -91,7 +103,7 @@ const BillDetailView = ({navigation, route}) => {
     }
   }, [message]);
 
-  const renderColums = ({item, index}) => {
+  const renderColums = ({ item, index }) => {
     return (
       <>
         {index === 0 ? (
@@ -99,27 +111,27 @@ const BillDetailView = ({navigation, route}) => {
             <Text
               style={[
                 styles.textBold,
-                {flexBasis: '70%', fontSize: calcScale(24)},
+                { flexBasis: '70%', fontSize: calcScale(24) },
               ]}>
               {item.data.issue}
             </Text>
-            <Text style={[styles.textBold, {fontSize: calcScale(24)}]}>
+            <Text style={[styles.textBold, { fontSize: calcScale(24) }]}>
               {item.data.price}
             </Text>
           </View>
         ) : item.data.issueId < 0 ? (
           <View style={styles.row}>
-            <Text style={[styles.textBold, {flexBasis: '70%'}]}>
+            <Text style={[styles.textBold, { flexBasis: '70%' }]}>
               {item.data.issue}
             </Text>
-            <Text style={styles.textRegular}>{item.data.price}0 VND</Text>
+            <Text style={styles.textRegular}>{item.data.price} VND</Text>
           </View>
         ) : (
           <View style={styles.row}>
-            <Text style={[styles.textRegular, {flexBasis: '70%'}]}>
+            <Text style={[styles.textRegular, { flexBasis: '70%' }]}>
               {item.data.issue}
             </Text>
-            <Text style={styles.textRegular}>{item.data.price}0 VND</Text>
+            <Text style={styles.textRegular}>{item.data.price} VND</Text>
           </View>
         )}
       </>
@@ -138,7 +150,7 @@ const BillDetailView = ({navigation, route}) => {
       style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View>
-          <Text style={[styles.textBold, {marginTop: calcScale(15)}]}>
+          <Text style={[styles.textBold, { marginTop: calcScale(15) }]}>
             Các chi phí cần thanh toán
           </Text>
           <FlatList
@@ -158,39 +170,39 @@ const BillDetailView = ({navigation, route}) => {
             <Text
               style={[
                 styles.textBold,
-                {flexBasis: '70%', fontSize: calcScale(24)},
+                { flexBasis: '70%', fontSize: calcScale(24) },
               ]}>
               Tổng tiền
             </Text>
-            <Text style={styles.textRegular}>{totalPrice}.000 VND</Text>
+            <Text style={styles.textRegular}>{totalPrice} VND</Text>
           </View>
           <View style={styles.row}>
             <Text
               style={[
                 styles.textBold,
-                {flexBasis: '50%', fontSize: calcScale(24)},
+                { flexBasis: '50%', fontSize: calcScale(24) },
               ]}>
-              Tổng tiền thực tế
+              Tiền thu thực tế
             </Text>
             <Input
-              containerStyle={[styles.input, {width: '30%'}]}
+              containerStyle={[styles.input, { width: '30%' }]}
               onChangeText={(realPrice) => setRealPrice(realPrice)}
               value={realPrice.toString()}
               errorMessage={
                 realPriceError !== ''
-                  ? 'Tổng tiền thực tế ' + realPriceError
+                  ? 'Tiền thu thực tế ' + realPriceError
                   : ''
               }
               keyboardType="number-pad"
             />
-            <Text style={styles.textRegular}>.000 VND</Text>
+            <Text style={styles.textRegular}> VND</Text>
           </View>
           <PTButton
             title="Xác nhận"
             onPress={() => createInvoiceHandle()}
             style={[
               styles.button,
-              {width: '100%', backgroundColor: 'rgb(255, 188, 0)'},
+              { width: '100%', backgroundColor: 'rgb(255, 188, 0)' },
             ]}
             color="#fff"
           />

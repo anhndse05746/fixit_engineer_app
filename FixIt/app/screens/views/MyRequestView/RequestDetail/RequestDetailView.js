@@ -147,7 +147,7 @@ const RequestDetailView = ({navigation, route}) => {
               fontSize: calcScale(16),
               marginBottom: calcScale(10),
             }}>
-            {data.invoice.total_price}0 VND
+            {data.invoice.actual_proceeds}00 VND
           </Text>
         </View>
       );
