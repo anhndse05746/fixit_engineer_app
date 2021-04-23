@@ -39,6 +39,7 @@ const ForgetPasswordView = ({navigation}) => {
       setErrorMessage(' không đúng định dạng');
     } else {
       setErrorMessage('');
+      setErrorPhone(false);
       dispatch(checkRegisteredUser(phone));
     }
   };

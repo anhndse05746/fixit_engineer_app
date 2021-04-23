@@ -151,6 +151,7 @@ const RegisterView = ({navigation}) => {
     } else {
       setErrorMessage('');
       setErrorChecked('');
+      setErrorPhone(false);
       dispatch(checkRegisteredUser(phone));
     }
   };
