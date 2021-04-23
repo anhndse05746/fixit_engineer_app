@@ -27,7 +27,7 @@ const InsideTabBottomNavigator = () => {
             return <Icon name="home" size={calcScale(22)} color={color} />;
           } else if (route.name === 'MyRequestStackNavigator') {
             return <Icon name="tasks" size={calcScale(22)} color={color} />;
-          } else if (route.name === 'AnnoucementView') {
+          } else if (route.name === 'AnnouncementStackNavigator') {
             return <Icon name="bell" size={calcScale(22)} color={color} />;
           } else {
             return <Icon name="user" size={calcScale(22)} color={color} />;
@@ -48,8 +48,8 @@ const InsideTabBottomNavigator = () => {
         component={MyRequestStackNavigator}
       />
       <InsideTabBottom.Screen
-        name="AnnoucementView"
-        component={AnnoucementView}
+        name="AnnouncementStackNavigator"
+        component={AnnouncementStackNavigator}
       />
       <InsideTabBottom.Screen name="MyProfileView" component={MyProfileView} />
     </InsideTabBottom.Navigator>
@@ -146,6 +146,38 @@ const MyRequestStackNavigator = ({navigation}) => {
         }}
       />
     </MyRequestStack.Navigator>
+  );
+};
+
+const AnnouncementStack = createStackNavigator();
+
+const AnnouncementStackNavigator = () => {
+  return (
+    <AnnouncementStack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+      }}>
+      <AnnouncementStack.Screen
+        name="AnnoucementView"
+        component={AnnoucementView}
+        options={{
+          title: 'Thông báo',
+          headerRight: () => {
+            return (
+              <TouchableHighlight
+                activeOpacity={1}
+                underlayColor={'#ccd0d5'}
+                onPress={() => navigation.openDrawer()}
+                style={styles.iconBox}>
+                <Icon name="user" size={calcScale(22)} color="#fff" />
+              </TouchableHighlight>
+            );
+          },
+          headerTitleStyle: {color: '#fff'},
+          headerLeft: null,
+        }}
+      />
+    </AnnouncementStack.Navigator>
   );
 };
 

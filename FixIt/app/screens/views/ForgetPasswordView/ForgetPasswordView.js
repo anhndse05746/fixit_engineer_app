@@ -36,7 +36,9 @@ const ForgetPasswordView = ({navigation}) => {
 
   const navigateOtpScreen = () => {
     if (phone === '') {
-      setErrorMessage(' is required');
+      setErrorMessage(' không được để trống');
+    } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(phone)) {
+      setErrorMessage(' không đúng định dạng');
     } else {
       setErrorMessage('');
       navigation.navigate('ConfirmPhoneView', {phone: phone});
@@ -66,7 +68,7 @@ const ForgetPasswordView = ({navigation}) => {
           <View style={styles.formContainer}>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Phone number <Text style={{color: 'red'}}>*</Text>
+                Số điện thoại <Text style={{color: 'red'}}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -86,7 +88,7 @@ const ForgetPasswordView = ({navigation}) => {
                 keyboardType="number-pad"
                 errorMessage={
                   errorMessage !== '' && phone === ''
-                    ? 'Phone number' + errorMessage
+                    ? 'Số điện thoại' + errorMessage
                     : ''
                 }
               />

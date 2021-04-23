@@ -42,7 +42,7 @@ const ResetPasswordView = ({ route, navigation }) => {
       password !== repassword
     ) {
       setMatchedPassword(true);
-      setErrorMessage(' Không trùng với Password');
+      setErrorMessage(' không trùng với mật khẩu');
     } else {
       setErrorMessage('');
       navigation.navigate('LoginView');
@@ -103,7 +103,7 @@ const ResetPasswordView = ({ route, navigation }) => {
                 value={password}
                 errorMessage={
                   errorMessage !== '' && password === ''
-                    ? 'Password' + errorMessage
+                    ? 'Mật khẩu' + errorMessage
                     : ''
                 }
               />
@@ -139,7 +139,7 @@ const ResetPasswordView = ({ route, navigation }) => {
                 value={repassword}
                 errorMessage={
                   (errorMessage !== '' && repassword === '') || matchedPassword
-                    ? 'Re-enter password' + errorMessage
+                    ? 'Nhập lại mật khẩu' + errorMessage
                     : ''
                 }
               />
