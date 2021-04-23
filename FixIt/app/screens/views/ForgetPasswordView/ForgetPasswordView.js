@@ -24,13 +24,9 @@ const ForgetPasswordView = ({navigation}) => {
   const {isRegistered, message} = useSelector((state) => state.resetPassword);
   const dispatch = useDispatch();
 
-  const checkRegistered = (phone) => {
-    dispatch(checkRegisteredUser(phone));
-  };
-
   useEffect(() => {
     if (isRegistered == true) {
-      navigateOtpScreen();
+      navigation.navigate('ConfirmPhoneView', {phone: phone});
     }
   }, [isRegistered]);
 
@@ -41,7 +37,7 @@ const ForgetPasswordView = ({navigation}) => {
       setErrorMessage(' không đúng định dạng');
     } else {
       setErrorMessage('');
-      navigation.navigate('ConfirmPhoneView', {phone: phone});
+      dispatch(checkRegisteredUser(phone));
     }
   };
 
@@ -61,7 +57,7 @@ const ForgetPasswordView = ({navigation}) => {
           <Text
             style={[
               styles.textRegular,
-              {marginTop: calcScale(15), fontSize: calcScale(22)},
+              {marginTop: calcScale(15), fontSize: calcScale(22), color: 'red'},
             ]}>
             {message}
           </Text>
@@ -98,7 +94,7 @@ const ForgetPasswordView = ({navigation}) => {
             <PTButton
               title="Tiếp tục"
               onPress={() => {
-                checkRegistered(phone);
+                navigateOtpScreen();
               }}
               style={styles.button}
               color="#fff"

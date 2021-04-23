@@ -62,6 +62,7 @@ const ChangePasswordView = ({route, navigation}) => {
       setErrorMessage(' không trùng với mật khẩu');
     } else {
       setErrorMessage('');
+      setMatchedPassword(false);
       console.log('dispatch');
       dispatch(
         changePassword(data.phoneNumber, data.token, oldPassword, password),
@@ -126,7 +127,7 @@ const ChangePasswordView = ({route, navigation}) => {
                 value={oldPassword}
                 errorMessage={
                   errorMessage !== '' && oldPassword === ''
-                    ? 'Password cũ' + errorMessage
+                    ? 'Mật khẩu cũ' + errorMessage
                     : ''
                 }
               />
@@ -162,7 +163,7 @@ const ChangePasswordView = ({route, navigation}) => {
                 value={password}
                 errorMessage={
                   errorMessage !== '' && password === ''
-                    ? 'Password' + errorMessage
+                    ? 'Mật khẩu' + errorMessage
                     : ''
                 }
               />
