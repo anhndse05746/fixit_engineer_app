@@ -19,12 +19,18 @@ const reset = createSlice({
         },
         resetSuccessful: (reset, action) => {
             console.log(action)
-            if (action.payload === true) {
+            if (action.payload !== "Old password and new password can't be duplicated") {
                 reset.isReset = true
                 reset.message = constants.RESET_PASSWORD_SUCCESSFULLY
                 reset.loading = false
             } else {
-                reset.message = "Đã có lỗi xảy ra. Vui lòng thử lại"
+                if (action.payload == "Old password and new password can't be duplicated") {
+                    reset.message = "Mật khẩu mới trùng với mật khẩu cũ"
+                }
+                else {
+                    reset.message = "Đã có lỗi xảy ra. Vui lòng thử lại"
+                }
+
             }
         },
         resetFailed: (reset, action) => {
@@ -49,11 +55,14 @@ const reset = createSlice({
             register.loading = false
             return;
         },
+        resetMessage: (reset, action) => {
+            reset.message = ''
+        },
     }
 })
 
 export default reset.reducer
-export const { resetRequested, resetSuccessful, resetFailed, checkRegistered, checkRegisteredFail } = reset.actions
+export const { resetRequested, resetSuccessful, resetFailed, checkRegistered, checkRegisteredFail, resetMessage } = reset.actions
 
 export const resetPassword = (phoneNumber, newPassword) => apiCallBegan({
     url: '/resetPassword',

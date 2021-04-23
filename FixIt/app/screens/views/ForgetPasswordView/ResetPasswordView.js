@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   Text,
   View,
@@ -8,16 +8,16 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
-import {Input} from 'react-native-elements';
-import {useDispatch, useSelector} from 'react-redux';
+import { Input } from 'react-native-elements';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CommonStyles from '../Styles';
 import PTButton from '../../commonComponent/Button';
-import {calcScale} from '../../../utils/dimension';
-import {resetPassword} from '../../../store/resetPassword';
+import { calcScale } from '../../../utils/dimension';
+import { resetPassword, resetMessage } from '../../../store/resetPassword';
 
-const ResetPasswordView = ({route, navigation}) => {
+const ResetPasswordView = ({ route, navigation }) => {
   const [password, setPassword] = React.useState('');
   const [repassword, setRepassword] = React.useState('');
   const [secure, setSecure] = React.useState(true);
@@ -29,7 +29,7 @@ const ResetPasswordView = ({route, navigation}) => {
   const phone = route.params.phone;
 
   const dispatch = useDispatch();
-  const {isReset, message} = useSelector((state) => state.resetPassword);
+  const { isReset, message } = useSelector((state) => state.resetPassword);
 
   const validateThenNavigate = () => {
     if (password === '') {
@@ -52,6 +52,7 @@ const ResetPasswordView = ({route, navigation}) => {
   useEffect(() => {
     if (isReset == true) {
       alert(message);
+      dispatch({ type: resetMessage.type })
       validateThenNavigate();
     }
   }, [isReset]);
@@ -65,14 +66,15 @@ const ResetPasswordView = ({route, navigation}) => {
           <Text
             style={[
               styles.textRegular,
-              {marginTop: calcScale(15), fontSize: calcScale(22)},
+              { marginTop: calcScale(15), fontSize: calcScale(22) },
             ]}>
             Vui lòng điền những thông tin sau
           </Text>
+          {message != '' ? <Text>{message}</Text> : null}
           <View style={styles.formContainer}>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Mật khẩu mới<Text style={{color: 'red'}}>*</Text>
+                Mật khẩu mới<Text style={{ color: 'red' }}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -87,7 +89,7 @@ const ResetPasswordView = ({route, navigation}) => {
                         size={calcScale(15)}
                         color="grey"
                         onPress={() => setSecure(!secure)}
-                        style={{marginRight: calcScale(5)}}
+                        style={{ marginRight: calcScale(5) }}
                       />
                       <Icon
                         name="times-circle"
@@ -108,7 +110,7 @@ const ResetPasswordView = ({route, navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Nhập lại mật khẩu <Text style={{color: 'red'}}>*</Text>
+                Nhập lại mật khẩu <Text style={{ color: 'red' }}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -123,7 +125,7 @@ const ResetPasswordView = ({route, navigation}) => {
                         size={calcScale(15)}
                         color="grey"
                         onPress={() => setResecure(!resecure)}
-                        style={{marginRight: calcScale(5)}}
+                        style={{ marginRight: calcScale(5) }}
                       />
                       <Icon
                         name="times-circle"
@@ -143,7 +145,7 @@ const ResetPasswordView = ({route, navigation}) => {
               />
             </View>
           </View>
-          <View style={{alignItems: 'center'}}>
+          <View style={{ alignItems: 'center' }}>
             <PTButton
               title="Xác nhận"
               onPress={() => {
