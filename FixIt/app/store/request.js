@@ -217,7 +217,7 @@ export const cancelRequest = (token, request_id, cancel_reason) => apiCallBegan(
     onError: cancelRequestFail.type,
 })
 
-export const createInvoice = (token, request_id, total_price, request_issues) => apiCallBegan({
+export const createInvoice = (token, request_id, other_cost, cost_of_supplies, total_price, actual_proceeds, request_issues) => apiCallBegan({
     url: '/api/createInvoice',
     headers: {
         Authorization: token,
@@ -226,7 +226,11 @@ export const createInvoice = (token, request_id, total_price, request_issues) =>
         request_id: request_id,
         payment_method_id: 1,
         status: "NOT_PAYMENT",
+        other_cost: other_cost,
+        cost_of_supplies: cost_of_supplies,
         total_price: total_price,
+        actual_proceeds: actual_proceeds,
+
         request_issues: request_issues,
     },
     method: 'POST',
