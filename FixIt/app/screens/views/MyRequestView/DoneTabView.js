@@ -2,6 +2,7 @@ import * as React from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {listAllRequest} from '../../../store/request';
+import {cityOfVN} from '../../../utils/cityOfVietNam';
 import {calcScale} from '../../../utils/dimension';
 import commonStyles from '../Styles';
 import ListEmptyComponent from './ListEmpty';
@@ -10,8 +11,22 @@ const DoneTabView = ({navigation}) => {
   const request = useSelector((state) => state.request);
   const user = useSelector((state) => state.user);
 
+  const [constructorHasRun, setConstructorHasRun] = React.useState(false);
+  const [cities, setCities] = React.useState([]);
+
   const doneData = request.completeRequest;
   let isLoading = request.isLoading;
+
+  const constructor = () => {
+    if (constructorHasRun) {
+      return;
+    } else {
+      setCities(cityOfVN);
+      setConstructorHasRun(true);
+    }
+  };
+
+  constructor();
 
   // Dispatch
   const dispatch = useDispatch();
@@ -30,6 +45,9 @@ const DoneTabView = ({navigation}) => {
       }`;
     }
 
+    const city = cities.find((x) => x.Id == item.city);
+    const district = city.Districts.find((x) => x.Id == item.district);
+
     return (
       <TouchableOpacity
         style={styles.ticketContainer}
@@ -42,7 +60,7 @@ const DoneTabView = ({navigation}) => {
               {schedule_time} - {item.serviceName}
             </Text>
             <Text style={[styles.textBold, styles.textTitle]}>
-              {`${item.address}, ${item.district}, ${item.city}`}
+              {`${item.address}, ${district.Name}, ${city.Name}`}
             </Text>
           </View>
         </View>
@@ -53,7 +71,7 @@ const DoneTabView = ({navigation}) => {
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Giá:</Text>
-            <Text style={styles.textBold}>{item.estimate_price}0 VND</Text>
+            <Text style={styles.textBold}>{item.estimate_price} VND</Text>
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Trạng thái:</Text>

@@ -16,6 +16,7 @@ import {
   paidConfirmation,
   takeRequest,
 } from '../../../../store/request';
+import {cityOfVN} from '../../../../utils/cityOfVietNam';
 import constants from '../../../../utils/constants';
 import {calcScale} from '../../../../utils/dimension';
 import PTButton from '../../../commonComponent/Button';
@@ -40,6 +41,7 @@ const RequestDetailView = ({navigation, route}) => {
   const data = request.requestDetail;
 
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
+  const [cities, setCities] = React.useState([]);
   const [accepted, setAccepted] = React.useState(0);
 
   const constructor = () => {
@@ -47,11 +49,21 @@ const RequestDetailView = ({navigation, route}) => {
       return;
     } else {
       setAccepted(data.accepted);
+      setCities(cityOfVN);
       setConstructorHasRun(true);
     }
   };
 
   constructor();
+
+  let city =
+    data && data.city ? cities.find((x) => x.Id == data.city).Name : '';
+  let district =
+    data && data.city && data.district
+      ? cities
+          .find((x) => x.Id == data.city)
+          .Districts.find((x) => x.Id == data.district).Name
+      : '';
 
   //Take request
   const takeRequestTrigger = (token, userId, requestId) => {
@@ -147,7 +159,7 @@ const RequestDetailView = ({navigation, route}) => {
               fontSize: calcScale(16),
               marginBottom: calcScale(10),
             }}>
-            {data.invoice.actual_proceeds}00 VND
+            {data.invoice.actual_proceeds} VND
           </Text>
         </View>
       );
@@ -168,7 +180,7 @@ const RequestDetailView = ({navigation, route}) => {
               fontSize: calcScale(16),
               marginBottom: calcScale(10),
             }}>
-            {data.estimate_price}0 VND
+            {data.estimate_price} VND
           </Text>
           <Text
             style={{
@@ -394,7 +406,7 @@ const RequestDetailView = ({navigation, route}) => {
               }}>
               <View style={{marginLeft: calcScale(20)}}>
                 <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
-                  Địa chỉ: {data.address}, {data.district}, {data.city}
+                  Địa chỉ: {data.address}, {district}, {city}
                 </Text>
                 <Text
                   style={{

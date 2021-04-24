@@ -33,7 +33,7 @@ const ConfirmPhoneView = ({route, navigation}) => {
       navigation.navigate('ResetPasswordView', {phone: route.params.phone});
     } catch (error) {
       console.log(error);
-      alert(JSON.stringify(error));
+      alert('Mã OTP không đúng');
     }
   };
 
@@ -52,11 +52,12 @@ const ConfirmPhoneView = ({route, navigation}) => {
         style={{width: '80%', height: 100}}
         pinCount={6}
         // code={code} //You can supply this prop or not. The component will be used as a controlled / uncontrolled component respectively.
-        // onCodeChanged = {(code) => setCode(code)}
+        // onCodeChanged={(code) => setCode(code)}
         autoFocusOnLoad
         codeInputFieldStyle={styles.styleBase}
         codeInputHighlightStyle={styles.styleHighLighted}
         onCodeFilled={(code) => setCode(code)}
+        editable={true}
       />
       <TouchableOpacity
         onPress={() => signInWithPhoneNumber(formatedPhoneNumber)}>

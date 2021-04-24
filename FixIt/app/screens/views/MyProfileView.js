@@ -28,9 +28,9 @@ const MyProfileView = () => {
   const [email, setEmail] = React.useState(data.email);
   const [address, setAddress] = React.useState(data.address);
   const [cities, setCities] = React.useState([]);
-  const [selectedCity, setSelectedCity] = React.useState(data.city);
+  const [selectedCity, setSelectedCity] = React.useState(0);
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
-  const [selectedDistrict, setSelectedDistrict] = React.useState(data.district);
+  const [selectedDistrict, setSelectedDistrict] = React.useState(0);
 
   const constructor = () => {
     if (constructorHasRun) {
@@ -44,8 +44,12 @@ const MyProfileView = () => {
   constructor();
 
   useEffect(() => {
-    const cityIndex = cities.findIndex((x) => x.Id === data.city.toString());
+    const cityIndex = cities.findIndex((x) => x.Id == data.city);
+    const city = cities.find((x) => x.Id == data.city);
+    const district = city.Districts.find((x) => x.Id == data.district);
+    setSelectedCity(city.Id);
     setSelectedCityIndex(cityIndex);
+    setSelectedDistrict(district.Id);
   });
 
   const edit = () => {
@@ -55,10 +59,23 @@ const MyProfileView = () => {
     } else {
       setHeaderText('Sửa');
       if (name !== data.name || email !== data.email) {
-        dispatch(updateUser(data.phoneNumber, data.token, name, email));
+        dispatch(
+          updateUser(
+            data.id,
+            data.phoneNumber,
+            data.token,
+            name,
+            email,
+            selectedDistrict,
+            selectedCity,
+            address,
+          ),
+        );
       }
     }
   };
+
+  console.log(data);
 
   return (
     <KeyboardAvoidingView

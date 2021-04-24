@@ -39,7 +39,7 @@ const RequestItem = ({navigation, item, index}) => {
           </ListItem.Title>
           <ListItem.Content style={styles.column}>
             <Text>Thời gian sửa ước tính: {data.estimate_time} Phút</Text>
-            <Text>Giá ước tính: {data.estimate_price}0 VND</Text>
+            <Text>Giá ước tính: {data.estimate_price} VND</Text>
             <Text>Ngày sửa: {data.schedule_time.toString()}</Text>
           </ListItem.Content>
         </ListItem.Content>

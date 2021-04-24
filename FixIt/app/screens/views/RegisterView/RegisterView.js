@@ -122,8 +122,6 @@ const RegisterView = ({navigation}) => {
       setErrorMessage(' không được để trống');
     } else if (nationId === '') {
       setErrorMessage(' không được để trống');
-    } else if (email === '') {
-      setErrorMessage(' không được để trống');
     } else if (phone === '') {
       setErrorMessage(' không được để trống');
     } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(phone)) {
@@ -150,13 +148,11 @@ const RegisterView = ({navigation}) => {
       setErrorMessage(' không trùng với mật khẩu');
     } else {
       setErrorMessage('');
-      setErrorChecked('');
       setErrorPhone(false);
+      setMatchedPassword(false);
       dispatch(checkRegisteredUser(phone));
     }
   };
-
-  console.log(checkedData);
 
   return (
     <KeyboardAvoidingView
@@ -303,6 +299,7 @@ const RegisterView = ({navigation}) => {
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedDistrict(itemValue);
                 }}>
+                <Picker.Item label={''} value={0} />
                 {cities.length > 0
                   ? cities[selectedCityIndex].Districts.map((district) => {
                       return (

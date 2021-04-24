@@ -1,19 +1,19 @@
 import * as React from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-import { Input } from 'react-native-elements';
-import { Picker } from '@react-native-picker/picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {Input} from 'react-native-elements';
+import {Picker} from '@react-native-picker/picker';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { calcScale } from '../../../../utils/dimension';
+import {calcScale} from '../../../../utils/dimension';
 import PTButton from '../../../commonComponent/Button';
 import CommonStyles from '../../Styles';
 
-const AddBillView = ({ navigation, route }) => {
+const AddBillView = ({navigation, route}) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [billData, setBillData] = React.useState([
     {
       id: 0,
-      data: { issueId: 0, issue: 'Công việc thực hiện', price: 'Đơn giá' },
+      data: {issueId: -4, issue: 'Công việc thực hiện', price: 'Đơn giá'},
       isRemove: false,
     },
   ]);
@@ -25,18 +25,19 @@ const AddBillView = ({ navigation, route }) => {
   //detail request
   const requestData = route.params;
   //get issue list of this service
-  let issueList = [{ estimate_price: '0', id: -3, name: '' }];
-  for (let i = 0; i < requestData.service.issues.length; i++) {
-    issueList.push(requestData.service.issues[i]);
-  }
-  issueList.push({ estimate_price: '0', id: -1, name: 'Công việc khác' });
-  issueList.push({ estimate_price: '0', id: -2, name: 'Chi phí vật tư' });
-  //setBillData(requestData.request_issues)
+  const [issueList, setIssueList] = React.useState([]);
 
   const constructor = () => {
     if (constructorHasRun) {
       return;
     } else {
+      const listIssue = [{estimate_price: '0', id: -3, name: ''}];
+      for (let i = 0; i < requestData.service.issues.length; i++) {
+        listIssue.push(requestData.service.issues[i]);
+      }
+      listIssue.push({estimate_price: '0', id: -1, name: 'Công việc khác'});
+      listIssue.push({estimate_price: '0', id: -2, name: 'Chi phí vật tư'});
+      setIssueList(listIssue);
       setConstructorHasRun(true);
     }
   };
@@ -51,7 +52,7 @@ const AddBillView = ({ navigation, route }) => {
     } else {
       const object = {
         id: id + 1,
-        data: { issue: '', price: '' },
+        data: {issue: '', price: ''},
         isRemove: true,
       };
       setErrorMessage('');
@@ -74,7 +75,10 @@ const AddBillView = ({ navigation, route }) => {
     const issueId = issueList.find((i) => i.name == issue).id;
     bills[index].data.issue = issue;
     bills[index].data.issueId = issueId;
-    setPrice(index, issueList.find((i) => i.name == issue).estimate_price.split('.')[0]);
+    setPrice(
+      index,
+      issueList.find((i) => i.name == issue).estimate_price.split('.')[0],
+    );
     setBillData(bills);
   };
 
@@ -84,7 +88,7 @@ const AddBillView = ({ navigation, route }) => {
     setBillData(bills);
   };
 
-  const renderColums = ({ item, index }) => {
+  const renderColums = ({item, index}) => {
     return (
       <>
         {!item.isRemove ? (
@@ -93,14 +97,14 @@ const AddBillView = ({ navigation, route }) => {
               style={[
                 styles.row,
                 {
-                  justifyContent: 'space-between',
+                  justifyContent: 'space-around',
                   marginTop: calcScale(20),
                 },
               ]}>
-              <Text style={[styles.textBold, { fontSize: calcScale(24) }]}>
+              <Text style={[styles.textBold, {fontSize: calcScale(24)}]}>
                 {item.data.issue}
               </Text>
-              <Text style={[styles.textBold, { fontSize: calcScale(24) }]}>
+              <Text style={[styles.textBold, {fontSize: calcScale(24)}]}>
                 {item.data.price}
               </Text>
             </View>
@@ -108,7 +112,7 @@ const AddBillView = ({ navigation, route }) => {
         ) : (
           <>
             <View style={styles.row} key={item.id.toString()}>
-              <View style={[styles.column, { width: '65%' }]}>
+              <View style={[styles.column, {width: '65%'}]}>
                 <Picker
                   selectedValue={item.data.issue}
                   onValueChange={(itemValue) => {
@@ -125,23 +129,16 @@ const AddBillView = ({ navigation, route }) => {
                   })}
                 </Picker>
                 {errorMessage !== '' && billData[index].data.issue === '' ? (
-                  <Text style={{ color: 'red' }}>Công việc{errorMessage}</Text>
+                  <Text style={{color: 'red'}}>Công việc{errorMessage}</Text>
                 ) : null}
               </View>
-
               {item.data.issueId && item.data.issueId > 0 ? (
                 <View>
-                  <Text>
-                    {
-                      issueList.find((i) => i.id == item.data.issueId)
-                        .estimate_price.split('.')[0]
-                    }{' '}
-                    VND
-                  </Text>
+                  <Text>{item.data.price} VND</Text>
                 </View>
               ) : (
                 <Input
-                  containerStyle={[styles.input, { width: '30%' }]}
+                  containerStyle={[styles.input, {width: '30%'}]}
                   onChangeText={(price) => setPrice(index, price)}
                   value={item.data.price}
                   errorMessage={
@@ -152,16 +149,6 @@ const AddBillView = ({ navigation, route }) => {
                   keyboardType="number-pad"
                 />
               )}
-              {/* <Input
-                containerStyle={[styles.input, { width: '30%' }]}
-                onChangeText={(price) => setPrice(index, price)}
-                value={item.data.price}
-                errorMessage={
-                  errorMessage !== '' && item.data.price === ''
-                    ? 'Đơn giá' + errorMessage
-                    : ''
-                }
-              /> */}
               <TouchableOpacity>
                 <Icon
                   name="times-circle"
@@ -179,6 +166,8 @@ const AddBillView = ({ navigation, route }) => {
     );
   };
 
+  console.log(billData.length);
+
   const navigateConfirmBill = () => {
     let checkData = true;
     console.log(billData);
@@ -193,6 +182,14 @@ const AddBillView = ({ navigation, route }) => {
           //   setErrorMessage(' không được để trống');
         }
       });
+      for (let i = 0; i < billData.length; i++) {
+        if (billData[i - 1]) {
+          if (billData[i].data.issueId == billData[i - 1].data.issueId) {
+            checkData = false;
+            alert('Không thể có 2 công việc thực hiện trùng nhau');
+          }
+        }
+      }
       if (checkData) {
         console.log(billData);
         navigation.navigate('BillDetailView', {
@@ -207,7 +204,7 @@ const AddBillView = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.textBold, { marginTop: calcScale(15) }]}>
+      <Text style={[styles.textBold, {marginTop: calcScale(15)}]}>
         Các chi phí cần thanh toán
       </Text>
       <FlatList
@@ -227,12 +224,12 @@ const AddBillView = ({ navigation, route }) => {
         keyExtractor={(item) => item.id.toString()}
       />
       {navigateFail !== '' ? (
-        <Text style={{ color: 'red' }}>{navigateFail}</Text>
+        <Text style={{color: 'red'}}>{navigateFail}</Text>
       ) : null}
       <PTButton
         title="Tạo"
         onPress={() => navigateConfirmBill()}
-        style={[styles.button, { backgroundColor: 'rgb(255, 188, 0)' }]}
+        style={[styles.button, {backgroundColor: 'rgb(255, 188, 0)'}]}
         color="#fff"
       />
     </View>

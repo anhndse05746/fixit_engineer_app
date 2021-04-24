@@ -18,6 +18,7 @@ import {
   listAllRequest,
 } from '../../../store/request';
 import constants from '../../../utils/constants';
+import {cityOfVN} from '../../../utils/cityOfVietNam';
 
 const ReceiveRequestView = ({navigation, route}) => {
   const user = useSelector((state) => state.user);
@@ -36,6 +37,7 @@ const ReceiveRequestView = ({navigation, route}) => {
   const data = request.requestDetail;
 
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
+  const [cities, setCities] = React.useState([]);
   const [accepted, setAccepted] = React.useState(0);
 
   const constructor = () => {
@@ -43,11 +45,21 @@ const ReceiveRequestView = ({navigation, route}) => {
       return;
     } else {
       setAccepted(data.accepted);
+      setCities(cityOfVN);
       setConstructorHasRun(true);
     }
   };
 
   constructor();
+
+  let city =
+    data && data.city ? cities.find((x) => x.Id == data.city).Name : '';
+  let district =
+    data && data.city && data.district
+      ? cities
+          .find((x) => x.Id == data.city)
+          .Districts.find((x) => x.Id == data.district).Name
+      : '';
 
   //Take request
   const takeRequestTrigger = (token, userId, requestId) => {
@@ -174,7 +186,7 @@ const ReceiveRequestView = ({navigation, route}) => {
                   fontSize: calcScale(16),
                   marginBottom: calcScale(10),
                 }}>
-                {data.estimate_price}0 VND
+                {data.estimate_price} VND
               </Text>
             </View>
             <View style={styles.innerFormContainer}>
@@ -203,7 +215,7 @@ const ReceiveRequestView = ({navigation, route}) => {
               }}>
               <View style={{marginLeft: calcScale(20)}}>
                 <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
-                  Địa chỉ: {data.address}, {data.district}, {data.city}
+                  Địa chỉ: {district}, {city}
                 </Text>
                 {requestStatus ? (
                   requestStatus[0].status_id != 1 ? (
