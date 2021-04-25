@@ -27,7 +27,7 @@ const MyProfileView = () => {
   const [phone, setPhone] = React.useState(data.phoneNumber);
   const [email, setEmail] = React.useState(data.email);
   const [address, setAddress] = React.useState(data.address);
-  const [cities, setCities] = React.useState([]);
+  const [cities, setCities] = React.useState(cityOfVN);
   const [selectedCity, setSelectedCity] = React.useState(0);
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
   const [selectedDistrict, setSelectedDistrict] = React.useState(0);
@@ -36,7 +36,6 @@ const MyProfileView = () => {
     if (constructorHasRun) {
       return;
     } else {
-      setCities(cityOfVN);
       setConstructorHasRun(true);
     }
   };
@@ -59,23 +58,31 @@ const MyProfileView = () => {
     } else {
       setHeaderText('Sửa');
       if (name !== data.name || email !== data.email) {
+        console.log(
+          data.userId,
+          data.phoneNumber,
+          data.token,
+          name,
+          email,
+          parseInt(selectedDistrict),
+          parseInt(selectedCity),
+          address,
+        );
         dispatch(
           updateUser(
-            data.id,
+            data.userId,
             data.phoneNumber,
             data.token,
             name,
             email,
-            selectedDistrict,
-            selectedCity,
+            parseInt(selectedDistrict),
+            parseInt(selectedCity),
             address,
           ),
         );
       }
     }
   };
-
-  console.log(data);
 
   return (
     <KeyboardAvoidingView

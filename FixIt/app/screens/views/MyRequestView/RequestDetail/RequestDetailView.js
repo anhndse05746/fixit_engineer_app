@@ -41,7 +41,7 @@ const RequestDetailView = ({navigation, route}) => {
   const data = request.requestDetail;
 
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
-  const [cities, setCities] = React.useState([]);
+  const [cities, setCities] = React.useState(cityOfVN);
   const [accepted, setAccepted] = React.useState(0);
 
   const constructor = () => {
@@ -49,7 +49,6 @@ const RequestDetailView = ({navigation, route}) => {
       return;
     } else {
       setAccepted(data.accepted);
-      setCities(cityOfVN);
       setConstructorHasRun(true);
     }
   };
@@ -180,7 +179,7 @@ const RequestDetailView = ({navigation, route}) => {
               fontSize: calcScale(16),
               marginBottom: calcScale(10),
             }}>
-            {data.estimate_price} VND
+            {data.estimate_price.split('.')[0]} VND
           </Text>
           <Text
             style={{
@@ -319,7 +318,8 @@ const RequestDetailView = ({navigation, route}) => {
                       fontSize: calcScale(16),
                       marginBottom: calcScale(10),
                     }}>
-                    + {item.issue.name} - {item.issue.estimate_price}0đ
+                    + {item.issue.name} -{' '}
+                    {item.issue.estimate_price.split('.')[0]}0đ
                   </Text>
                 );
               })}

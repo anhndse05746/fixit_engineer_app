@@ -12,7 +12,7 @@ const CanceledTabview = ({navigation}) => {
   const user = useSelector((state) => state.user);
 
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
-  const [cities, setCities] = React.useState([]);
+  const [cities, setCities] = React.useState(cityOfVN);
 
   const canceledData = request.canceledRequest;
   let isLoading = request.isLoading;
@@ -21,7 +21,6 @@ const CanceledTabview = ({navigation}) => {
     if (constructorHasRun) {
       return;
     } else {
-      setCities(cityOfVN);
       setConstructorHasRun(true);
     }
   };
@@ -71,7 +70,9 @@ const CanceledTabview = ({navigation}) => {
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Giá:</Text>
-            <Text style={styles.textBold}>{item.estimate_price}0 VND</Text>
+            <Text style={styles.textBold}>
+              {item.estimate_price.split('.')[0]}0 VND
+            </Text>
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Trạng thái:</Text>

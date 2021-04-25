@@ -12,7 +12,7 @@ const DoneTabView = ({navigation}) => {
   const user = useSelector((state) => state.user);
 
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
-  const [cities, setCities] = React.useState([]);
+  const [cities, setCities] = React.useState(cityOfVN);
 
   const doneData = request.completeRequest;
   let isLoading = request.isLoading;
@@ -21,7 +21,6 @@ const DoneTabView = ({navigation}) => {
     if (constructorHasRun) {
       return;
     } else {
-      setCities(cityOfVN);
       setConstructorHasRun(true);
     }
   };
@@ -71,7 +70,9 @@ const DoneTabView = ({navigation}) => {
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Giá:</Text>
-            <Text style={styles.textBold}>{item.estimate_price} VND</Text>
+            <Text style={styles.textBold}>
+              {item.estimate_price.split('.')[0]} VND
+            </Text>
           </View>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Trạng thái:</Text>

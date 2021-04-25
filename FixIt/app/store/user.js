@@ -40,6 +40,7 @@ const user = createSlice({
       users.city = action.payload.city;
       users.district = action.payload.district;
       users.is_verify = action.payload.is_verify;
+      users.address = action.payload.address;
       //console.log(action.payload.is_verify.data[0])
       users.message = LOGGED_IN;
       users.loading = false;
@@ -141,13 +142,14 @@ export const updateUser = (
     },
     data: {
       user_id: id,
-      phone_number: phone,
       name: name,
-      role_id: constants.ROLE_REPAIRER,
       email: email,
+      phone: phone,
+      role_id: constants.ROLE_REPAIRER,
       district: district,
       city: city,
       address: address,
+      identity_card_number: '',
     },
     method: 'POST',
     onStart: usersRequested.type,

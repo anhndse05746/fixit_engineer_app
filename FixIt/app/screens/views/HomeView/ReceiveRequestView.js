@@ -37,7 +37,7 @@ const ReceiveRequestView = ({navigation, route}) => {
   const data = request.requestDetail;
 
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
-  const [cities, setCities] = React.useState([]);
+  const [cities, setCities] = React.useState(cityOfVN);
   const [accepted, setAccepted] = React.useState(0);
 
   const constructor = () => {
@@ -45,7 +45,6 @@ const ReceiveRequestView = ({navigation, route}) => {
       return;
     } else {
       setAccepted(data.accepted);
-      setCities(cityOfVN);
       setConstructorHasRun(true);
     }
   };
@@ -186,7 +185,7 @@ const ReceiveRequestView = ({navigation, route}) => {
                   fontSize: calcScale(16),
                   marginBottom: calcScale(10),
                 }}>
-                {data.estimate_price} VND
+                {data.estimate_price.split('.')[0]} VND
               </Text>
             </View>
             <View style={styles.innerFormContainer}>

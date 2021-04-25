@@ -38,8 +38,16 @@ const HomeView = ({navigation}) => {
       const workingToggleValue = await userPreferences.getObjectAsync(
         WORKING_TOGGLE,
       );
-      setIsEnabled(data.is_verify.data[0] == 0 ? false : workingToggleValue);
-      setIsDisabled(data.is_verify.data[0] == 0 ? true : false);
+      setIsEnabled(
+        data
+          ? data.is_verify.data[0] == 0
+            ? false
+            : workingToggleValue
+          : false,
+      );
+      setIsDisabled(
+        data ? (data.is_verify.data[0] == 0 ? true : false) : false,
+      );
     }
   };
 
@@ -67,7 +75,7 @@ const HomeView = ({navigation}) => {
         <Text style={[styles.textBold, {paddingTop: calcScale(10)}]}>
           Hi, {data.name}!
         </Text>
-        {data.is_verify.data[0] == 0 ? (
+        {data && data.is_verify.data[0] && data.is_verify.data[0] == 0 ? (
           <View style={{paddingRight: calcScale(5)}}>
             <Text style={styles.textRegular}>
               Tài khoản của bạn chưa được xác minh.

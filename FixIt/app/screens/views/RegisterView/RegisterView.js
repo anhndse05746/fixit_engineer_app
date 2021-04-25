@@ -36,7 +36,7 @@ const RegisterView = ({navigation}) => {
   const [errorMessage, setErrorMessage] = React.useState('');
   const [errorPhone, setErrorPhone] = React.useState(false);
   const [matchedPassword, setMatchedPassword] = React.useState(false);
-  const [cities, setCities] = React.useState([]);
+  const [cities, setCities] = React.useState(cityOfVN);
   const [selectedCity, setSelectedCity] = React.useState(0);
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
   const [selectedDistrict, setSelectedDistrict] = React.useState(0);
@@ -74,7 +74,6 @@ const RegisterView = ({navigation}) => {
       return;
     } else {
       setChecked(dataJob);
-      setCities(cityOfVN);
       setErrorMessage('');
       setConstructorHasRun(true);
     }

@@ -68,6 +68,7 @@ const LoginView = ({navigation}) => {
           city: data.city,
           district: data.district,
           is_verify: data.is_verify,
+          address: data.address,
         };
         userPreferences.setObjectAsync(USER_KEY, userData);
       }
