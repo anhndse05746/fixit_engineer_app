@@ -1,19 +1,42 @@
-import React, {useEffect} from 'react';
-import {ActivityIndicator} from 'react-native';
-import {StyleSheet, Text, View, FlatList} from 'react-native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {calcScale} from '../../../utils/dimension';
+import React, { useEffect } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { calcScale } from '../../../utils/dimension';
 import commonStyles from '../Styles';
 import AnnouncementBox from './AnnouncementBox';
 import NewAnnouncement from './NewAnnouncement';
 
-const AnnouncementView = ({navigation}) => {
+const AnnouncementView = ({ navigation }) => {
   const [newNotification, setNewNotification] = React.useState([]);
   const [earlierNotification, setEarlierNotification] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(0);
   const [isEndReach, setIsEndReach] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  let sampleData = [
+    {
+      id: 12,
+      user_id: 47,
+      title: "Yêu cầu Sửa máy giặt đã bị huỷ bởi khách",
+      type: 1,
+      request_id: 117,
+      isRead: false,
+      createdAt: "2021-04-26T01:46:16.000Z",
+      updatedAt: "2021-04-26T01:46:16.000Z"
+    },
+    {
+      id: 10,
+      user_id: 47,
+      title: "Bạn đã nhận một yêu cầu Sửa máy giặt",
+      type: 1,
+      request_id: 117,
+      isRead: false,
+      createdAt: "2021-04-26T01:34:42.000Z",
+      updatedAt: "2021-04-26T01:34:42.000Z"
+    }
+  ]
 
   useEffect(() => {
     getNewNotification();
@@ -51,7 +74,7 @@ const AnnouncementView = ({navigation}) => {
         <ActivityIndicator
           size="small"
           color="#3368f3"
-          style={{marginBottom: calcScale(10)}}
+          style={{ marginBottom: calcScale(10) }}
         />
       );
     } else {
@@ -68,7 +91,7 @@ const AnnouncementView = ({navigation}) => {
         ListHeaderComponent={
           <NewAnnouncement data={newNotification} navigation={navigation} />
         }
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <AnnouncementBox item={item} navigation={navigation} />
         )}
         onEndReached={() => loadMoreData()}
