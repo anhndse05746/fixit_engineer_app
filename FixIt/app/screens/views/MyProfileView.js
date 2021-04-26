@@ -36,20 +36,26 @@ const MyProfileView = () => {
     if (constructorHasRun) {
       return;
     } else {
+      const cityIndex = cities.findIndex((x) => x.Id == data.city);
+      const city = cities.find((x) => x.Id == data.city);
+      const district = city.Districts.find((x) => x.Id == data.district);
+      setSelectedCity(city.Id);
+      setSelectedCityIndex(cityIndex);
+      setSelectedDistrict(district.Id);
       setConstructorHasRun(true);
     }
   };
 
   constructor();
 
-  useEffect(() => {
-    const cityIndex = cities.findIndex((x) => x.Id == data.city);
-    const city = cities.find((x) => x.Id == data.city);
-    const district = city.Districts.find((x) => x.Id == data.district);
-    setSelectedCity(city.Id);
-    setSelectedCityIndex(cityIndex);
-    setSelectedDistrict(district.Id);
-  });
+  // useEffect(() => {
+  //   const cityIndex = cities.findIndex((x) => x.Id == data.city);
+  //   const city = cities.find((x) => x.Id == data.city);
+  //   const district = city.Districts.find((x) => x.Id == data.district);
+  //   setSelectedCity(city.Id);
+  //   setSelectedCityIndex(cityIndex);
+  //   setSelectedDistrict(district.Id);
+  // });
 
   const edit = () => {
     setNotEdit(!notEdit);

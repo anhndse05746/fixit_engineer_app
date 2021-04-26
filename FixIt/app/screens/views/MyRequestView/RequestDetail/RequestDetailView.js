@@ -319,7 +319,7 @@ const RequestDetailView = ({navigation, route}) => {
                       marginBottom: calcScale(10),
                     }}>
                     + {item.issue.name} -{' '}
-                    {item.issue.estimate_price.split('.')[0]}0đ
+                    {item.issue.estimate_price.split('.')[0]} VND
                   </Text>
                 );
               })}

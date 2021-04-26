@@ -58,6 +58,7 @@ const LoginView = ({navigation}) => {
           data.token,
           EncryptionKey_TOKEN_KEY,
         );
+        console.log('login data: ' + JSON.stringify(data));
         const userData = {
           id: data.userId,
           phone: data.phoneNumber,
@@ -70,6 +71,7 @@ const LoginView = ({navigation}) => {
           is_verify: data.is_verify,
           address: data.address,
         };
+        console.log('user data: ' + JSON.stringify(userData));
         userPreferences.setObjectAsync(USER_KEY, userData);
       }
       navigation.navigate('DrawerInside');
