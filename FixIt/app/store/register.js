@@ -63,6 +63,8 @@ export const registerUser = (
   city,
   district,
   address,
+  identity_card_number,
+  major_id,
 ) =>
   apiCallBegan({
     url: '/register',
@@ -75,6 +77,8 @@ export const registerUser = (
       district: district,
       city: city,
       address: address,
+      identity_card: identity_card_number,
+      major_id: major_id,
     },
     method: 'POST',
     onStart: registerRequested.type,

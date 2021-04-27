@@ -6,7 +6,9 @@ import {calcScale} from '../../../utils/dimension';
 
 const AnnouncementBox = ({item, navigation}) => {
   const [checkRead, setCheckRead] = React.useState(false);
-
+  // const requestData = {
+  //   id: item.requestId,
+  // };
   useEffect(() => {
     setCheckRead(item.isRead);
   }, []);
@@ -20,9 +22,16 @@ const AnnouncementBox = ({item, navigation}) => {
   return (
     <ListItem
       containerStyle={{
-        backgroundColor: !checkRead ? 'rgba(255, 188, 0, .9)' : '#fff',
+        backgroundColor: !checkRead ? 'rgb(255, 224, 216)' : '#fff',
+        borderWidth: 1,
+        borderColor: 'black',
       }}
-      onPress={() => {}}>
+      onPress={() => {
+        // navigation.navigate('MyRequestStackNavigator', {
+        //   screen: 'RequestDetailView',
+        //   params: {requestData: requestData},
+        // });
+      }}>
       {/* <Avatar.Text size={calcScale(65)} label={item.metionUser.charAt(0)} /> */}
       <ListItem.Content>
         <ListItem.Title numberOfLines={2}>{item.title}</ListItem.Title>

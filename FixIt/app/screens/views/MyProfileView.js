@@ -63,7 +63,13 @@ const MyProfileView = () => {
       setHeaderText('Lưu');
     } else {
       setHeaderText('Sửa');
-      if (name !== data.name || email !== data.email) {
+      if (
+        name !== data.name ||
+        email !== data.email ||
+        selectedCity != data.city ||
+        selectedDistrict != data.selectedDistrict ||
+        address != data.address
+      ) {
         console.log(
           data.userId,
           data.phoneNumber,
@@ -89,6 +95,13 @@ const MyProfileView = () => {
       }
     }
   };
+
+  useEffect(() => {
+    console.log(updateUserMessage);
+    if (updateUserMessage) {
+      alert(updateUserMessage);
+    }
+  }, [updateUserMessage]);
 
   return (
     <KeyboardAvoidingView
@@ -124,18 +137,14 @@ const MyProfileView = () => {
               />
             )}
           </View>
-          <View style={{paddingTop: calcScale(20)}}>
+          <View style={{paddingVertical: calcScale(20)}}>
             <Text style={[styles.textBold, {textAlign: 'center'}]}>
               {data.name}
             </Text>
             <Text style={[styles.textRegular, {textAlign: 'center'}]}>
               Thợ sửa chữa
             </Text>
-            <Text style={[styles.textRegular, {textAlign: 'center'}]}>
-              Số dư: 0 VND
-            </Text>
           </View>
-          <Text>{updateUserMessage}</Text>
           <View style={{paddingBottom: calcScale(50)}}>
             <Input
               containerStyle={[styles.input, {width: calcScale(width)}]}

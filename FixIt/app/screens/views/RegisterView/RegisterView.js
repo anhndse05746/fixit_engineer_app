@@ -100,14 +100,22 @@ const RegisterView = ({navigation}) => {
       district: selectedDistrict,
       city: selectedCity,
       address: address,
+      identity_card_number: nationId,
+      major_id: checked[0].id,
     };
     if (isRegistered == false) {
       navigation.navigate('OTPView', user);
     }
+  }, [isRegistered]);
+
+  useEffect(() => {
+    console.log(message);
     if (message) {
       alert(message);
     }
-  }, [isRegistered]);
+  }, [message]);
+
+  console.log(errorMessage);
 
   const navigateOtpScreen = () => {
     const check = [];

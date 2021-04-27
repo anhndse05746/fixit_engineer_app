@@ -26,6 +26,9 @@ const OTPView = ({route, navigation}) => {
     password: route.params.password,
     district: route.params.district,
     city: route.params.city,
+    address: route.params.address,
+    identity_card_number: route.params.identity_card_number,
+    major_id: route.params.major_id,
   };
   const formatedPhoneNumber = '+84' + user.phone.slice(1);
 
@@ -44,6 +47,17 @@ const OTPView = ({route, navigation}) => {
   const confirmOTP = async () => {
     try {
       await confirm.confirm(code);
+      console.log(
+        user.phone,
+        user.password,
+        user.name,
+        user.email,
+        user.city,
+        user.district,
+        user.address,
+        user.identity_card_number,
+        user.major_id,
+      );
       dispatch(
         registerUser(
           user.phone,
@@ -53,6 +67,8 @@ const OTPView = ({route, navigation}) => {
           user.city,
           user.district,
           user.address,
+          user.identity_card_number,
+          user.major_id,
         ),
       );
     } catch (error) {
