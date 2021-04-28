@@ -1,23 +1,23 @@
-import React, {useEffect} from 'react';
-import {KeyboardAvoidingView, SafeAreaView} from 'react-native';
-import {View} from 'react-native';
-import {StyleSheet, Text} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
-import {Avatar, Header, Input} from 'react-native-elements';
+import React, { useEffect } from 'react';
+import { KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import { View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { Avatar, Header, Input } from 'react-native-elements';
 
-import {width, calcScale} from '../../utils/dimension';
+import { width, calcScale } from '../../utils/dimension';
 import CommonStyles from './Styles';
-import {updateUser} from '../../store/user';
-import {Picker} from '@react-native-picker/picker';
-import {cityOfVN} from '../../utils/cityOfVietNam';
-import {ScrollView} from 'react-native';
+import { updateUser } from '../../store/user';
+import { Picker } from '@react-native-picker/picker';
+import { cityOfVN } from '../../utils/cityOfVietNam';
+import { ScrollView } from 'react-native';
 
 const MyProfileView = () => {
   const data = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {updateUserMessage} = data;
+  const { updateUserMessage } = data;
 
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [notEdit, setNotEdit] = React.useState(true);
@@ -110,14 +110,14 @@ const MyProfileView = () => {
       <Header
         rightComponent={{
           text: headerText,
-          style: {color: '#fff'},
+          style: { color: '#fff' },
           onPress: () => edit(),
         }}
         backgroundColor="rgb(0, 0, 60)"
       />
       <ScrollView>
         <View style={styles.innerContainer}>
-          <View style={{paddingTop: calcScale(10)}}>
+          <View style={{ paddingTop: calcScale(10) }}>
             {isHasAvatar ? (
               <Avatar rounded size={calcScale(130)} />
             ) : (
@@ -137,18 +137,18 @@ const MyProfileView = () => {
               />
             )}
           </View>
-          <View style={{paddingVertical: calcScale(20)}}>
-            <Text style={[styles.textBold, {textAlign: 'center'}]}>
+          <View style={{ paddingVertical: calcScale(20) }}>
+            <Text style={[styles.textBold, { textAlign: 'center' }]}>
               {data.name}
             </Text>
-            <Text style={[styles.textRegular, {textAlign: 'center'}]}>
+            <Text style={[styles.textRegular, { textAlign: 'center' }]}>
               Thợ sửa chữa
             </Text>
           </View>
-          <View style={{paddingBottom: calcScale(50)}}>
+          <View style={{ paddingBottom: calcScale(50) }}>
             <Input
-              containerStyle={[styles.input, {width: calcScale(width)}]}
-              inputContainerStyle={{borderBottomWidth: 0}}
+              containerStyle={[styles.input, { width: calcScale(width) }]}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
               placeholder="Họ và Tên"
               onChangeText={(name) => setName(name)}
               value={name}
@@ -157,9 +157,9 @@ const MyProfileView = () => {
             <Input
               containerStyle={[
                 styles.input,
-                {width: calcScale(width), marginTop: calcScale(15)},
+                { width: calcScale(width), marginTop: calcScale(15) },
               ]}
-              inputContainerStyle={{borderBottomWidth: 0}}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
               placeholder="Điện thoại"
               onChangeText={(phone) => setPhone(phone)}
               value={phone}
@@ -169,9 +169,9 @@ const MyProfileView = () => {
             <Input
               containerStyle={[
                 styles.input,
-                {width: calcScale(width), marginTop: calcScale(15)},
+                { width: calcScale(width), marginTop: calcScale(15) },
               ]}
-              inputContainerStyle={{borderBottomWidth: 0}}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
               placeholder="Email"
               onChangeText={(email) => setEmail(email)}
               value={email}
@@ -185,6 +185,7 @@ const MyProfileView = () => {
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedCity(itemValue);
                   setSelectedCityIndex(itemIndex);
+                  setSelectedDistrict(cities[itemIndex].Districts[0].Id);
                 }}>
                 {cities.map((city) => {
                   return (
@@ -206,23 +207,23 @@ const MyProfileView = () => {
                 }}>
                 {cities.length > 0
                   ? cities[selectedCityIndex].Districts.map((district) => {
-                      return (
-                        <Picker.Item
-                          label={district.Name}
-                          value={district.Id}
-                          key={district.Id}
-                        />
-                      );
-                    })
+                    return (
+                      <Picker.Item
+                        label={district.Name}
+                        value={district.Id}
+                        key={district.Id}
+                      />
+                    );
+                  })
                   : null}
               </Picker>
             </View>
             <Input
               containerStyle={[
                 styles.input,
-                {width: calcScale(width), marginTop: calcScale(15)},
+                { width: calcScale(width), marginTop: calcScale(15) },
               ]}
-              inputContainerStyle={{borderBottomWidth: 0}}
+              inputContainerStyle={{ borderBottomWidth: 0 }}
               placeholder="Địa chỉ"
               onChangeText={(address) => setAddress(address)}
               value={address}
