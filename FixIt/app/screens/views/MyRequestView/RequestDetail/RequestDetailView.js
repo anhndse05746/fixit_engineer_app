@@ -141,26 +141,66 @@ const RequestDetailView = ({navigation, route}) => {
 
     //Price
     if (requestStatus == 4 || requestStatus == 5) {
-      console.log(data.invoice);
+      console.log('data.invoice: ' + JSON.stringify(data.invoice));
       //Show price
       price = (
-        <View style={styles.innerFormContainer}>
-          <Text
-            style={{
-              fontSize: calcScale(18),
-              fontWeight: 'bold',
-              marginBottom: calcScale(10),
-            }}>
-            Tiền thu thực tế:
-          </Text>
-          <Text
-            style={{
-              fontSize: calcScale(16),
-              marginBottom: calcScale(10),
-            }}>
-            {data.invoice.actual_proceeds} VND
-          </Text>
-        </View>
+        <>
+          <View style={styles.innerFormContainer}>
+            <Text
+              style={{
+                fontSize: calcScale(18),
+                fontWeight: 'bold',
+                marginBottom: calcScale(10),
+              }}>
+              Tiền thu thực tế:
+            </Text>
+            <Text
+              style={{
+                fontSize: calcScale(16),
+                marginBottom: calcScale(10),
+              }}>
+              {data.invoice.actual_proceeds} VND
+            </Text>
+          </View>
+          {data.invoice.cost_of_supplies != 0 ? (
+            <View style={styles.innerFormContainer}>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                Chi phí vật tư:
+              </Text>
+              <Text
+                style={{
+                  fontSize: calcScale(16),
+                  marginBottom: calcScale(10),
+                }}>
+                {data.invoice.cost_of_supplies} VND
+              </Text>
+            </View>
+          ) : null}
+          {data.invoice.other_cost != 0 ? (
+            <View style={styles.innerFormContainer}>
+              <Text
+                style={{
+                  fontSize: calcScale(18),
+                  fontWeight: 'bold',
+                  marginBottom: calcScale(10),
+                }}>
+                Chi phí khác:
+              </Text>
+              <Text
+                style={{
+                  fontSize: calcScale(16),
+                  marginBottom: calcScale(10),
+                }}>
+                {data.invoice.other_cost} VND
+              </Text>
+            </View>
+          ) : null}
+        </>
       );
     } else {
       //Show price
@@ -342,44 +382,48 @@ const RequestDetailView = ({navigation, route}) => {
                 {data.description}
               </Text>
             </View>
-            <View style={styles.innerFormContainer}>
-              <Text
-                style={{
-                  fontSize: calcScale(18),
-                  fontWeight: 'bold',
-                  marginBottom: calcScale(10),
-                }}>
-                Thời gian sửa ước tính:
-              </Text>
-              <Text
-                style={{
-                  fontSize: calcScale(16),
-                  marginBottom: calcScale(10),
-                }}>
-                {data.estimate_time} Phút
-              </Text>
-            </View>
+            {requestStatus && requestStatus < 4 ? (
+              <View style={styles.innerFormContainer}>
+                <Text
+                  style={{
+                    fontSize: calcScale(18),
+                    fontWeight: 'bold',
+                    marginBottom: calcScale(10),
+                  }}>
+                  Thời gian sửa ước tính:
+                </Text>
+                <Text
+                  style={{
+                    fontSize: calcScale(16),
+                    marginBottom: calcScale(10),
+                  }}>
+                  {data.estimate_time} Phút
+                </Text>
+              </View>
+            ) : null}
             {
               //price
               price
             }
-            <View style={styles.innerFormContainer}>
-              <Text
-                style={{
-                  fontSize: calcScale(18),
-                  fontWeight: 'bold',
-                  marginBottom: calcScale(10),
-                }}>
-                Tiền công tối thiểu
-              </Text>
-              <Text
-                style={{
-                  fontSize: calcScale(16),
-                  marginBottom: calcScale(10),
-                }}>
-                30.000 VND
-              </Text>
-            </View>
+            {requestStatus && requestStatus >= 4 ? (
+              <View style={styles.innerFormContainer}>
+                <Text
+                  style={{
+                    fontSize: calcScale(18),
+                    fontWeight: 'bold',
+                    marginBottom: calcScale(10),
+                  }}>
+                  Tiền công tối thiểu
+                </Text>
+                <Text
+                  style={{
+                    fontSize: calcScale(16),
+                    marginBottom: calcScale(10),
+                  }}>
+                  30.000 VND
+                </Text>
+              </View>
+            ) : null}
             <View style={styles.innerFormContainer}>
               <Text
                 style={{

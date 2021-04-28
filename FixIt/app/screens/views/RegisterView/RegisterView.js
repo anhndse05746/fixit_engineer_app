@@ -35,6 +35,7 @@ const RegisterView = ({navigation}) => {
   const [nationId, setNationId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
   const [errorPhone, setErrorPhone] = React.useState(false);
+  const [errorMatchedPassword, setErrorMatchedPassword] = React.useState('');
   const [matchedPassword, setMatchedPassword] = React.useState(false);
   const [cities, setCities] = React.useState(cityOfVN);
   const [selectedCity, setSelectedCity] = React.useState(0);
@@ -75,6 +76,9 @@ const RegisterView = ({navigation}) => {
     } else {
       setChecked(dataJob);
       setErrorMessage('');
+      setErrorMatchedPassword('');
+      setErrorPhone(false);
+      setMatchedPassword(false);
       setConstructorHasRun(true);
     }
   };
@@ -152,9 +156,10 @@ const RegisterView = ({navigation}) => {
       password !== repassword
     ) {
       setMatchedPassword(true);
-      setErrorMessage(' không trùng với mật khẩu');
+      setErrorMatchedPassword(' không trùng với mật khẩu');
     } else {
       setErrorMessage('');
+      setErrorMatchedPassword('');
       setErrorPhone(false);
       setMatchedPassword(false);
       dispatch(checkRegisteredUser(phone));
@@ -439,8 +444,12 @@ const RegisterView = ({navigation}) => {
                 }
                 value={repassword}
                 errorMessage={
-                  (errorMessage !== '' && repassword === '') || matchedPassword
-                    ? 'Nhập lại mật khẩu' + errorMessage
+                  (errorMessage !== '' && repassword === '') ||
+                  (matchedPassword && errorMatchedPassword !== '')
+                    ? 'Nhập lại mật khẩu' +
+                      (errorMessage === ''
+                        ? errorMatchedPassword
+                        : errorMessage)
                     : ''
                 }
               />
