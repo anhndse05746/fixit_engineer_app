@@ -49,7 +49,7 @@ const HomeView = ({navigation}) => {
 
   useEffect(() => {
     if (isEnabled) {
-      dispatch(listRequest(data.token, data.userId));
+      dispatch(listRequest(data.token, data.city, data.major));
     }
   }, [isEnabled]);
 

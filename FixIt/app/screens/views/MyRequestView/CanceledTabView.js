@@ -51,7 +51,10 @@ const CanceledTabview = ({navigation}) => {
       <TouchableOpacity
         style={styles.ticketContainer}
         onPress={() =>
-          navigation.navigate('RequestDetailView', {requestData: item})
+          navigation.navigate('RequestDetailView', {
+            flag: 'myrequest',
+            requestData: item,
+          })
         }>
         <View style={styles.row}>
           <View style={styles.column}>

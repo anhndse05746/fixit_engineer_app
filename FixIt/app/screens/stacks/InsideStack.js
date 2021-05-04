@@ -126,12 +126,32 @@ const MyRequestStackNavigator = ({navigation}) => {
       <MyRequestStack.Screen
         name="RequestDetailView"
         component={RequestDetailView}
-        options={{
-          title: 'Chi tiết đơn hàng',
+        options={({route}) => ({
+          title: 'Chi tiết yêu cầu',
+          headerLeft: () => {
+            return (
+              <TouchableHighlight
+                activeOpacity={1}
+                underlayColor={'#ccd0d5'}
+                onPress={() => {
+                  route.params.flag === 'announcement'
+                    ? backToAnnouncement(navigation)
+                    : navigation.navigate('MyRequest');
+                }}
+                style={styles.backButton}>
+                <Icon
+                  name={Platform.OS === 'ios' ? 'chevron-left' : 'arrow-left'}
+                  size={calcScale(22)}
+                  color="#fff"
+                  light={true}
+                />
+              </TouchableHighlight>
+            );
+          },
           headerTitleStyle: {color: '#fff'},
           headerTintColor: '#fff',
           headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
-        }}
+        })}
       />
       <MyRequestStack.Screen
         name="AddBillView"

@@ -27,10 +27,13 @@ const AnnouncementBox = ({item, navigation}) => {
         borderColor: 'black',
       }}
       onPress={() => {
-        // navigation.navigate('MyRequestStackNavigator', {
-        //   screen: 'RequestDetailView',
-        //   params: {requestData: requestData},
-        // });
+        navigation.navigate('MyRequestStackNavigator', {
+          screen: 'RequestDetailView',
+          params: {
+            flag: 'myrequest',
+            requestData: {id: item.request_id},
+          },
+        });
       }}>
       {/* <Avatar.Text size={calcScale(65)} label={item.metionUser.charAt(0)} /> */}
       <ListItem.Content>

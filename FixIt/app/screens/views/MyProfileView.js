@@ -140,7 +140,7 @@ const MyProfileView = () => {
               containerStyle={[styles.input, {width: calcScale(width)}]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Họ và Tên"
-              onChangeText={(name) => setName(name)}
+              onChangeText={(name) => setName(name.trim())}
               value={name}
               disabled={notEdit}
             />
@@ -151,7 +151,7 @@ const MyProfileView = () => {
               ]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Điện thoại"
-              onChangeText={(phone) => setPhone(phone)}
+              onChangeText={(phone) => setPhone(phone.trim())}
               value={phone}
               disabled
               keyboardType="number-pad"
@@ -163,7 +163,7 @@ const MyProfileView = () => {
               ]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Email"
-              onChangeText={(email) => setEmail(email)}
+              onChangeText={(email) => setEmail(email.trim())}
               value={email}
               disabled={notEdit}
               keyboardType="email-address"
@@ -215,7 +215,7 @@ const MyProfileView = () => {
               ]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Địa chỉ"
-              onChangeText={(address) => setAddress(address)}
+              onChangeText={(address) => setAddress(address.trim())}
               value={address}
               disabled={notEdit}
             />

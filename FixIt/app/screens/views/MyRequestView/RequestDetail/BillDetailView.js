@@ -178,7 +178,7 @@ const BillDetailView = ({navigation, route}) => {
             <Text
               style={[
                 styles.textBold,
-                {flexBasis: '70%', fontSize: calcScale(24)},
+                {flexBasis: '70%', fontSize: calcScale(20)},
               ]}>
               Tổng tiền
             </Text>
@@ -188,7 +188,7 @@ const BillDetailView = ({navigation, route}) => {
             <Text
               style={[
                 styles.textBold,
-                {flexBasis: '50%', fontSize: calcScale(24)},
+                {flexBasis: '50%', fontSize: calcScale(20)},
               ]}>
               Tiền thu thực tế
             </Text>

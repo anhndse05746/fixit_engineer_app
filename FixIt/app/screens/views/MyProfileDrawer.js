@@ -90,11 +90,9 @@ const MyProfileDrawer = ({navigation}) => {
             </View>
           </TouchableOpacity>
         </View>
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={() => logOut()}>
-            <Text style={styles.headmanText}>Đăng xuất</Text>
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.footer} onPress={() => logOut()}>
+          <Text style={styles.headmanText}>Đăng xuất</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </View>
   );

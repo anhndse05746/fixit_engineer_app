@@ -79,7 +79,7 @@ const AnnouncementView = ({navigation}) => {
         )}
         onEndReached={() => loadMoreData()}
         onEndReachedThreshold={0.2}
-        onMomentumScrollBegin={() => setEndReach(true)}
+        onMomentumScrollBegin={() => setIsEndReach(true)}
         ListFooterComponent={renderFooter()}
         onRefresh={() => reloadData()}
         refreshing={isLoading}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {
   Text,
   View,
@@ -8,19 +8,18 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
-import { Input } from 'react-native-elements';
-import { useDispatch, useSelector } from 'react-redux';
+import {Input} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CommonStyles from './Styles';
 import PTButton from '../commonComponent/Button';
-import { calcScale } from '../../utils/dimension';
-import { changePassword } from '../../store/user';
+import {calcScale} from '../../utils/dimension';
+import {changePassword} from '../../store/user';
 import constants from '../../utils/constants';
-import { TouchableOpacity } from 'react-native';
+import {TouchableOpacity} from 'react-native';
 
-const ChangePasswordView = ({ route, navigation }) => {
-
+const ChangePasswordView = ({route, navigation}) => {
   const [oldPassword, setOldPassword] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [repassword, setRepassword] = React.useState('');
@@ -44,7 +43,7 @@ const ChangePasswordView = ({ route, navigation }) => {
 
   const dispatch = useDispatch();
   const data = useSelector((state) => state.user);
-  const { changePassMessage } = data;
+  const {changePassMessage} = data;
 
   const validateThenNavigate = () => {
     if (oldPassword === '') {
@@ -85,10 +84,10 @@ const ChangePasswordView = ({ route, navigation }) => {
           <Text
             style={[
               styles.textRegular,
-              { marginTop: calcScale(15), fontSize: calcScale(22) },
+              {marginTop: calcScale(15), fontSize: calcScale(22)},
             ]}>
             <TouchableOpacity
-              style={{ paddingRight: calcScale(20) }}
+              style={{paddingRight: calcScale(20)}}
               onPress={() => navigation.navigate('HomeView')}>
               <Icon name="arrow-left" size={calcScale(22)} color="#000" />
             </TouchableOpacity>
@@ -98,12 +97,12 @@ const ChangePasswordView = ({ route, navigation }) => {
           <View style={styles.formContainer}>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Mật khẩu cũ<Text style={{ color: 'red' }}>*</Text>
+                Mật khẩu cũ<Text style={{color: 'red'}}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana123"
-                onChangeText={(password) => setOldPassword(password)}
+                onChangeText={(password) => setOldPassword(password.trim())}
                 secureTextEntry={oldSecure}
                 rightIcon={
                   oldPassword != '' ? (
@@ -113,7 +112,7 @@ const ChangePasswordView = ({ route, navigation }) => {
                         size={calcScale(15)}
                         color="grey"
                         onPress={() => setOldSecure(!oldSecure)}
-                        style={{ marginRight: calcScale(5) }}
+                        style={{marginRight: calcScale(5)}}
                       />
                       <Icon
                         name="times-circle"
@@ -134,12 +133,12 @@ const ChangePasswordView = ({ route, navigation }) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Mật khẩu mới<Text style={{ color: 'red' }}>*</Text>
+                Mật khẩu mới<Text style={{color: 'red'}}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana123"
-                onChangeText={(password) => setPassword(password)}
+                onChangeText={(password) => setPassword(password.trim())}
                 secureTextEntry={secure}
                 rightIcon={
                   password != '' ? (
@@ -149,7 +148,7 @@ const ChangePasswordView = ({ route, navigation }) => {
                         size={calcScale(15)}
                         color="grey"
                         onPress={() => setSecure(!secure)}
-                        style={{ marginRight: calcScale(5) }}
+                        style={{marginRight: calcScale(5)}}
                       />
                       <Icon
                         name="times-circle"
@@ -170,12 +169,12 @@ const ChangePasswordView = ({ route, navigation }) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Nhập lại mật khẩu <Text style={{ color: 'red' }}>*</Text>
+                Nhập lại mật khẩu <Text style={{color: 'red'}}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana123"
-                onChangeText={(repassword) => setRepassword(repassword)}
+                onChangeText={(repassword) => setRepassword(repassword.trim())}
                 secureTextEntry={resecure}
                 rightIcon={
                   repassword != '' ? (
@@ -185,7 +184,7 @@ const ChangePasswordView = ({ route, navigation }) => {
                         size={calcScale(15)}
                         color="grey"
                         onPress={() => setResecure(!resecure)}
-                        style={{ marginRight: calcScale(5) }}
+                        style={{marginRight: calcScale(5)}}
                       />
                       <Icon
                         name="times-circle"
@@ -205,7 +204,7 @@ const ChangePasswordView = ({ route, navigation }) => {
               />
             </View>
           </View>
-          <View style={{ alignItems: 'center' }}>
+          <View style={{alignItems: 'center'}}>
             <PTButton
               title="Xác nhận"
               onPress={() => {

@@ -58,7 +58,7 @@ const LoginView = ({navigation}) => {
           data.token,
           EncryptionKey_TOKEN_KEY,
         );
-        console.log('login data: ' + JSON.stringify(data));
+        // console.log('login data: ' + JSON.stringify(data));
         const userData = {
           id: data.userId,
           phone: data.phoneNumber,
@@ -70,8 +70,9 @@ const LoginView = ({navigation}) => {
           district: data.district,
           is_verify: data.is_verify,
           address: data.address,
+          major_id: data.major,
         };
-        console.log('user data: ' + JSON.stringify(userData));
+        // console.log('user data: ' + JSON.stringify(userData));
         userPreferences.setObjectAsync(USER_KEY, userData);
       }
       navigation.navigate('DrawerInside');
@@ -113,14 +114,15 @@ const LoginView = ({navigation}) => {
               containerStyle={styles.input}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Số điện thoại"
-              onChangeText={(username) => setUsername(username)}
+              onChangeText={(username) => setUsername(username.trim())}
               keyboardType="number-pad"
+              value={username}
             />
             <Input
               containerStyle={styles.input}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Mật khẩu"
-              onChangeText={(password) => setPassword(password)}
+              onChangeText={(password) => setPassword(password.trim())}
               secureTextEntry={secure}
               rightIcon={
                 password != '' ? (
@@ -132,6 +134,7 @@ const LoginView = ({navigation}) => {
                   />
                 ) : null
               }
+              value={password}
             />
             <TouchableOpacity
               onPress={() => navigation.navigate('ForgetPasswordView')}>

@@ -113,13 +113,10 @@ const RegisterView = ({navigation}) => {
   }, [isRegistered]);
 
   useEffect(() => {
-    console.log(message);
     if (message) {
       alert(message);
     }
   }, [message]);
-
-  console.log(errorMessage);
 
   const navigateOtpScreen = () => {
     const check = [];
@@ -187,7 +184,7 @@ const RegisterView = ({navigation}) => {
               <Input
                 containerStyle={styles.input}
                 placeholder="Nguyễn Văn A..."
-                onChangeText={(fullName) => setFullName(fullName)}
+                onChangeText={(fullName) => setFullName(fullName.trim())}
                 rightIcon={
                   fullName != '' ? (
                     <Icon
@@ -212,7 +209,7 @@ const RegisterView = ({navigation}) => {
               </Text>
               <Input
                 containerStyle={styles.input}
-                onChangeText={(nationId) => setNationId(nationId)}
+                onChangeText={(nationId) => setNationId(nationId.trim())}
                 rightIcon={
                   nationId != '' ? (
                     <Icon
@@ -236,7 +233,7 @@ const RegisterView = ({navigation}) => {
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana@gmail.com"
-                onChangeText={(email) => setEmail(email)}
+                onChangeText={(email) => setEmail(email.trim())}
                 rightIcon={
                   email != '' ? (
                     <Icon
@@ -258,7 +255,7 @@ const RegisterView = ({navigation}) => {
               <Input
                 containerStyle={styles.input}
                 placeholder="0123456789"
-                onChangeText={(phone) => setPhone(phone)}
+                onChangeText={(phone) => setPhone(phone.trim())}
                 rightIcon={
                   phone != '' ? (
                     <Icon
@@ -334,7 +331,7 @@ const RegisterView = ({navigation}) => {
               </Text>
               <Input
                 containerStyle={styles.input}
-                onChangeText={(address) => setAddress(address)}
+                onChangeText={(address) => setAddress(address.trim())}
                 rightIcon={
                   address != '' ? (
                     <Icon
@@ -385,7 +382,7 @@ const RegisterView = ({navigation}) => {
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana123"
-                onChangeText={(password) => setPassword(password)}
+                onChangeText={(password) => setPassword(password.trim())}
                 secureTextEntry={secure}
                 rightIcon={
                   password != '' ? (
@@ -421,7 +418,7 @@ const RegisterView = ({navigation}) => {
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana123"
-                onChangeText={(repassword) => setRepassword(repassword)}
+                onChangeText={(repassword) => setRepassword(repassword.trim())}
                 secureTextEntry={resecure}
                 rightIcon={
                   repassword != '' ? (

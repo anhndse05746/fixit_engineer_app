@@ -72,7 +72,7 @@ const ForgetPasswordView = ({navigation}) => {
               <Input
                 containerStyle={styles.input}
                 placeholder="0123456789"
-                onChangeText={(phone) => setPhone(phone)}
+                onChangeText={(phone) => setPhone(phone.trim())}
                 rightIcon={
                   phone != '' ? (
                     <Icon

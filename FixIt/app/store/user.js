@@ -20,6 +20,7 @@ const user = createSlice({
     city: '',
     district: '',
     address: '',
+    major: '',
   },
   reducers: {
     usersRequested: (users, action) => {
@@ -41,7 +42,7 @@ const user = createSlice({
       users.district = action.payload.district;
       users.is_verify = action.payload.is_verify;
       users.address = action.payload.address;
-      //console.log(action.payload.is_verify.data[0])
+      users.major = action.payload.major_id;
       users.message = LOGGED_IN;
       users.loading = false;
     },

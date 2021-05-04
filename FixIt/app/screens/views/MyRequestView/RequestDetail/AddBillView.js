@@ -139,7 +139,7 @@ const AddBillView = ({navigation, route}) => {
               ) : (
                 <Input
                   containerStyle={[styles.input, {width: '30%'}]}
-                  onChangeText={(price) => setPrice(index, price)}
+                  onChangeText={(price) => setPrice(index, price.trim())}
                   value={item.data.price}
                   errorMessage={
                     errorMessage !== '' && item.data.price === ''
