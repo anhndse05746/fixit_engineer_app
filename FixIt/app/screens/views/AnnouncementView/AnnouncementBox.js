@@ -1,49 +1,42 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text} from 'react-native';
 import {ListItem} from 'react-native-elements';
 import {Avatar} from 'react-native-paper';
 import {calcScale} from '../../../utils/dimension';
 
-const AnnouncementTitle = ({metionUser, title, ticket}) => {
-  return (
-    <>
-      <Text style={styles.metionUser}>{metionUser}</Text>
-      <Text style={styles.titleAnnoucement}> {title}</Text>
-      <Text style={styles.titleTicket}>{ticket}</Text>
-    </>
-  );
-};
-
 const AnnouncementBox = ({item, navigation}) => {
-  const [checkRead, setCheckRead] = React.useState(0);
-
+  const [checkRead, setCheckRead] = React.useState(false);
+  // const requestData = {
+  //   id: item.requestId,
+  // };
   useEffect(() => {
-    setCheckRead(item.checkRead);
+    setCheckRead(item.isRead);
   }, []);
 
-  readNotification = async (id) => {
-    if (checkRead !== 1) {
-    } else {
-    }
-  };
+  // readNotification = async (id) => {
+  //   if (checkRead !== 1) {
+  //   } else {
+  //   }
+  // };
 
   return (
     <ListItem
       containerStyle={{
-        backgroundColor: checkRead === 0 ? 'rgb(255, 218, 114)' : '#fff',
+        backgroundColor: !checkRead ? 'rgb(255, 224, 216)' : '#fff',
+        borderWidth: 1,
+        borderColor: 'black',
       }}
-      onPress={() => readNotification(item.id)}>
-      <Avatar.Text size={calcScale(65)} label={item.metionUser.charAt(0)} />
+      onPress={() => {
+        // navigation.navigate('MyRequestStackNavigator', {
+        //   screen: 'RequestDetailView',
+        //   params: {requestData: requestData},
+        // });
+      }}>
+      {/* <Avatar.Text size={calcScale(65)} label={item.metionUser.charAt(0)} /> */}
       <ListItem.Content>
-        <ListItem.Title numberOfLines={2}>
-          <AnnouncementTitle
-            metionUser={item.metionUser}
-            title={item.tit}
-            ticket={item.titleTicket}
-          />
-        </ListItem.Title>
+        <ListItem.Title numberOfLines={2}>{item.title}</ListItem.Title>
         <ListItem.Subtitle style={styles.time}>
-          {item.recordedTime}
+          {item.createdAt}
         </ListItem.Subtitle>
       </ListItem.Content>
     </ListItem>

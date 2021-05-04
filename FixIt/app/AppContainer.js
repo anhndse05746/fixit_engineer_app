@@ -1,26 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
-import Navigation from './libs/Navigation';
-import { getActiveRouteName } from './utils/navigation';
+import { createStackNavigator } from '@react-navigation/stack';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { StatusBar } from 'react-native';
 import { connect } from 'react-redux';
-import {
-  ROOT_BACKGROUND,
-  ROOT_INSIDE,
-  ROOT_LOADING,
-  ROOT_OUTSIDE,
-} from './store/appState';
-import AuthLoadingView from './screens/views/AuthLoadingView';
+import Navigation from './libs/Navigation';
 import DrawerInside from './screens/stacks/DrawerStack';
 import OutsideStackNavigator from './screens/stacks/OutsideStack';
-import { StatusBar } from 'react-native';
+import { getActiveRouteName } from './utils/navigation';
 
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 
 const Stack = createStackNavigator();
-const App = React.memo(({ root }) => {
+const App = () => {
 
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
@@ -64,18 +57,13 @@ const App = React.memo(({ root }) => {
       <StatusBar hidden />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <>
-          {root === ROOT_LOADING || root === ROOT_BACKGROUND ? (
-            <Stack.Screen name="AuthLoading" component={AuthLoadingView} />
-          ) : null}
-          {/* {root === ROOT_OUTSIDE ? ( */}
           <Stack.Screen name="OutsideStack" component={OutsideStackNavigator} />
-          {/* ) : null} */}
           <Stack.Screen name="DrawerInside" component={DrawerInside} />
         </>
       </Stack.Navigator>
     </NavigationContainer>
   );
-});
+};
 
 const mapStateToProps = (state) => ({
   root: state.app.root,

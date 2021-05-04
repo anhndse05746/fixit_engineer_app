@@ -17,7 +17,6 @@ import CommonStyles from '../Styles';
 import PTButton from '../../commonComponent/Button';
 import {calcScale} from '../../../utils/dimension';
 import {checkRegisteredUser} from '../../../store/register';
-import {useReducer} from 'react';
 import {cityOfVN} from '../../../utils/cityOfVietNam';
 
 const RegisterView = ({navigation}) => {
@@ -26,20 +25,22 @@ const RegisterView = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [phone, setPhone] = React.useState('');
   const [address, setAddress] = React.useState('');
-  const [knowledge, setKnowledge] = React.useState();
   const [password, setPassword] = React.useState('');
   const [repassword, setRepassword] = React.useState('');
   const [secure, setSecure] = React.useState(true);
   const [resecure, setResecure] = React.useState(true);
   const [checked, setChecked] = React.useState([]);
+  const [checkedData, setCheckedData] = React.useState([]);
   const [confirm, setConfirm] = React.useState(false);
-  const [errorChecked, setErrorChecked] = React.useState('');
+  const [nationId, setNationId] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorPhone, setErrorPhone] = React.useState(false);
+  const [errorMatchedPassword, setErrorMatchedPassword] = React.useState('');
   const [matchedPassword, setMatchedPassword] = React.useState(false);
-  const [cities, setCities] = React.useState([]);
-  const [selectedCity, setSelectedCity] = React.useState('');
+  const [cities, setCities] = React.useState(cityOfVN);
+  const [selectedCity, setSelectedCity] = React.useState(0);
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
-  const [selectedDistrict, setSelectedDistrict] = React.useState('');
+  const [selectedDistrict, setSelectedDistrict] = React.useState(0);
 
   const dataJob = [
     {
@@ -74,7 +75,10 @@ const RegisterView = ({navigation}) => {
       return;
     } else {
       setChecked(dataJob);
-      setCities(cityOfVN);
+      setErrorMessage('');
+      setErrorMatchedPassword('');
+      setErrorPhone(false);
+      setMatchedPassword(false);
       setConstructorHasRun(true);
     }
   };
@@ -90,42 +94,58 @@ const RegisterView = ({navigation}) => {
   const {isRegistered, message} = useSelector((state) => state.register);
   const dispatch = useDispatch();
 
-  const checkRegistered = (phone) => {
-    dispatch(checkRegisteredUser(phone));
-  };
-
   useEffect(() => {
     const user = {
       phone: phone,
       name: fullName,
+      nationId: nationId,
       email: email,
       password: password,
       district: selectedDistrict,
       city: selectedCity,
+      address: address,
+      identity_card_number: nationId,
+      major_id: checked[0].id,
     };
-    console.log(user);
     if (isRegistered == false) {
-      navigateOtpScreen(user);
+      navigation.navigate('OTPView', user);
     }
   }, [isRegistered]);
 
-  const navigateOtpScreen = (user) => {
-    const checkedData = [];
+  useEffect(() => {
+    console.log(message);
+    if (message) {
+      alert(message);
+    }
+  }, [message]);
+
+  console.log(errorMessage);
+
+  const navigateOtpScreen = () => {
+    const check = [];
     checked.map((item, index) => {
       if (item.checked) {
-        checkedData.push(item);
+        check.push(item);
       }
     });
+    setCheckedData(check);
     if (fullName === '') {
       setErrorMessage(' không được để trống');
-    } else if (email === '') {
+    } else if (nationId === '') {
       setErrorMessage(' không được để trống');
     } else if (phone === '') {
       setErrorMessage(' không được để trống');
+    } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(phone)) {
+      setErrorPhone(true);
+      setErrorMessage(' không đúng định dạng');
+    } else if (selectedCity === 0) {
+      setErrorMessage(' không được để trống');
+    } else if (selectedDistrict === 0) {
+      setErrorMessage(' không được để trống');
     } else if (address === '') {
       setErrorMessage(' không được để trống');
-    } else if (checkedData.length === 0) {
-      setErrorChecked('Cần có ít nhất một chuyên ngành');
+    } else if (check.length === 0) {
+      setErrorMessage(' không được để trống');
     } else if (password === '') {
       setErrorMessage(' không được để trống');
     } else if (repassword === '') {
@@ -135,11 +155,14 @@ const RegisterView = ({navigation}) => {
       repassword !== '' &&
       password !== repassword
     ) {
-      setErrorMessage(' không trùng với Password');
+      setMatchedPassword(true);
+      setErrorMatchedPassword(' không trùng với mật khẩu');
     } else {
       setErrorMessage('');
-      setErrorChecked('');
-      navigation.navigate('OTPView', user);
+      setErrorMatchedPassword('');
+      setErrorPhone(false);
+      setMatchedPassword(false);
+      dispatch(checkRegisteredUser(phone));
     }
   };
 
@@ -156,15 +179,6 @@ const RegisterView = ({navigation}) => {
             ]}>
             Vui lòng điền những thông tin sau
           </Text>
-          {message ? (
-            <Text
-              style={[
-                styles.textRegular,
-                {marginTop: calcScale(5), fontSize: calcScale(22)},
-              ]}>
-              {message}
-            </Text>
-          ) : null}
           <View style={styles.formContainer}>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
@@ -194,8 +208,31 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Email <Text style={{color: 'red'}}>*</Text>
+                CMT/CCCD <Text style={{color: 'red'}}>*</Text>
               </Text>
+              <Input
+                containerStyle={styles.input}
+                onChangeText={(nationId) => setNationId(nationId)}
+                rightIcon={
+                  nationId != '' ? (
+                    <Icon
+                      name="times-circle"
+                      size={calcScale(15)}
+                      color="grey"
+                      onPress={() => setNationId('')}
+                    />
+                  ) : null
+                }
+                value={nationId}
+                errorMessage={
+                  errorMessage !== '' && nationId === ''
+                    ? 'CMT/CCCD' + errorMessage
+                    : ''
+                }
+              />
+            </View>
+            <View style={styles.column}>
+              <Text style={styles.textRegular}>Email</Text>
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana@gmail.com"
@@ -216,7 +253,7 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Phone number <Text style={{color: 'red'}}>*</Text>
+                Số điện thoại <Text style={{color: 'red'}}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -235,7 +272,7 @@ const RegisterView = ({navigation}) => {
                 value={phone}
                 keyboardType="number-pad"
                 errorMessage={
-                  errorMessage !== '' && phone === ''
+                  (errorMessage !== '' && phone === '') || errorPhone
                     ? 'Số điện thoại' + errorMessage
                     : ''
                 }
@@ -261,6 +298,9 @@ const RegisterView = ({navigation}) => {
                   );
                 })}
               </Picker>
+              {errorMessage !== '' && selectedCity === 0 ? (
+                <Text style={{color: 'red'}}>Thành phố {errorMessage}</Text>
+              ) : null}
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
@@ -271,6 +311,7 @@ const RegisterView = ({navigation}) => {
                 onValueChange={(itemValue, itemIndex) => {
                   setSelectedDistrict(itemValue);
                 }}>
+                <Picker.Item label={''} value={0} />
                 {cities.length > 0
                   ? cities[selectedCityIndex].Districts.map((district) => {
                       return (
@@ -283,6 +324,9 @@ const RegisterView = ({navigation}) => {
                     })
                   : null}
               </Picker>
+              {errorMessage !== '' && selectedDistrict === 0 ? (
+                <Text style={{color: 'red'}}>Quận/Huyện {errorMessage}</Text>
+              ) : null}
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
@@ -311,21 +355,6 @@ const RegisterView = ({navigation}) => {
             </View>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Trình độ học vấn <Text style={{color: 'red'}}>*</Text>
-              </Text>
-              <Picker
-                selectedValue={knowledge}
-                onValueChange={(itemValue, itemIndex) =>
-                  setKnowledge(itemValue)
-                }>
-                <Picker.Item label="Tốt nghiệp cấp 2" value="0" />
-                <Picker.Item label="Tốt nghiệp cấp 3" value="1" />
-                <Picker.Item label="Cao đẳng" value="2" />
-                <Picker.Item label="Đại học" value="3" />
-              </Picker>
-            </View>
-            <View style={styles.column}>
-              <Text style={styles.textRegular}>
                 Chuyên ngành <Text style={{color: 'red'}}>*</Text>
               </Text>
               <ListItem
@@ -345,8 +374,8 @@ const RegisterView = ({navigation}) => {
                   );
                 })}
               </ListItem>
-              {errorChecked !== '' ? (
-                <Text style={{color: 'red'}}>{errorChecked}</Text>
+              {errorMessage !== '' && checkedData.length === 0 ? (
+                <Text style={{color: 'red'}}>Chuyên ngành {errorMessage}</Text>
               ) : null}
             </View>
             <View style={styles.column}>
@@ -415,8 +444,12 @@ const RegisterView = ({navigation}) => {
                 }
                 value={repassword}
                 errorMessage={
-                  (errorMessage !== '' && repassword === '') || matchedPassword
-                    ? 'Nhập lại mật khẩu' + errorMessage
+                  (errorMessage !== '' && repassword === '') ||
+                  (matchedPassword && errorMatchedPassword !== '')
+                    ? 'Nhập lại mật khẩu' +
+                      (errorMessage === ''
+                        ? errorMatchedPassword
+                        : errorMessage)
                     : ''
                 }
               />
@@ -433,11 +466,11 @@ const RegisterView = ({navigation}) => {
             <PTButton
               title="Tiếp tục"
               onPress={() => {
-                checkRegistered(phone);
+                navigateOtpScreen();
               }}
               style={styles.button}
               color="#fff"
-              disable={confirm}
+              disabled={!confirm}
             />
           </View>
         </ScrollView>

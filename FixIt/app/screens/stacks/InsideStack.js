@@ -1,12 +1,13 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { useNavigation } from '@react-navigation/core';
-import { createStackNavigator } from '@react-navigation/stack';
-import React, { useEffect } from 'react';
-import { StyleSheet, TouchableHighlight } from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useNavigation} from '@react-navigation/core';
+import {createStackNavigator} from '@react-navigation/stack';
+import React, {useEffect} from 'react';
+import {StyleSheet, TouchableHighlight} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useDispatch, useSelector } from 'react-redux';
-import { listAllRequest } from '../../store/request';
-import { calcScale } from '../../utils/dimension';
+import {useDispatch, useSelector} from 'react-redux';
+import {listAllRequest} from '../../store/request';
+import {getNotificationList} from '../../store/notification';
+import {calcScale} from '../../utils/dimension';
 import AnnoucementView from '../views/AnnouncementView';
 import HomeView from '../views/HomeView';
 import ReceiveRequestView from '../views/HomeView/ReceiveRequestView';
@@ -21,13 +22,13 @@ const InsideTabBottom = createBottomTabNavigator();
 const InsideTabBottomNavigator = () => {
   return (
     <InsideTabBottom.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
           if (route.name === 'HomeStackNavigator') {
             return <Icon name="home" size={calcScale(22)} color={color} />;
           } else if (route.name === 'MyRequestStackNavigator') {
             return <Icon name="tasks" size={calcScale(22)} color={color} />;
-          } else if (route.name === 'AnnoucementView') {
+          } else if (route.name === 'AnnouncementStackNavigator') {
             return <Icon name="bell" size={calcScale(22)} color={color} />;
           } else {
             return <Icon name="user" size={calcScale(22)} color={color} />;
@@ -36,22 +37,29 @@ const InsideTabBottomNavigator = () => {
       })}
       tabBarOptions={{
         keyboardHidesTabBar: true,
-        showLabel: false,
+        showLabel: true,
         activeTintColor: 'rgb(0, 0, 60)',
       }}>
       <InsideTabBottom.Screen
         name="HomeStackNavigator"
         component={HomeStackNavigator}
+        options={{tabBarLabel: 'Trang chủ'}}
       />
       <InsideTabBottom.Screen
         name="MyRequestStackNavigator"
         component={MyRequestStackNavigator}
+        options={{tabBarLabel: 'Yêu cầu'}}
       />
       <InsideTabBottom.Screen
-        name="AnnoucementView"
-        component={AnnoucementView}
+        name="AnnouncementStackNavigator"
+        component={AnnouncementStackNavigator}
+        options={{tabBarLabel: 'Thông báo'}}
       />
-      <InsideTabBottom.Screen name="MyProfileView" component={MyProfileView} />
+      <InsideTabBottom.Screen
+        name="MyProfileView"
+        component={MyProfileView}
+        options={{tabBarLabel: 'Tôi'}}
+      />
     </InsideTabBottom.Navigator>
   );
 };
@@ -62,7 +70,7 @@ const HomeStackNavigator = () => {
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen
-        options={{ headerShown: false }}
+        options={{headerShown: false}}
         name="HomeView"
         component={HomeView}
       />
@@ -71,9 +79,9 @@ const HomeStackNavigator = () => {
         component={ReceiveRequestView}
         options={{
           title: 'Chi tiết đơn hàng',
-          headerTitleStyle: { color: '#fff' },
+          headerTitleStyle: {color: '#fff'},
           headerTintColor: '#fff',
-          headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
+          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
         }}
       />
     </HomeStack.Navigator>
@@ -82,8 +90,7 @@ const HomeStackNavigator = () => {
 
 const MyRequestStack = createStackNavigator();
 
-const MyRequestStackNavigator = () => {
-  const navigation = useNavigation();
+const MyRequestStackNavigator = ({navigation}) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -94,7 +101,7 @@ const MyRequestStackNavigator = () => {
   return (
     <MyRequestStack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
+        headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
       }}>
       <MyRequestStack.Screen
         name="MyRequest"
@@ -111,7 +118,7 @@ const MyRequestStackNavigator = () => {
               </TouchableHighlight>
             );
           },
-          headerTitleStyle: { color: '#fff' },
+          headerTitleStyle: {color: '#fff'},
           headerLeft: null,
         }}
         component={RequestTabs}
@@ -121,9 +128,9 @@ const MyRequestStackNavigator = () => {
         component={RequestDetailView}
         options={{
           title: 'Chi tiết đơn hàng',
-          headerTitleStyle: { color: '#fff' },
+          headerTitleStyle: {color: '#fff'},
           headerTintColor: '#fff',
-          headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
+          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
         }}
       />
       <MyRequestStack.Screen
@@ -131,9 +138,9 @@ const MyRequestStackNavigator = () => {
         component={AddBillView}
         options={{
           title: 'Tạo hóa đơn',
-          headerTitleStyle: { color: '#fff' },
+          headerTitleStyle: {color: '#fff'},
           headerTintColor: '#fff',
-          headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
+          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
         }}
       />
       <MyRequestStack.Screen
@@ -141,12 +148,50 @@ const MyRequestStackNavigator = () => {
         component={BillDetailView}
         options={{
           title: 'Xác nhận hóa đơn',
-          headerTitleStyle: { color: '#fff' },
+          headerTitleStyle: {color: '#fff'},
           headerTintColor: '#fff',
-          headerStyle: { backgroundColor: 'rgb(0, 0, 60)' },
+          headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
         }}
       />
     </MyRequestStack.Navigator>
+  );
+};
+
+const AnnouncementStack = createStackNavigator();
+
+const AnnouncementStackNavigator = () => {
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getNotificationList(user.token, user.userId, 1));
+  }, []);
+  return (
+    <AnnouncementStack.Navigator
+      screenOptions={{
+        headerStyle: {backgroundColor: 'rgb(0, 0, 60)'},
+      }}>
+      <AnnouncementStack.Screen
+        name="AnnoucementView"
+        component={AnnoucementView}
+        options={{
+          title: 'Thông báo',
+          headerRight: () => {
+            return (
+              <TouchableHighlight
+                activeOpacity={1}
+                underlayColor={'#ccd0d5'}
+                onPress={() => navigation.openDrawer()}
+                style={styles.iconBox}>
+                <Icon name="user" size={calcScale(22)} color="#fff" />
+              </TouchableHighlight>
+            );
+          },
+          headerTitleStyle: {color: '#fff'},
+          headerLeft: null,
+        }}
+      />
+    </AnnouncementStack.Navigator>
   );
 };
 

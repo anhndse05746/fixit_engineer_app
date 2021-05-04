@@ -228,8 +228,9 @@ export const createInvoice = (token, request_id, other_cost, cost_of_supplies, t
         status: "NOT_PAYMENT",
         other_cost: other_cost,
         cost_of_supplies: cost_of_supplies,
-        actual_proceeds: actual_proceeds,
         total_price: total_price,
+        actual_proceeds: actual_proceeds,
+
         request_issues: request_issues,
     },
     method: 'POST',

@@ -9,7 +9,8 @@ import {
 import {Avatar} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useSelector} from 'react-redux';
-
+import userPreferences from '../../libs/UserPreferences';
+import {TOKEN_KEY} from '../../utils/constants';
 import {calcScale} from '../../utils/dimension';
 import commonStyles from './Styles';
 
@@ -19,6 +20,8 @@ const MyProfileDrawer = ({navigation}) => {
   let data = useSelector((state) => state.user);
 
   const logOut = () => {
+    userPreferences.removeItem(TOKEN_KEY);
+    // DevSettings.reload();
     navigation.navigate('OutsideStack');
   };
 
@@ -86,38 +89,6 @@ const MyProfileDrawer = ({navigation}) => {
               </Text>
             </View>
           </TouchableOpacity>
-          {/* <TouchableOpacity style={styles.button}>
-            <View style={[styles.row, {paddingLeft: calcScale(20)}]}>
-              <Icon
-                name="gratipay"
-                size={calcScale(24)}
-                color="rgb(0, 0, 60)"
-              />
-              <Text
-                style={[
-                  styles.textMedium,
-                  {paddingLeft: calcScale(20), fontSize: calcScale(20)},
-                ]}>
-                Cộng đồng FixIt
-              </Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <View style={[styles.row, {paddingLeft: calcScale(20)}]}>
-              <Icon
-                name="info-circle"
-                size={calcScale(24)}
-                color="rgb(0, 0, 60)"
-              />
-              <Text
-                style={[
-                  styles.textMedium,
-                  {paddingLeft: calcScale(20), fontSize: calcScale(20)},
-                ]}>
-                Về FixIt
-              </Text>
-            </View>
-          </TouchableOpacity> */}
         </View>
         <View style={styles.footer}>
           <TouchableOpacity onPress={() => logOut()}>

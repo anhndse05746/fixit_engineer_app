@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Image, StyleSheet, View, TouchableOpacity, Switch} from 'react-native';
 import {calcScale} from '../../../utils/dimension';
 
-const SearchView = ({navigation, isEnabled, toggleSwitch}) => {
+const SearchView = ({navigation, isEnabled, toggleSwitch, isDisabled}) => {
   return (
     <View style={styles.headerSafeArea}>
       <View style={styles.header}>
@@ -27,6 +27,7 @@ const SearchView = ({navigation, isEnabled, toggleSwitch}) => {
             thumbColor={'#fff'}
             onValueChange={() => toggleSwitch()}
             value={isEnabled}
+            disabled={isDisabled}
           />
         </View>
       </View>

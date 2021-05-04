@@ -1,101 +1,61 @@
-import React, { useEffect } from 'react';
-import { FlatList, SafeAreaView } from 'react-native';
-import { View } from 'react-native';
-import { StyleSheet, Text } from 'react-native';
-import { calcScale } from '../../../utils/dimension';
+import React, {useEffect} from 'react';
+import {FlatList, SafeAreaView} from 'react-native';
+import {View} from 'react-native';
+import {StyleSheet, Text} from 'react-native';
+import {calcScale} from '../../../utils/dimension';
 import HeaderBar from './HeaderBar';
 import CommonStyles from '../Styles';
 import RequestItem from './RequestItem';
-import { useNavigation } from '@react-navigation/native';
-import { useDispatch, useSelector } from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import {useDispatch, useSelector} from 'react-redux';
 
-import { listRequest } from '../../../store/request';
+import {listRequest} from '../../../store/request';
+import userPreferences from '../../../libs/UserPreferences';
+import {WORKING_TOGGLE} from '../../../utils/constants';
 
-const HomeView = ({ navigation }) => {
-  // const requestData = [
-  //   {
-  //     id: 24,
-  //     customer_id: 44,
-  //     service_id: 5,
-  //     estimate_time: 40,
-  //     estimate_price: 80.00,
-  //     schedule_time: "28-3-2021",
-  //     currentStatus: 1,
-  //     statusName: "Đang tìm thợ",
-  //     serviceName: "Sửa máy giặt"
-  //   },
-  //   {
-  //     id: 25,
-  //     customer_id: 44,
-  //     service_id: 5,
-  //     estimate_time: 40,
-  //     estimate_price: 80.00,
-  //     schedule_time: "28-3-2021",
-  //     currentStatus: 1,
-  //     statusName: "Đang tìm thợ",
-  //     serviceName: "Sửa máy giặt"
-  //   },
-  //   {
-  //     id: 26,
-  //     customer_id: 44,
-  //     service_id: 5,
-  //     estimate_time: 40,
-  //     estimate_price: 80.00,
-  //     schedule_time: "28-3-2021",
-  //     currentStatus: 1,
-  //     statusName: "Đang tìm thợ",
-  //     serviceName: "Sửa máy giặt"
-  //   },
-  //   {
-  //     id: 35,
-  //     customer_id: 43,
-  //     service_id: 5,
-  //     estimate_time: 40,
-  //     estimate_price: 80.00,
-  //     schedule_time: "28-3-2021",
-  //     currentStatus: 1,
-  //     statusName: "Đang tìm thợ",
-  //     serviceName: "Sửa máy giặt"
-  //   },
-  //   {
-  //     id: 73,
-  //     customer_id: 31,
-  //     service_id: 6,
-  //     estimate_time: 10,
-  //     estimate_price: 100.00,
-  //     schedule_time: "28-3-2021",
-  //     currentStatus: 1,
-  //     statusName: "Đang tìm thợ",
-  //     serviceName: "Sửa máy nước nóng"
-  //   }
-  // ]
-
+const HomeView = ({navigation}) => {
+  const [constructorHasRun, setConstructorHasRun] = React.useState(false);
+  const [isDisabled, setIsDisabled] = React.useState(false);
   const [isEnabled, setIsEnabled] = React.useState(false);
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+
+  const toggleSwitch = () => {
+    setIsEnabled(!isEnabled);
+    userPreferences.setObjectAsync(WORKING_TOGGLE, !isEnabled);
+  };
+
   const request = useSelector((state) => state.request);
   const data = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const requestData = request.listRequest;
+  let isLoading = request.isLoading;
+
+  const constructor = async () => {
+    if (constructorHasRun) {
+      return;
+    } else {
+      setConstructorHasRun(true);
+      const workingToggleValue = await userPreferences.getObjectAsync(
+        WORKING_TOGGLE,
+      );
+      setIsEnabled(data.is_verify.data[0] == 0 ? false : workingToggleValue);
+      setIsDisabled(data.is_verify.data[0] == 0 ? true : false);
+    }
+  };
+
+  console.log(JSON.stringify(data));
+
+  constructor();
 
   useEffect(() => {
     if (isEnabled) {
-      console.log(data.token, data.userId)
       dispatch(listRequest(data.token, data.userId));
     }
   }, [isEnabled]);
 
-  // const navigation = useNavigation();
-
-  //select user's token
-  // const {token} = data;
-
-  //select majorList
-  // const {majorsList} = useSelector((state) => state.majors);
-
-  // useEffect(() => {
-  //   if (majorsList.length == 0) dispatch(loadMajors(token));
-  // }, []);
+  const reloadData = () => {
+    dispatch(listRequest(data.token, data.userId));
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -103,35 +63,52 @@ const HomeView = ({ navigation }) => {
         navigation={navigation}
         isEnabled={isEnabled}
         toggleSwitch={toggleSwitch}
+        isDisabled={isDisabled}
       />
       <View style={styles.innerContainer}>
-        <Text style={[styles.textBold, { paddingTop: calcScale(10) }]}>
+        <Text style={[styles.textBold, {paddingTop: calcScale(10)}]}>
           Hi, {data.name}!
         </Text>
-        {isEnabled && requestData ? (
-          <>
+        {isDisabled ? (
+          <View style={{paddingRight: calcScale(5)}}>
             <Text style={styles.textRegular}>
-              Hãy chọn một yêu cầu để bắt đầu làm việc!
+              Tài khoản của bạn chưa được xác minh.
             </Text>
-            <FlatList
-              data={requestData}
-              style={styles.serviceContainer}
-              renderItem={({ item, index }) => (
-                <RequestItem
-                  navigation={navigation}
-                  item={item}
-                  index={index}
-                />
-              )}
-              keyExtractor={(item) => item.id.toString()}
-            />
-          </>
+            <Text style={styles.textRegular}>
+              Hãy liên hệ với đội ngũ FixIt để xác minh tài khoản để có thể nhận
+              yêu cầu sửa chữa.
+            </Text>
+          </View>
         ) : (
           <>
-            <Text style={styles.textRegular}>Bạn đang ở chế độ nghỉ.</Text>
-            <Text style={styles.textRegular}>
-              Hãy bật chế độ làm việc để nhận yêu cầu.
-            </Text>
+            {isEnabled && requestData ? (
+              <>
+                <Text style={styles.textRegular}>
+                  Hãy chọn một yêu cầu để bắt đầu làm việc!
+                </Text>
+                <FlatList
+                  data={requestData}
+                  style={styles.serviceContainer}
+                  renderItem={({item, index}) => (
+                    <RequestItem
+                      navigation={navigation}
+                      item={item}
+                      index={index}
+                    />
+                  )}
+                  keyExtractor={(item) => item.id.toString()}
+                  onRefresh={() => reloadData()}
+                  refreshing={isLoading}
+                />
+              </>
+            ) : (
+              <>
+                <Text style={styles.textRegular}>Bạn đang ở chế độ nghỉ.</Text>
+                <Text style={styles.textRegular}>
+                  Hãy bật chế độ làm việc để nhận yêu cầu sửa chữa.
+                </Text>
+              </>
+            )}
           </>
         )}
       </View>

@@ -1,24 +1,28 @@
 import React, {useEffect} from 'react';
 import {
-  Text,
-  View,
-  StyleSheet,
   Image,
-  KeyboardAvoidingView,
   Keyboard,
-  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome5';
 import {Input} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useDispatch, useSelector} from 'react-redux';
-
-import CommonStyles from './Styles';
-import PTButton from '../commonComponent/Button';
-import {calcScale} from '../../utils/dimension';
-import {loadUsers, LOGGED_IN} from '../../store/user';
 import firebase from '../../config/firebaseConfig';
-import {userUpdateDeviceToken} from '../../store/user';
+import userPreferences from '../../libs/UserPreferences';
+import {loadUsers, LOGGED_IN} from '../../store/user';
+import {
+  EncryptionKey_TOKEN_KEY,
+  TOKEN_KEY,
+  USER_KEY,
+} from '../../utils/constants';
+import {calcScale} from '../../utils/dimension';
+import PTButton from '../commonComponent/Button';
+import CommonStyles from './Styles';
 
 const LoginView = ({navigation}) => {
   const [username, setUsername] = React.useState('');
@@ -34,9 +38,11 @@ const LoginView = ({navigation}) => {
   const login = (username, password) => {
     //call api & check user to login
     if (username === '') {
-      setErrorMessage('Username không thể để trống');
+      setErrorMessage('Số điện thoại không thể để trống');
+    } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(username)) {
+      setErrorMessage('Số điện thoại không đúng định dạng');
     } else if (password === '') {
-      setErrorMessage('Password không thể để trống');
+      setErrorMessage('Mật khẩu không thể để trống');
     } else {
       setErrorMessage('');
       dispatch(loadUsers(username, password, deviceToken));
@@ -46,6 +52,28 @@ const LoginView = ({navigation}) => {
 
   useEffect(() => {
     if (message === LOGGED_IN) {
+      if (data) {
+        userPreferences.setEncryptData(
+          TOKEN_KEY,
+          data.token,
+          EncryptionKey_TOKEN_KEY,
+        );
+        console.log('login data: ' + JSON.stringify(data));
+        const userData = {
+          id: data.userId,
+          phone: data.phoneNumber,
+          name: data.name,
+          roleId: data.roleId,
+          email: data.email,
+          token: data.token,
+          city: data.city,
+          district: data.district,
+          is_verify: data.is_verify,
+          address: data.address,
+        };
+        console.log('user data: ' + JSON.stringify(userData));
+        userPreferences.setObjectAsync(USER_KEY, userData);
+      }
       navigation.navigate('DrawerInside');
     }
   }, [message]);
@@ -84,14 +112,14 @@ const LoginView = ({navigation}) => {
             <Input
               containerStyle={styles.input}
               inputContainerStyle={{borderBottomWidth: 0}}
-              placeholder="Username"
+              placeholder="Số điện thoại"
               onChangeText={(username) => setUsername(username)}
               keyboardType="number-pad"
             />
             <Input
               containerStyle={styles.input}
               inputContainerStyle={{borderBottomWidth: 0}}
-              placeholder="Password"
+              placeholder="Mật khẩu"
               onChangeText={(password) => setPassword(password)}
               secureTextEntry={secure}
               rightIcon={
@@ -133,7 +161,7 @@ const LoginView = ({navigation}) => {
               </TouchableOpacity>
             </View>
             <View style={styles.line} />
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={[
                 styles.row,
                 {
@@ -152,7 +180,7 @@ const LoginView = ({navigation}) => {
               <Text style={[styles.textRegular, {color: '#000', flex: 0.75}]}>
                 Đăng nhập với Google
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
       </TouchableWithoutFeedback>

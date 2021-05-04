@@ -6,6 +6,7 @@ import register from './register'
 import resetPassword from './resetPassword'
 import majors from './majors'
 import request from './request'
+import notification from './notification'
 
 export default combineReducers({
     app,
@@ -13,5 +14,6 @@ export default combineReducers({
     register,
     resetPassword,
     majors,
-    request
+    request,
+    notification
 });

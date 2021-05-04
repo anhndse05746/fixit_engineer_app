@@ -20,26 +20,27 @@ import {checkRegisteredUser} from '../../../store/resetPassword';
 const ForgetPasswordView = ({navigation}) => {
   const [phone, setPhone] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorPhone, setErrorPhone] = React.useState(false);
 
   const {isRegistered, message} = useSelector((state) => state.resetPassword);
   const dispatch = useDispatch();
 
-  const checkRegistered = (phone) => {
-    dispatch(checkRegisteredUser(phone));
-  };
-
   useEffect(() => {
     if (isRegistered == true) {
-      navigateOtpScreen();
+      navigation.navigate('ConfirmPhoneView', {phone: phone});
     }
   }, [isRegistered]);
 
   const navigateOtpScreen = () => {
     if (phone === '') {
-      setErrorMessage(' is required');
+      setErrorMessage(' không được để trống');
+    } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(phone)) {
+      setErrorPhone(true);
+      setErrorMessage(' không đúng định dạng');
     } else {
       setErrorMessage('');
-      navigation.navigate('ConfirmPhoneView', {phone: phone});
+      setErrorPhone(false);
+      dispatch(checkRegisteredUser(phone));
     }
   };
 
@@ -59,14 +60,14 @@ const ForgetPasswordView = ({navigation}) => {
           <Text
             style={[
               styles.textRegular,
-              {marginTop: calcScale(15), fontSize: calcScale(22)},
+              {marginTop: calcScale(15), fontSize: calcScale(22), color: 'red'},
             ]}>
             {message}
           </Text>
           <View style={styles.formContainer}>
             <View style={styles.column}>
               <Text style={styles.textRegular}>
-                Phone number <Text style={{color: 'red'}}>*</Text>
+                Số điện thoại <Text style={{color: 'red'}}>*</Text>
               </Text>
               <Input
                 containerStyle={styles.input}
@@ -85,8 +86,8 @@ const ForgetPasswordView = ({navigation}) => {
                 value={phone}
                 keyboardType="number-pad"
                 errorMessage={
-                  errorMessage !== '' && phone === ''
-                    ? 'Phone number' + errorMessage
+                  (errorMessage !== '' && phone === '') || errorPhone
+                    ? 'Số điện thoại' + errorMessage
                     : ''
                 }
               />
@@ -96,7 +97,7 @@ const ForgetPasswordView = ({navigation}) => {
             <PTButton
               title="Tiếp tục"
               onPress={() => {
-                checkRegistered(phone);
+                navigateOtpScreen();
               }}
               style={styles.button}
               color="#fff"

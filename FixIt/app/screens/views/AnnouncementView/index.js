@@ -2,47 +2,57 @@ import React, {useEffect} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {useDispatch, useSelector} from 'react-redux';
+import {getNotificationList} from '../../../store/notification';
 import {calcScale} from '../../../utils/dimension';
 import commonStyles from '../Styles';
 import AnnouncementBox from './AnnouncementBox';
-import NewAnnouncement from './NewAnnouncement';
 
 const AnnouncementView = ({navigation}) => {
-  const [newNotification, setNewNotification] = React.useState([]);
-  const [earlierNotification, setEarlierNotification] = React.useState([]);
+  const notification = useSelector((state) => state.notification);
+  const user = useSelector((state) => state.user);
+
+  const [constructorHasRun, setConstructorHasRun] = React.useState(false);
+  const [listNotification, setListNotification] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [totalPage, setTotalPage] = React.useState(0);
   const [isEndReach, setIsEndReach] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
+
+  const isLoading = notification.loading;
+
+  //Dispatch
+  const dispatch = useDispatch();
+
+  const getNotification = () => {
+    dispatch(getNotificationList(user.token, user.userId, currentPage));
+  };
+
+  const constructor = () => {
+    if (constructorHasRun) {
+      return;
+    } else {
+      getNotification();
+      setConstructorHasRun(true);
+    }
+  };
+
+  constructor();
 
   useEffect(() => {
-    getNewNotification();
-    getEarlierNotification(currentPage);
-  }, []);
-
-  const getNewNotification = () => {
-    setIsLoading(true);
-
-    setNewNotification();
-    setIsLoading(false);
-  };
-
-  const getEarlierNotification = (currentPage) => {
-    setIsLoading(true);
-    setEarlierNotification();
-    setIsLoading(false);
-    setTotalPage();
-  };
+    setListNotification(notification.notificationList);
+  });
 
   const loadMoreData = () => {
-    if (currentPage < totalPage && !isLoading) {
-      const page = this.state.currentPage + 1;
+    if (isEndReach) {
+      const page = currentPage + 1;
+      setIsEndReach(false);
       setCurrentPage(page);
-      getEarlierNotification(page);
+      dispatch(getNotificationList(user.token, user.userId, currentPage));
     }
-    if (currentPage === totalPage) {
-      setIsEndReach(true);
-    }
+  };
+
+  const reloadData = () => {
+    setCurrentPage(1);
+    dispatch(getNotificationList(user.token, user.userId, currentPage));
   };
 
   const renderFooter = () => {
@@ -62,18 +72,17 @@ const AnnouncementView = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
-        data={earlierNotification}
+        data={listNotification}
         keyExtractor={(item, index) => index.toString()}
-        //Header to show above listview
-        ListHeaderComponent={
-          <NewAnnouncement data={newNotification} navigation={navigation} />
-        }
         renderItem={({item}) => (
           <AnnouncementBox item={item} navigation={navigation} />
         )}
         onEndReached={() => loadMoreData()}
         onEndReachedThreshold={0.2}
+        onMomentumScrollBegin={() => setEndReach(true)}
         ListFooterComponent={renderFooter()}
+        onRefresh={() => reloadData()}
+        refreshing={isLoading}
       />
     </SafeAreaView>
   );

@@ -1,6 +1,6 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
-import { apiCallBegan } from './apiActions';
+import {apiCallBegan} from './apiActions';
 import constants from '../utils/constants';
 
 const user = createSlice({
@@ -19,6 +19,7 @@ const user = createSlice({
     is_verify: '',
     city: '',
     district: '',
+    address: '',
   },
   reducers: {
     usersRequested: (users, action) => {
@@ -39,6 +40,7 @@ const user = createSlice({
       users.city = action.payload.city;
       users.district = action.payload.district;
       users.is_verify = action.payload.is_verify;
+      users.address = action.payload.address;
       //console.log(action.payload.is_verify.data[0])
       users.message = LOGGED_IN;
       users.loading = false;
@@ -123,17 +125,31 @@ export const changePassword = (phone, token, old_password, new_password) =>
     onError: userChangePasswordFail.type,
   });
 
-export const updateUser = (phone, token, name, email) =>
+export const updateUser = (
+  id,
+  phone,
+  token,
+  name,
+  email,
+  district,
+  city,
+  address,
+) =>
   apiCallBegan({
     url: '/api/updateUser',
     headers: {
       Authorization: token,
     },
     data: {
-      phone_number: phone,
-      role_id: constants.ROLE_REPAIRER,
+      user_id: id,
       name: name,
       email: email,
+      phone: phone,
+      role_id: constants.ROLE_REPAIRER,
+      district: district,
+      city: city,
+      address: address,
+      identity_card_number: '',
     },
     method: 'POST',
     onStart: usersRequested.type,

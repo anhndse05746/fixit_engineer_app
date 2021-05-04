@@ -42,17 +42,18 @@ const ResetPasswordView = ({route, navigation}) => {
       password !== repassword
     ) {
       setMatchedPassword(true);
-      setErrorMessage(' Không trùng với Password');
+      setErrorMessage(' không trùng với mật khẩu');
     } else {
       setErrorMessage('');
-      navigation.navigate('LoginView');
+      setMatchedPassword(false);
+      dispatch(resetPassword(phone, password));
     }
   };
 
   useEffect(() => {
     if (isReset == true) {
       alert(message);
-      validateThenNavigate();
+      navigation.navigate('LoginView');
     }
   }, [isReset]);
 
@@ -101,7 +102,7 @@ const ResetPasswordView = ({route, navigation}) => {
                 value={password}
                 errorMessage={
                   errorMessage !== '' && password === ''
-                    ? 'Password' + errorMessage
+                    ? 'Mật khẩu' + errorMessage
                     : ''
                 }
               />
@@ -137,7 +138,7 @@ const ResetPasswordView = ({route, navigation}) => {
                 value={repassword}
                 errorMessage={
                   (errorMessage !== '' && repassword === '') || matchedPassword
-                    ? 'Re-enter password' + errorMessage
+                    ? 'Nhập lại mật khẩu' + errorMessage
                     : ''
                 }
               />
@@ -147,7 +148,7 @@ const ResetPasswordView = ({route, navigation}) => {
             <PTButton
               title="Xác nhận"
               onPress={() => {
-                dispatch(resetPassword(phone, password));
+                validateThenNavigate();
               }}
               style={styles.button}
               color="#fff"
