@@ -72,6 +72,7 @@ const LoginView = ({navigation}) => {
           address: data.address,
           major_id: data.major,
           identity_card_number: data.identity_card_number,
+          is_active: data.is_active,
         };
         // console.log('user data: ' + JSON.stringify(userData));
         userPreferences.setObjectAsync(USER_KEY, userData);

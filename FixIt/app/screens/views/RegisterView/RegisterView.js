@@ -64,11 +64,11 @@ const RegisterView = ({navigation}) => {
       name: 'Sửa điện lạnh',
       // checked: false,
     },
-    {
-      id: 5,
-      name: 'Khác',
-      // checked: false,
-    },
+    // {
+    //   id: 5,
+    //   name: 'Khác',
+    //   checked: false,
+    // },
   ];
 
   const constructor = () => {

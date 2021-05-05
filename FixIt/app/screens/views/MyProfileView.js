@@ -2,16 +2,20 @@ import React, {useEffect} from 'react';
 import {KeyboardAvoidingView, SafeAreaView} from 'react-native';
 import {View} from 'react-native';
 import {StyleSheet, Text} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {Avatar, Header, Input} from 'react-native-elements';
-
 import {width, calcScale} from '../../utils/dimension';
 import CommonStyles from './Styles';
 import {updateUser} from '../../store/user';
 import {Picker} from '@react-native-picker/picker';
 import {cityOfVN} from '../../utils/cityOfVietNam';
 import {ScrollView} from 'react-native';
+import userPreferences from '../../libs/UserPreferences';
+import {
+  EncryptionKey_TOKEN_KEY,
+  TOKEN_KEY,
+  USER_KEY,
+} from '../../utils/constants';
 
 const MyProfileView = () => {
   const data = useSelector((state) => state.user);
@@ -73,15 +77,15 @@ const MyProfileView = () => {
           address,
           nationId,
         );
-        if (name.trim() !== '') {
+        if (name.trim() === '') {
           setErrorMessage(' không được để trống');
-        } else if (nationId.trim() !== '') {
+        } else if (nationId.trim() === '') {
           setErrorMessage(' không được để trống');
         } else if (selectedCity === 0) {
           setErrorMessage(' không được để trống');
         } else if (selectedDistrict === 0) {
           setErrorMessage(' không được để trống');
-        } else if (address.trim() !== '') {
+        } else if (address.trim() === '') {
           setErrorMessage(' không được để trống');
         } else {
           setErrorMessage('');
@@ -106,6 +110,31 @@ const MyProfileView = () => {
   useEffect(() => {
     console.log(updateUserMessage);
     if (updateUserMessage) {
+      if (data) {
+        userPreferences.setEncryptData(
+          TOKEN_KEY,
+          data.token,
+          EncryptionKey_TOKEN_KEY,
+        );
+        // console.log('login data: ' + JSON.stringify(data));
+        const userData = {
+          id: data.userId,
+          phone: data.phoneNumber,
+          name: data.name,
+          roleId: data.roleId,
+          email: data.email,
+          token: data.token,
+          city: selectedDistrict,
+          district: selectedCity,
+          is_verify: data.is_verify,
+          address: address,
+          major_id: data.major,
+          identity_card_number: nationId,
+          is_active: data.is_active,
+        };
+        // console.log('user data: ' + JSON.stringify(userData));
+        userPreferences.setObjectAsync(USER_KEY, userData);
+      }
       alert(updateUserMessage);
     }
   }, [updateUserMessage]);
@@ -169,7 +198,7 @@ const MyProfileView = () => {
             <Input
               containerStyle={[
                 styles.input,
-                {width: calcScale(width), marginTop: calcScale(15)},
+                {width: calcScale(width), marginTop: calcScale(20)},
               ]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="CMT/CCCD"
@@ -177,7 +206,7 @@ const MyProfileView = () => {
               value={nationId}
               disabled={notEdit}
               errorMessage={
-                errorMessage !== '' && name === ''
+                errorMessage !== '' && nationId === ''
                   ? 'Số CMT/CCCD' + errorMessage
                   : ''
               }
@@ -185,7 +214,7 @@ const MyProfileView = () => {
             <Input
               containerStyle={[
                 styles.input,
-                {width: calcScale(width), marginTop: calcScale(15)},
+                {width: calcScale(width), marginTop: calcScale(20)},
               ]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Điện thoại"
@@ -197,7 +226,7 @@ const MyProfileView = () => {
             <Input
               containerStyle={[
                 styles.input,
-                {width: calcScale(width), marginTop: calcScale(15)},
+                {width: calcScale(width), marginTop: calcScale(20)},
               ]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Email"

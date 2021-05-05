@@ -22,6 +22,7 @@ const user = createSlice({
     address: '',
     major: '',
     identity_card_number: '',
+    is_active: false,
   },
   reducers: {
     usersRequested: (users, action) => {
@@ -45,6 +46,7 @@ const user = createSlice({
       users.address = action.payload.address;
       users.major = action.payload.major_id;
       users.identity_card_number = action.payload.identity_card_number;
+      users.is_active = action.payload.is_active;
       users.message = LOGGED_IN;
       users.loading = false;
     },
