@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   Modal,
@@ -9,7 +9,7 @@ import {
   View,
   Linking,
 } from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   cancelRequest,
   getRequestDetail,
@@ -17,18 +17,18 @@ import {
   paidConfirmation,
   takeRequest,
 } from '../../../../store/request';
-import {cityOfVN} from '../../../../utils/cityOfVietNam';
+import { cityOfVN } from '../../../../utils/cityOfVietNam';
 import constants from '../../../../utils/constants';
-import {calcScale} from '../../../../utils/dimension';
+import { calcScale } from '../../../../utils/dimension';
 import PTButton from '../../../commonComponent/Button';
 import commonStyles from '../../Styles';
 
-const RequestDetailView = ({navigation, route}) => {
+const RequestDetailView = ({ navigation, route }) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const request = useSelector((state) => state.request);
   const requestId = route.params.requestData.id;
-  const {message} = request;
+  const { message } = request;
   const [modalVisible, setModalVisible] = React.useState(false);
   const [cancelReason, setCancelReason] = React.useState('');
 
@@ -62,8 +62,8 @@ const RequestDetailView = ({navigation, route}) => {
   let district =
     data && data.city && data.district
       ? cities
-          .find((x) => x.Id == data.city)
-          .Districts.find((x) => x.Id == data.district).Name
+        .find((x) => x.Id == data.city)
+        .Districts.find((x) => x.Id == data.district).Name
       : '';
 
   //Take request
@@ -82,12 +82,10 @@ const RequestDetailView = ({navigation, route}) => {
   useEffect(() => {
     console.log(message);
     if (message === constants.CANCEL_REQUEST_SUCCESSFULLY) {
-      alert(message);
       dispatch(listAllRequest(user.token, user.userId));
       //navigate to home view
       navigation.navigate('Accecpted');
     } else if (message === constants.PAID_CONFIRMATION_SUCCESSFULLY) {
-      alert(message);
       dispatch(listAllRequest(user.token, user.userId));
       //navigate to home view
       navigation.navigate('Done');
@@ -103,7 +101,7 @@ const RequestDetailView = ({navigation, route}) => {
     //Request button
     if (requestStatus == 2) {
       myRequestButton = (
-        <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
+        <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
           <View style={styles.row}>
             <PTButton
               title="Gọi điện"
@@ -130,7 +128,7 @@ const RequestDetailView = ({navigation, route}) => {
       );
     } else if (requestStatus == 4) {
       myRequestButton = (
-        <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
+        <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
           <PTButton
             title="Xác nhận đã thanh toán"
             onPress={() => dispatch(paidConfirmation(user.token, data.id))}
@@ -241,7 +239,7 @@ const RequestDetailView = ({navigation, route}) => {
     <ScrollView
       style={[
         styles.container,
-        modalVisible ? {backgroundColor: 'rgba(0,0,0,0.5)'} : '',
+        modalVisible ? { backgroundColor: 'rgba(0,0,0,0.5)' } : '',
       ]}>
       <Modal
         animationType="slide"
@@ -280,7 +278,7 @@ const RequestDetailView = ({navigation, route}) => {
               <PTButton
                 title="Không hủy"
                 color="#fff"
-                style={[styles.button, {backgroundColor: '#ccc', width: '45%'}]}
+                style={[styles.button, { backgroundColor: '#ccc', width: '45%' }]}
                 onPress={() => {
                   setModalVisible(false);
                   setCancelReason('');
@@ -291,7 +289,7 @@ const RequestDetailView = ({navigation, route}) => {
                 color="#fff"
                 style={[
                   styles.button,
-                  {width: '45%', marginLeft: calcScale(20)},
+                  { width: '45%', marginLeft: calcScale(20) },
                 ]}
                 onPress={() =>
                   cancelRequestTrigger(user.token, data.id, cancelReason)
@@ -340,11 +338,9 @@ const RequestDetailView = ({navigation, route}) => {
                   fontSize: calcScale(18),
                   marginBottom: calcScale(10),
                 }}>
-                {`${
-                  data.schedule_time.split('T')[1].split('.')[0].split(':')[0]
-                }:${
-                  data.schedule_time.split('T')[1].split('.')[0].split(':')[1]
-                }, ${data.schedule_time.split('T')[0]}`}
+                {`${data.schedule_time.split('T')[1].split('.')[0].split(':')[0]
+                  }:${data.schedule_time.split('T')[1].split('.')[0].split(':')[1]
+                  }, ${data.schedule_time.split('T')[0]}`}
               </Text>
             </View>
             <View style={styles.innerFormContainer}>
@@ -454,8 +450,8 @@ const RequestDetailView = ({navigation, route}) => {
                 paddingTop: calcScale(10),
                 marginBottom: calcScale(20),
               }}>
-              <View style={{marginLeft: calcScale(20)}}>
-                <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
+              <View style={{ marginLeft: calcScale(20) }}>
+                <Text style={{ fontSize: calcScale(24), fontWeight: 'bold' }}>
                   Địa chỉ: {data.address}, {district}, {city}
                 </Text>
                 <Text
@@ -482,7 +478,7 @@ const RequestDetailView = ({navigation, route}) => {
         <ActivityIndicator
           size="small"
           color="#3368f3"
-          style={{marginTop: calcScale(10)}}
+          style={{ marginTop: calcScale(10) }}
         />
       )}
     </ScrollView>

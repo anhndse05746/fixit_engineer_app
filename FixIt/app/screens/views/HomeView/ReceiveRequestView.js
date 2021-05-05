@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -6,9 +6,9 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-import {calcScale} from '../../../utils/dimension';
+import { calcScale } from '../../../utils/dimension';
 import PTButton from '../../commonComponent/Button';
 import commonStyles from '../Styles';
 import {
@@ -18,14 +18,14 @@ import {
   listAllRequest,
 } from '../../../store/request';
 import constants from '../../../utils/constants';
-import {cityOfVN} from '../../../utils/cityOfVietNam';
+import { cityOfVN } from '../../../utils/cityOfVietNam';
 
-const ReceiveRequestView = ({navigation, route}) => {
+const ReceiveRequestView = ({ navigation, route }) => {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const request = useSelector((state) => state.request);
   const requestId = route.params.requestData.id;
-  const {message} = request;
+  const { message } = request;
 
   //get request detail
   useEffect(() => {
@@ -56,8 +56,8 @@ const ReceiveRequestView = ({navigation, route}) => {
   let district =
     data && data.city && data.district
       ? cities
-          .find((x) => x.Id == data.city)
-          .Districts.find((x) => x.Id == data.district).Name
+        .find((x) => x.Id == data.city)
+        .Districts.find((x) => x.Id == data.district).Name
       : '';
 
   //Take request
@@ -69,7 +69,6 @@ const ReceiveRequestView = ({navigation, route}) => {
   useEffect(() => {
     console.log(message);
     if (message === constants.TAKE_REQUEST_SUCCESSFULLY) {
-      alert(message);
       dispatch(listAllRequest(user.token, user.userId));
       //navigate to home view
       navigation.popToTop();
@@ -111,11 +110,9 @@ const ReceiveRequestView = ({navigation, route}) => {
                   fontSize: calcScale(18),
                   marginBottom: calcScale(10),
                 }}>
-                {`${
-                  data.schedule_time.split('T')[1].split('.')[0].split(':')[0]
-                }:${
-                  data.schedule_time.split('T')[1].split('.')[0].split(':')[1]
-                }, ${data.schedule_time.split('T')[0]}`}
+                {`${data.schedule_time.split('T')[1].split('.')[0].split(':')[0]
+                  }:${data.schedule_time.split('T')[1].split('.')[0].split(':')[1]
+                  }, ${data.schedule_time.split('T')[0]}`}
               </Text>
             </View>
             <View style={styles.innerFormContainer}>
@@ -216,8 +213,8 @@ const ReceiveRequestView = ({navigation, route}) => {
                 paddingTop: calcScale(10),
                 marginBottom: calcScale(20),
               }}>
-              <View style={{marginLeft: calcScale(20)}}>
-                <Text style={{fontSize: calcScale(24), fontWeight: 'bold'}}>
+              <View style={{ marginLeft: calcScale(20) }}>
+                <Text style={{ fontSize: calcScale(24), fontWeight: 'bold' }}>
                   Địa chỉ: {district}, {city}
                 </Text>
                 {requestStatus ? (
@@ -231,7 +228,7 @@ const ReceiveRequestView = ({navigation, route}) => {
                         {data.Customer.name}
                         {/* | {user.phoneNumber} */}
                       </Text>
-                      <Text style={{fontSize: calcScale(18)}}>
+                      <Text style={{ fontSize: calcScale(18) }}>
                         {data.address}
                       </Text>
                     </>
@@ -239,7 +236,7 @@ const ReceiveRequestView = ({navigation, route}) => {
                 ) : null}
               </View>
             </View>
-            <View style={[styles.innerFormContainer, {alignItems: 'center'}]}>
+            <View style={[styles.innerFormContainer, { alignItems: 'center' }]}>
               <PTButton
                 title="Nhận yêu cầu"
                 onPress={() =>
@@ -255,7 +252,7 @@ const ReceiveRequestView = ({navigation, route}) => {
         <ActivityIndicator
           size="small"
           color="#3368f3"
-          style={{marginTop: calcScale(10)}}
+          style={{ marginTop: calcScale(10) }}
         />
       )}
     </ScrollView>
