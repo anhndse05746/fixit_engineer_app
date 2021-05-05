@@ -71,6 +71,7 @@ const LoginView = ({navigation}) => {
           is_verify: data.is_verify,
           address: data.address,
           major_id: data.major,
+          identity_card_number: data.identity_card_number,
         };
         // console.log('user data: ' + JSON.stringify(userData));
         userPreferences.setObjectAsync(USER_KEY, userData);

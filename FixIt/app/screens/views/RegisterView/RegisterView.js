@@ -97,15 +97,14 @@ const RegisterView = ({navigation}) => {
 
   useEffect(() => {
     const user = {
-      phone: phone,
-      name: fullName,
-      nationId: nationId,
-      email: email,
-      password: password,
+      phone: phone.trim(),
+      name: fullName.trim(),
+      email: email.trim(),
+      password: password.trim(),
       district: selectedDistrict,
       city: selectedCity,
-      address: address,
-      identity_card_number: nationId,
+      address: address.trim(),
+      identity_card_number: nationId.trim(),
       major_id: checked,
     };
     if (isRegistered == false) {
@@ -127,11 +126,11 @@ const RegisterView = ({navigation}) => {
     //   }
     // });
     // setCheckedData(check);
-    if (fullName === '') {
+    if (fullName.trim() === '') {
       setErrorMessage(' không được để trống');
-    } else if (nationId === '') {
+    } else if (nationId.trim() === '') {
       setErrorMessage(' không được để trống');
-    } else if (phone === '') {
+    } else if (phone.trim() === '') {
       setErrorMessage(' không được để trống');
     } else if (!/^(84|0[3|5|7|8|9])+([0-9]{8})\b$/.test(phone)) {
       setErrorPhone(true);
@@ -140,13 +139,13 @@ const RegisterView = ({navigation}) => {
       setErrorMessage(' không được để trống');
     } else if (selectedDistrict === 0) {
       setErrorMessage(' không được để trống');
-    } else if (address === '') {
+    } else if (address.trim() === '') {
       setErrorMessage(' không được để trống');
     } else if (checked == 0) {
       setErrorMessage(' không được để trống');
-    } else if (password === '') {
+    } else if (password.trim() === '') {
       setErrorMessage(' không được để trống');
-    } else if (repassword === '') {
+    } else if (repassword.trim() === '') {
       setErrorMessage(' không được để trống');
     } else if (
       password !== '' &&
@@ -185,7 +184,7 @@ const RegisterView = ({navigation}) => {
               <Input
                 containerStyle={styles.input}
                 placeholder="Nguyễn Văn A..."
-                onChangeText={(fullName) => setFullName(fullName.trim())}
+                onChangeText={(fullName) => setFullName(fullName)}
                 rightIcon={
                   fullName != '' ? (
                     <Icon
@@ -234,7 +233,7 @@ const RegisterView = ({navigation}) => {
               <Input
                 containerStyle={styles.input}
                 placeholder="nguyenvana@gmail.com"
-                onChangeText={(email) => setEmail(email.trim())}
+                onChangeText={(email) => setEmail(email)}
                 rightIcon={
                   email != '' ? (
                     <Icon
@@ -332,7 +331,7 @@ const RegisterView = ({navigation}) => {
               </Text>
               <Input
                 containerStyle={styles.input}
-                onChangeText={(address) => setAddress(address.trim())}
+                onChangeText={(address) => setAddress(address)}
                 rightIcon={
                   address != '' ? (
                     <Icon

@@ -30,6 +30,8 @@ const MyProfileView = () => {
   const [selectedCity, setSelectedCity] = React.useState(0);
   const [selectedCityIndex, setSelectedCityIndex] = React.useState(0);
   const [selectedDistrict, setSelectedDistrict] = React.useState(0);
+  const [nationId, setNationId] = React.useState(data.identity_card_number);
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const constructor = () => {
     if (constructorHasRun) {
@@ -69,19 +71,34 @@ const MyProfileView = () => {
           parseInt(selectedDistrict),
           parseInt(selectedCity),
           address,
+          nationId,
         );
-        dispatch(
-          updateUser(
-            data.userId,
-            data.phoneNumber,
-            data.token,
-            name,
-            email,
-            parseInt(selectedDistrict),
-            parseInt(selectedCity),
-            address,
-          ),
-        );
+        if (name.trim() !== '') {
+          setErrorMessage(' không được để trống');
+        } else if (nationId.trim() !== '') {
+          setErrorMessage(' không được để trống');
+        } else if (selectedCity === 0) {
+          setErrorMessage(' không được để trống');
+        } else if (selectedDistrict === 0) {
+          setErrorMessage(' không được để trống');
+        } else if (address.trim() !== '') {
+          setErrorMessage(' không được để trống');
+        } else {
+          setErrorMessage('');
+          dispatch(
+            updateUser(
+              data.userId,
+              data.phoneNumber,
+              data.token,
+              name.trim(),
+              email.trim(),
+              parseInt(selectedDistrict),
+              parseInt(selectedCity),
+              address.trim(),
+              nationId.trim(),
+            ),
+          );
+        }
       }
     }
   };
@@ -140,9 +157,30 @@ const MyProfileView = () => {
               containerStyle={[styles.input, {width: calcScale(width)}]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Họ và Tên"
-              onChangeText={(name) => setName(name.trim())}
+              onChangeText={(name) => setName(name)}
               value={name}
               disabled={notEdit}
+              errorMessage={
+                errorMessage !== '' && name === ''
+                  ? 'Họ và tên' + errorMessage
+                  : ''
+              }
+            />
+            <Input
+              containerStyle={[
+                styles.input,
+                {width: calcScale(width), marginTop: calcScale(15)},
+              ]}
+              inputContainerStyle={{borderBottomWidth: 0}}
+              placeholder="CMT/CCCD"
+              onChangeText={(nationId) => setNationId(nationId.trim())}
+              value={nationId}
+              disabled={notEdit}
+              errorMessage={
+                errorMessage !== '' && name === ''
+                  ? 'Số CMT/CCCD' + errorMessage
+                  : ''
+              }
             />
             <Input
               containerStyle={[
@@ -151,7 +189,7 @@ const MyProfileView = () => {
               ]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Điện thoại"
-              onChangeText={(phone) => setPhone(phone.trim())}
+              onChangeText={(phone) => setPhone(phone)}
               value={phone}
               disabled
               keyboardType="number-pad"
@@ -163,7 +201,7 @@ const MyProfileView = () => {
               ]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Email"
-              onChangeText={(email) => setEmail(email.trim())}
+              onChangeText={(email) => setEmail(email)}
               value={email}
               disabled={notEdit}
               keyboardType="email-address"
@@ -187,6 +225,9 @@ const MyProfileView = () => {
                   );
                 })}
               </Picker>
+              {errorMessage !== '' && selectedCity === 0 ? (
+                <Text style={{color: 'red'}}>Thành phố {errorMessage}</Text>
+              ) : null}
             </View>
             <View style={styles.picker}>
               <Picker
@@ -207,6 +248,9 @@ const MyProfileView = () => {
                     })
                   : null}
               </Picker>
+              {errorMessage !== '' && selectedDistrict === 0 ? (
+                <Text style={{color: 'red'}}>Quận/Huyện {errorMessage}</Text>
+              ) : null}
             </View>
             <Input
               containerStyle={[
@@ -215,9 +259,14 @@ const MyProfileView = () => {
               ]}
               inputContainerStyle={{borderBottomWidth: 0}}
               placeholder="Địa chỉ"
-              onChangeText={(address) => setAddress(address.trim())}
+              onChangeText={(address) => setAddress(address)}
               value={address}
               disabled={notEdit}
+              errorMessage={
+                errorMessage !== '' && address === ''
+                  ? 'Địa chỉ' + errorMessage
+                  : ''
+              }
             />
           </View>
         </View>

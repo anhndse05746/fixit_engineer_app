@@ -73,7 +73,7 @@ const RequestDetailView = ({ navigation, route }) => {
   };
 
   const cancelRequestTrigger = (token, requestId, cancelReason) => {
-    if (cancelReason !== '') {
+    if (cancelReason.trim() !== '') {
       dispatch(cancelRequest(token, requestId, cancelReason));
       setModalVisible(false);
     }
@@ -261,9 +261,7 @@ const RequestDetailView = ({ navigation, route }) => {
               </Text>
               <TextInput
                 multiline={true}
-                onChangeText={(cancelReason) =>
-                  setCancelReason(cancelReason.trim())
-                }
+                onChangeText={(cancelReason) => setCancelReason(cancelReason)}
                 value={cancelReason}
                 style={{
                   borderColor: '#000',

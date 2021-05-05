@@ -21,6 +21,7 @@ const user = createSlice({
     district: '',
     address: '',
     major: '',
+    identity_card_number: '',
   },
   reducers: {
     usersRequested: (users, action) => {
@@ -43,6 +44,7 @@ const user = createSlice({
       users.is_verify = action.payload.is_verify;
       users.address = action.payload.address;
       users.major = action.payload.major_id;
+      users.identity_card_number = action.payload.identity_card_number;
       users.message = LOGGED_IN;
       users.loading = false;
     },
@@ -135,6 +137,7 @@ export const updateUser = (
   district,
   city,
   address,
+  identity_card_number,
 ) =>
   apiCallBegan({
     url: '/api/updateUser',
@@ -150,7 +153,7 @@ export const updateUser = (
       district: district,
       city: city,
       address: address,
-      identity_card_number: '',
+      identity_card_number: identity_card_number,
     },
     method: 'POST',
     onStart: usersRequested.type,
