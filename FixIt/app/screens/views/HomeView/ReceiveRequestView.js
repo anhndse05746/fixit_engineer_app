@@ -110,9 +110,7 @@ const ReceiveRequestView = ({ navigation, route }) => {
                   fontSize: calcScale(18),
                   marginBottom: calcScale(10),
                 }}>
-                {`${data.schedule_time.split('T')[1].split('.')[0].split(':')[0]
-                  }:${data.schedule_time.split('T')[1].split('.')[0].split(':')[1]
-                  }, ${data.schedule_time.split('T')[0]}`}
+                {`${data.schedule_time}`}
               </Text>
             </View>
             <View style={styles.innerFormContainer}>
