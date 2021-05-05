@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
-import {listAllRequest} from '../../../store/request';
-import {cityOfVN} from '../../../utils/cityOfVietNam';
-import {calcScale} from '../../../utils/dimension';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { listAllRequest } from '../../../store/request';
+import { cityOfVN } from '../../../utils/cityOfVietNam';
+import { calcScale } from '../../../utils/dimension';
 import commonStyles from '../Styles';
 import ListEmptyComponent from './ListEmpty';
 
-const DoneTabView = ({navigation}) => {
+const DoneTabView = ({ navigation }) => {
   const request = useSelector((state) => state.request);
   const user = useSelector((state) => state.user);
 
@@ -34,15 +34,15 @@ const DoneTabView = ({navigation}) => {
     dispatch(listAllRequest(user.token, user.userId));
   };
 
-  const renderListRequest = ({item}) => {
-    let schedule_time;
-    if (item.schedule_time) {
-      schedule_time = `${
-        item.schedule_time.split('T')[1].split('.')[0].split(':')[0]
-      }:${item.schedule_time.split('T')[1].split('.')[0].split(':')[1]}, ${
-        item.schedule_time.split('T')[0]
-      }`;
-    }
+  const renderListRequest = ({ item }) => {
+    let schedule_time = item.schedule_time;
+    // if (item.schedule_time) {
+    //   schedule_time = `${
+    //     item.schedule_time.split('T')[1].split('.')[0].split(':')[0]
+    //   }:${item.schedule_time.split('T')[1].split('.')[0].split(':')[1]}, ${
+    //     item.schedule_time.split('T')[0]
+    //   }`;
+    // }
 
     const city = cities.find((x) => x.Id == item.city);
     const district = city.Districts.find((x) => x.Id == item.district);
@@ -66,7 +66,7 @@ const DoneTabView = ({navigation}) => {
             </Text>
           </View>
         </View>
-        <View style={[styles.row, {justifyContent: 'space-between'}]}>
+        <View style={[styles.row, { justifyContent: 'space-between' }]}>
           <View style={styles.column}>
             <Text style={styles.textRegular}>Thời gian:</Text>
             <Text style={styles.textBold}>{item.estimate_time} Phút</Text>
