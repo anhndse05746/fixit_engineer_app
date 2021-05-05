@@ -18,6 +18,7 @@ import PTButton from '../../commonComponent/Button';
 import {calcScale} from '../../../utils/dimension';
 import {checkRegisteredUser} from '../../../store/register';
 import {cityOfVN} from '../../../utils/cityOfVietNam';
+import {RadioButton} from 'react-native-paper';
 
 const RegisterView = ({navigation}) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
@@ -29,7 +30,7 @@ const RegisterView = ({navigation}) => {
   const [repassword, setRepassword] = React.useState('');
   const [secure, setSecure] = React.useState(true);
   const [resecure, setResecure] = React.useState(true);
-  const [checked, setChecked] = React.useState([]);
+  const [checked, setChecked] = React.useState('0');
   const [checkedData, setCheckedData] = React.useState([]);
   const [confirm, setConfirm] = React.useState(false);
   const [nationId, setNationId] = React.useState('');
@@ -46,27 +47,27 @@ const RegisterView = ({navigation}) => {
     {
       id: 1,
       name: 'Sửa nhà',
-      checked: false,
+      // checked: false,
     },
     {
       id: 2,
       name: 'Sửa điện tử',
-      checked: false,
+      // checked: false,
     },
     {
       id: 3,
       name: 'Sửa điện dân dụng',
-      checked: false,
+      // checked: false,
     },
     {
       id: 4,
       name: 'Sửa điện lạnh',
-      checked: false,
+      // checked: false,
     },
     {
       id: 5,
       name: 'Khác',
-      checked: false,
+      // checked: false,
     },
   ];
 
@@ -105,7 +106,7 @@ const RegisterView = ({navigation}) => {
       city: selectedCity,
       address: address,
       identity_card_number: nationId,
-      major_id: checked[0].id,
+      major_id: checked,
     };
     if (isRegistered == false) {
       navigation.navigate('OTPView', user);
@@ -119,13 +120,13 @@ const RegisterView = ({navigation}) => {
   }, [message]);
 
   const navigateOtpScreen = () => {
-    const check = [];
-    checked.map((item, index) => {
-      if (item.checked) {
-        check.push(item);
-      }
-    });
-    setCheckedData(check);
+    // const check = [];
+    // checked.map((item, index) => {
+    //   if (item.checked) {
+    //     check.push(item);
+    //   }
+    // });
+    // setCheckedData(check);
     if (fullName === '') {
       setErrorMessage(' không được để trống');
     } else if (nationId === '') {
@@ -141,7 +142,7 @@ const RegisterView = ({navigation}) => {
       setErrorMessage(' không được để trống');
     } else if (address === '') {
       setErrorMessage(' không được để trống');
-    } else if (check.length === 0) {
+    } else if (checked == 0) {
       setErrorMessage(' không được để trống');
     } else if (password === '') {
       setErrorMessage(' không được để trống');
@@ -354,23 +355,36 @@ const RegisterView = ({navigation}) => {
               <Text style={styles.textRegular}>
                 Chuyên ngành <Text style={{color: 'red'}}>*</Text>
               </Text>
-              <ListItem
+              {/* <ListItem
                 containerStyle={{
                   flexDirection: 'column',
                   alignItems: 'flex-start',
                 }}>
-                {checked.map((item, index) => {
+                {dataJob.map((item, index) => {
                   return (
                     <ListItem.CheckBox
                       key={item.id.toString()}
                       title={item.name}
                       checked={item.checked}
                       containerStyle={{backgroundColor: '#fff', borderWidth: 0}}
-                      onPress={() => toggleCheckbox(index)}
+                      onPress={() => setChecked(item.id)}
                     />
                   );
                 })}
-              </ListItem>
+              </ListItem> */}
+              <RadioButton.Group
+                onValueChange={(newValue) => setChecked(newValue)}
+                value={checked}>
+                {dataJob.map((item, index) => {
+                  return (
+                    <RadioButton.Item
+                      key={item.id.toString()}
+                      label={item.name}
+                      value={item.id}
+                    />
+                  );
+                })}
+              </RadioButton.Group>
               {errorMessage !== '' && checkedData.length === 0 ? (
                 <Text style={{color: 'red'}}>Chuyên ngành {errorMessage}</Text>
               ) : null}
