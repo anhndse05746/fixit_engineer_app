@@ -1,19 +1,19 @@
-import React, {useEffect} from 'react';
-import {FlatList, SafeAreaView} from 'react-native';
-import {View} from 'react-native';
-import {StyleSheet, Text} from 'react-native';
-import {calcScale} from '../../../utils/dimension';
+import React, { useEffect } from 'react';
+import { FlatList, SafeAreaView } from 'react-native';
+import { View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+import { calcScale } from '../../../utils/dimension';
 import HeaderBar from './HeaderBar';
 import CommonStyles from '../Styles';
 import RequestItem from './RequestItem';
-import {useNavigation} from '@react-navigation/native';
-import {useDispatch, useSelector} from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
 
-import {listRequest} from '../../../store/request';
+import { listRequest } from '../../../store/request';
 import userPreferences from '../../../libs/UserPreferences';
-import {WORKING_TOGGLE} from '../../../utils/constants';
+import { WORKING_TOGGLE } from '../../../utils/constants';
 
-const HomeView = ({navigation}) => {
+const HomeView = ({ navigation }) => {
   const [constructorHasRun, setConstructorHasRun] = React.useState(false);
   const [isDisabled, setIsDisabled] = React.useState(false);
   const [isEnabled, setIsEnabled] = React.useState(false);
@@ -49,12 +49,13 @@ const HomeView = ({navigation}) => {
 
   useEffect(() => {
     if (isEnabled) {
+      console.log(data.token + " " + data.city, + data.major)
       dispatch(listRequest(data.token, data.city, data.major));
     }
   }, [isEnabled]);
 
   const reloadData = () => {
-    dispatch(listRequest(data.token, data.userId));
+    dispatch(listRequest(data.token, data.city, data.major));
   };
 
   return (
@@ -66,11 +67,11 @@ const HomeView = ({navigation}) => {
         isDisabled={isDisabled}
       />
       <View style={styles.innerContainer}>
-        <Text style={[styles.textBold, {paddingTop: calcScale(10)}]}>
+        <Text style={[styles.textBold, { paddingTop: calcScale(10) }]}>
           Hi, {data.name}!
         </Text>
         {isDisabled ? (
-          <View style={{paddingRight: calcScale(5)}}>
+          <View style={{ paddingRight: calcScale(5) }}>
             <Text style={styles.textRegular}>
               Tài khoản của bạn chưa được xác minh.
             </Text>
@@ -89,7 +90,7 @@ const HomeView = ({navigation}) => {
                 <FlatList
                   data={requestData}
                   style={styles.serviceContainer}
-                  renderItem={({item, index}) => (
+                  renderItem={({ item, index }) => (
                     <RequestItem
                       navigation={navigation}
                       item={item}
